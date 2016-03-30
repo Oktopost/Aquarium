@@ -1,0 +1,22 @@
+{
+	"name": "oktopost/aquarium",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Alexey Puchkov",
+			"email": "alexey@oktopost.com"
+		}
+	],
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=5.5",
+		"oktopost/objection": "dev-master",
+		"oktopost/skeleton": "dev-master"
+	},
+	"autoload": {
+		"psr-0": {
+			"Aquarium": "src"
+		}
+	}
+}
