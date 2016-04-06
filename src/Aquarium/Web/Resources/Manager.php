@@ -2,41 +2,15 @@
 namespace Aquarium\Web\Resources;
 
 
-class Manager implements IProvider {
-	
-	/** @var IConsumer */
-	private $consumer;
-	
-	/** @var IPackageProvider */
-	private $packageProvider;
-	
-	
-	/**
-	 * @param IConsumer $c
-	 * @return static
-	 */
-	public function setConsumer(IConsumer $c) {
-		$this->consumer = $c;
-		return $this;
-	}
-	
-	/**
-	 * @param IPackageProvider $pp
-	 * @return static
-	 */
-	public function setPackageProvider(IPackageProvider $pp) {
-		$this->packageProvider = $pp;
-		$this->packageProvider->setProvider($this);
-		return $this;
-	}
-	
-	
+class Manager implements IProvider 
+{
 	/**
 	 * @param string $name
 	 * @return static
 	 */
-	public function package($name) {
-		$this->packageProvider->addPackage($name);
+	public function package($name) 
+	{
+		Config::instance()->Provider->package($name);
 		return $this;
 	}
 	
@@ -44,8 +18,9 @@ class Manager implements IProvider {
 	 * @param string $path
 	 * @return static
 	 */
-	public function script($path) {
-		$this->consumer->addScript($path);
+	public function script($path) 
+	{
+		Config::instance()->Consumer->addScript($path);
 		return $this;
 	}
 	
@@ -53,8 +28,9 @@ class Manager implements IProvider {
 	 * @param string $path
 	 * @return static
 	 */
-	public function style($path) {
-		$this->consumer->addStyle($path);
+	public function style($path)
+	{
+		Config::instance()->Consumer->addStyle($path);
 		return $this;
 	}
 }
