@@ -14,8 +14,5 @@ class ConfigDefaults
 	{
 		if (is_null(Config::instance()->PackageConstructor))
 			Config::instance()->PackageConstructor = new SimpleConstructor();
-		
-		if (is_null(Config::instance()->Provider))
-			Config::instance()->Provider = new Manager();
 	}
 }

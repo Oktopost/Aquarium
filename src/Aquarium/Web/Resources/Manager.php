@@ -10,7 +10,7 @@ class Manager implements IProvider
 	 */
 	public function package($name) 
 	{
-		Config::instance()->Provider->package($name);
+		Config::instance()->PackageConstructor->append($name);
 		return $this;
 	}
 	

@@ -13,6 +13,9 @@ class ClassMethods implements IPackageDefinitionManager
 	private $configClassName;
 	private $configObject = null;
 	
+	/** @var Package[] By package name */
+	private $cached = [];
+	
 	
 	/**
 	 * @return null
@@ -51,15 +54,20 @@ class ClassMethods implements IPackageDefinitionManager
 	 */
 	public function get($name)
 	{
-		$builder	= new Builder();
-		$package	= new Package($name);
-		$object		= $this->getObject();
-		$funcName	= $this->getFunctionName($name);
+		if (!isset($this->cached[$name]))
+		{
+			$builder	= new Builder();
+			$package	= new Package($name);
+			$object		= $this->getObject();
+			$funcName	= $this->getFunctionName($name);
+			
+			$builder->setup($package);
+			call_user_func([$object, $funcName], $builder);
+			
+			$this->cached[$name] = $package;
+		}
 		
-		$builder->setup($package);
-		call_user_func([$object, $funcName], $builder);
-		
-		return $package;
+		return $this->cached[$name];
 	}
 	
 	/**
@@ -68,6 +76,8 @@ class ClassMethods implements IPackageDefinitionManager
 	 */
 	public function has($name)
 	{
+		if (isset($this->cached[$name])) return true;
+		
 		$object		= $this->getObject();
 		$funcName	= $this->getFunctionName($name);
 		

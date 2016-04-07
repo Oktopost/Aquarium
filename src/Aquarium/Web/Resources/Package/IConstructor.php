@@ -9,4 +9,10 @@ interface IConstructor
 	 * @return PackageDefinition
 	 */
 	public function construct($packageName);
+	
+	/**
+	 * Construct the package and append it to the consumer.
+	 * @param $packageName
+	 */
+	public function append($packageName);
 }

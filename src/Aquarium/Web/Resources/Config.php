@@ -10,7 +10,6 @@ use Objection\LiteObject;
 
 
 /**
- * @property IProvider 					$Provider
  * @property IConsumer 					$Consumer
  * @property IConstructor			 	$PackageConstructor
  * @property IPackageDefinitionManager 	$DefinitionManager
@@ -26,7 +25,6 @@ class Config extends LiteObject
 	protected function _setup()
 	{
 		return [
-			'Provider'				=> LiteSetup::createInstanceOf(IProvider::class), 
 			'Consumer'				=> LiteSetup::createInstanceOf(IConsumer::class), 
 			'PackageConstructor'	=> LiteSetup::createInstanceOf(IConstructor::class), 
 			'DefinitionManager'		=> LiteSetup::createInstanceOf(IPackageDefinitionManager::class)	 

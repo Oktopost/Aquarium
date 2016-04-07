@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f019bc8d7cd9401108b915b7b6581954",
-    "content-hash": "d8a5600fba80b847bc39c802d6db6351",
+    "hash": "e03d23e02a4344505be21b02ab347cf9",
+    "content-hash": "f321127dc41d9503aedf243c2a6eb4bf",
     "packages": [
         {
             "name": "oktopost/objection",
-            "version": "dev-master",
+            "version": "1.0.0-RC",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/Objection.git",
-                "reference": "eae1f484e72987320cc6a82998e6a54f00f3bccb"
+                "reference": "5f96c1f0dce49fb5ec004e01d165965c457ca429"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/eae1f484e72987320cc6a82998e6a54f00f3bccb",
-                "reference": "eae1f484e72987320cc6a82998e6a54f00f3bccb",
+                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/5f96c1f0dce49fb5ec004e01d165965c457ca429",
+                "reference": "5f96c1f0dce49fb5ec004e01d165965c457ca429",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5"
+                "php": ">=5.5-stable"
             },
             "type": "library",
             "autoload": {
@@ -43,7 +43,7 @@
             ],
             "description": "Objects in PHP",
             "homepage": "https://github.com/Oktopost/Objection",
-            "time": "2016-04-05 13:11:45"
+            "time": "2016-04-07 07:58:15"
         },
         {
             "name": "oktopost/skeleton",
@@ -86,15 +86,14 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "RC",
     "stability-flags": {
-        "oktopost/objection": 20,
         "oktopost/skeleton": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5"
+        "php": ">=5.5-stable"
     },
     "platform-dev": []
 }

@@ -8,12 +8,15 @@
 			"email": "alexey@oktopost.com"
 		}
 	],
-	"minimum-stability": "dev",
+	
+	"minimum-stability": "RC",
+	
 	"require": {
-		"php": ">=5.5",
-		"oktopost/objection": "dev-master",
+		"php": ">=5.5-stable",
+		"oktopost/objection": "~1.0.0",
 		"oktopost/skeleton": "dev-master"
 	},
+	
 	"autoload": {
 		"psr-0": {
 			"Aquarium": "src"
