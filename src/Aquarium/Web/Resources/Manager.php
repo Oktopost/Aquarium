@@ -15,7 +15,7 @@ class Manager implements IProvider
 	{
 		$this->dependencies[$package->Name] = true;
 		
-		foreach ($package->Packages as $required)
+		foreach ($package->Requires as $required)
 		{
 			$this->package($required);
 		}

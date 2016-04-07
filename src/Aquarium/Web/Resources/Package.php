@@ -13,7 +13,7 @@ use Objection\LiteObject;
 /**
  * @property string 			$Name
  * @property array				$Path
- * @property ResourceCollection	$Packages
+ * @property ResourceCollection	$Requires
  * @property ResourceCollection	$Styles
  * @property ResourceCollection	$Scripts
  */
@@ -27,7 +27,7 @@ class Package extends LiteObject
 		return [
 			'Name'		=> LiteSetup::createString('', AccessRestriction::NO_SET),
 			'Path'		=> LiteSetup::createArray([], AccessRestriction::NO_SET),
-			'Packages'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
+			'Requires'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
 			'Styles'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
 			'Scripts'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET)
 		];
@@ -43,7 +43,7 @@ class Package extends LiteObject
 		
 		$this->_p->Name		= $name;
 		$this->_p->Path		= explode(PackageUtils::PACKAGE_PATH_SEPARATOR, $name);
-		$this->_p->Packages = new ResourceCollection();
+		$this->_p->Requires = new ResourceCollection();
 		$this->_p->Styles	= new ResourceCollection();
 		$this->_p->Scripts	= new ResourceCollection();
 	}

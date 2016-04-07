@@ -48,7 +48,7 @@ class Builder implements IBuilder
 	 */
 	public function package($name)
 	{
-		$this->package->Packages->add($name);
+		$this->package->Requires->add($name);
 		return $this;
 	}
 }

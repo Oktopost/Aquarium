@@ -37,7 +37,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
 	{
 		$p = new Package('package/name');
 		
-		$this->assertInstanceOf(ResourceCollection::class, $p->Packages);
+		$this->assertInstanceOf(ResourceCollection::class, $p->Requires);
 		$this->assertInstanceOf(ResourceCollection::class, $p->Scripts);
 		$this->assertInstanceOf(ResourceCollection::class, $p->Styles);
 	}

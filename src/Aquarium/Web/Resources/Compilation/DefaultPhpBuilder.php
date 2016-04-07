@@ -47,7 +47,7 @@ TAG
 			IBuilder::class);
 		
 		// Write main function body.
-		foreach ($package->Packages as $package) 
+		foreach ($package->Requires as $package) 
 		{
 			fprintf($resource, "\t\t\$b->package(%s);%s", $package, PHP_EOL);
 		}
