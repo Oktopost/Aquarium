@@ -3,11 +3,11 @@ namespace Aquarium\Web\Resources\Compilation;
 
 
 use Aquarium\Web\Resources\Config;
+use Aquarium\Web\Resources\Package;
 use Aquarium\Web\Resources\Package\IBuilder;
-use Aquarium\Web\Resources\Package\PackageDefinition;
 
 
-class DefaultBuilder implements IPhpBuilder
+class DefaultPhpBuilder implements IPhpBuilder
 {
 	
 	/**
@@ -27,11 +27,11 @@ class DefaultBuilder implements IPhpBuilder
 	
 	/**
 	 * @param resource $resource
-	 * @param PackageDefinition $definition
+	 * @param Package $package
 	 */
-	private function writePhpFile($resource, PackageDefinition $definition)
+	private function writePhpFile($resource, Package $package)
 	{
-		$className = Utils::getClassName($definition->Package->Name);
+		$className = Utils::getClassName($package->Name);
 		
 		// Write head.
 		fprintf($resource, <<<TAG
@@ -47,17 +47,17 @@ TAG
 			IBuilder::class);
 		
 		// Write main function body.
-		foreach ($definition->Packages as $package) 
+		foreach ($package->Packages as $package) 
 		{
 			fprintf($resource, "\t\t\$b->package(%s);%s", $package, PHP_EOL);
 		}
 		
-		foreach ($definition->Styles as $style) 
+		foreach ($package->Styles as $style) 
 		{
 			fprintf($resource, "\t\t\$b->style(%s);%s", $style, PHP_EOL);
 		}
 		
-		foreach ($definition->Scripts as $script) 
+		foreach ($package->Scripts as $script) 
 		{
 			fprintf($resource, "\t\t\$b->script(%s);%s", $script, PHP_EOL);
 		}
@@ -72,16 +72,16 @@ TAG
 	
 	
 	/**
-	 * @param PackageDefinition $definition
+	 * @param Package $package
 	 */
-	public function buildPhpFile(PackageDefinition $definition)
+	public function buildPhpFile(Package $package)
 	{
-		$className = Utils::getClassName($definition->Package->Name);
+		$className = Utils::getClassName($package->Name);
 		$resource = $this->createFile($className);
 		
 		try 
 		{
-			$this->writePhpFile($resource, $definition);
+			$this->writePhpFile($resource, $package);
 		}
 		finally
 		{

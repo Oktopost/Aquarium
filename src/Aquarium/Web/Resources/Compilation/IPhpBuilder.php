@@ -2,13 +2,13 @@
 namespace Aquarium\Web\Resources\Compilation;
 
 
-use Aquarium\Web\Resources\Package\PackageDefinition;
+use Aquarium\Web\Resources\Package;
 
 
 interface IPhpBuilder
 {
 	/**
-	 * @param PackageDefinition $definition
+	 * @param Package $p
 	 */
-	public function buildPhpFile(PackageDefinition $definition);
+	public function buildPhpFile(Package $p);
 }

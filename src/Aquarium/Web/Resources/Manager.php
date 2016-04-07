@@ -9,6 +9,30 @@ class Manager implements IProvider
 	
 	
 	/**
+	 * @param Package $package
+	 */
+	private function appendPackage(Package $package)
+	{
+		$this->dependencies[$package->Name] = true;
+		
+		foreach ($package->Packages as $required)
+		{
+			$this->package($required);
+		}
+		
+		foreach ($package->Styles as $style)
+		{
+			Config::instance()->Consumer->addStyle($style);
+		}
+		
+		foreach ($package->Scripts as $script)
+		{
+			Config::instance()->Consumer->addScript($script);
+		}
+	}
+	
+	
+	/**
 	 * @param string $name
 	 * @return static
 	 */
@@ -20,8 +44,8 @@ class Manager implements IProvider
 		if (!Utils\PackageUtils::isValidPackageName($name)) 
 			throw new \Exception('Package name is invalid');
 		
-		$this->dependencies[$name] = true;
-		Config::instance()->PackageConstructor->append($name);
+		$package = Config::instance()->DefinitionManager->get($name);
+		$this->appendPackage($package);
 		
 		return $this;
 	}
