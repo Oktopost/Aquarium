@@ -2,8 +2,8 @@
 namespace Aquarium\Web\Resources;
 
 
-interface IProvider {
-	
+interface IProvider
+{
 	/**
 	 * @param string $name
 	 * @return static

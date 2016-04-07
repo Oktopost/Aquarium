@@ -35,17 +35,17 @@ class Package extends LiteObject
 	
 	
 	/**
-	 * @param $name
+	 * @param string $name
 	 */
 	public function __construct($name) 
 	{
-		parent::__construct([
-			'Name'		=> $name,
-			'Path'		=> explode(PackageUtils::PACKAGE_PATH_SEPARATOR, $name),
-			'Packages'	=> new ResourceCollection(),
-			'Styles'	=> new ResourceCollection(),
-			'Scripts'	=> new ResourceCollection()
-		]);
+		parent::__construct();
+		
+		$this->_p->Name		= $name;
+		$this->_p->Path		= explode(PackageUtils::PACKAGE_PATH_SEPARATOR, $name);
+		$this->_p->Packages = new ResourceCollection();
+		$this->_p->Styles	= new ResourceCollection();
+		$this->_p->Scripts	= new ResourceCollection();
 	}
 	
 	

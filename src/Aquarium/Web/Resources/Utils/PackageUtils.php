@@ -16,7 +16,7 @@ class PackageUtils
 	 */
 	public static function isValidPackageName($name) 
 	{
-		$allowed = 'a-z0-9\-\_';
+		$allowed = 'a-z0-9';
 		$separator = self::PACKAGE_PATH_SEPARATOR;
 		
 		return (bool)preg_match("/^[$allowed]+(\\{$separator}[$allowed]+)*$/i", $name);

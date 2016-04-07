@@ -2,8 +2,8 @@
 namespace Aquarium\Web\Resources;
 
 
-interface IConsumer {
-	
+interface IConsumer
+{	
 	/**
 	 * @param string $path
 	 * @return static

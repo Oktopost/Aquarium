@@ -8,13 +8,13 @@ use Aquarium\Web\Resources\Package\IConstructor;
 use Aquarium\Web\Resources\Package\PackageDefinition;
 
 
-class SimpleConstructor implements IConstructor
+class CompiledConstructor implements IConstructor
 {
 	/**
 	 * @param Package $p
 	 * @param PackageDefinition $pd
 	 */
-	private function loadPackageFilesIntoDefinition(Package $p, PackageDefinition $pd)
+	protected function loadPackageFilesIntoDefinition(Package $p, PackageDefinition $pd)
 	{
 		foreach ($p->Styles as $style)
 		{
@@ -37,15 +37,12 @@ class SimpleConstructor implements IConstructor
 	 * @param Package $p
 	 * @param PackageDefinition $pd
 	 */
-	private function loadPackage(Package $p, PackageDefinition $pd)
+	protected function loadPackage(Package $p, PackageDefinition $pd)
 	{
 		foreach ($p->Packages as $packageName) 
 		{
-			if ($pd->hasPackage($packageName)) continue;
-			
-			$this->loadPackageFilesIntoDefinition(
-				Config::instance()->DefinitionManager->get($packageName),
-				$pd);
+			if (!$pd->hasPackage($packageName))
+				$p->Packages[] = $packageName;
 		}
 		
 		$this->loadPackageFilesIntoDefinition($p, $pd);
@@ -73,6 +70,11 @@ class SimpleConstructor implements IConstructor
 	public function append($packageName)
 	{
 		$definition = $this->construct($packageName);
+		
+		foreach ($definition->Package as $package)
+		{
+			Config::instance()->Provider->package($package);
+		}
 		
 		foreach ($definition->Styles as $style)
 		{

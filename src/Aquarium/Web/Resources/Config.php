@@ -4,15 +4,18 @@ namespace Aquarium\Web\Resources;
 
 use Aquarium\Web\Resources\Package\IConstructor;
 use Aquarium\Web\Resources\Package\IPackageDefinitionManager;
-
+use Aquarium\Web\Resources\Compilation\DirConfig;
+use Objection\Enum\AccessRestriction;
 use Objection\LiteSetup;
 use Objection\LiteObject;
 
 
 /**
  * @property IConsumer 					$Consumer
+ * @property IProvider					$Provider
  * @property IConstructor			 	$PackageConstructor
  * @property IPackageDefinitionManager 	$DefinitionManager
+ * @property DirConfig 					$Directories
  */
 class Config extends LiteObject
 {
@@ -26,8 +29,10 @@ class Config extends LiteObject
 	{
 		return [
 			'Consumer'				=> LiteSetup::createInstanceOf(IConsumer::class), 
+			'Provider'				=> LiteSetup::createInstanceOf(IProvider::class), 
 			'PackageConstructor'	=> LiteSetup::createInstanceOf(IConstructor::class), 
-			'DefinitionManager'		=> LiteSetup::createInstanceOf(IPackageDefinitionManager::class)	 
+			'DefinitionManager'		=> LiteSetup::createInstanceOf(IPackageDefinitionManager::class),
+			'Directories'			=> LiteSetup::createInstanceOf(new DirConfig(), AccessRestriction::NO_SET)
 		];
 	}
 }
