@@ -38,8 +38,10 @@ class DefaultPhpBuilder implements IPhpBuilder
 <?php
 namespace %s;
 
-class %s {
-	public static function get(%s \$b) {
+class %s 
+{
+	public static function get(%s \$b) 
+	{
 TAG
 			,	
 			Utils::PACKAGE_CLASS_NAME_PREFIX, 
@@ -47,9 +49,9 @@ TAG
 			IBuilder::class);
 		
 		// Write main function body.
-		foreach ($package->Requires as $package) 
+		foreach ($package->Requires as $required) 
 		{
-			fprintf($resource, "\t\t\$b->package(%s);%s", $package, PHP_EOL);
+			fprintf($resource, "\t\t\$b->package(%s);%s", $required, PHP_EOL);
 		}
 		
 		foreach ($package->Styles as $style) 
