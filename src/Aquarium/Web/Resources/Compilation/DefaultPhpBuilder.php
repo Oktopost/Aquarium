@@ -39,7 +39,7 @@ class DefaultPhpBuilder implements IPhpBuilder
 namespace %s;
 
 class %s {
-	public function get(%s \$b) {
+	public static function get(%s \$b) {
 TAG
 			,	
 			Utils::PACKAGE_CLASS_NAME_PREFIX, 

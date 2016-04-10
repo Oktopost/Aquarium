@@ -2,6 +2,7 @@
 namespace Aquarium\Web\Resources\Compilation;
 
 
+use Aquarium\Web\Resources\Config;
 use Aquarium\Web\Resources\Package;
 use Aquarium\Web\Resources\Utils\PackageUtils;
 
@@ -28,6 +29,20 @@ class Utils
 		return 
 			self::PACKAGE_CLASS_NAME_PREFIX .
 			implode('_', explode(PackageUtils::PACKAGE_PATH_SEPARATOR, $packageName));
+	}
+	
+	/**
+	 * @param Package|string $packageName
+	 * @return string
+	 */
+	public static function getClassPath($packageName)
+	{
+		if ($packageName instanceof Package) 
+			return self::getClassPath($packageName->Name);
+		
+		
+		return Config::instance()->Directories->ResourcesTargetDir . 
+			DIRECTORY_SEPARATOR . self::getClassName($packageName) . '.php';
 	}
 	
 	/**
