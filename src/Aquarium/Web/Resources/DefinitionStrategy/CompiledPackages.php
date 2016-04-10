@@ -42,7 +42,7 @@ class CompiledPackages implements IPackageDefinitionManager
 			$builder->setup($package);
 			
 			if (!is_file($name) || !is_readable($name))
-				throw new \Exception("Can't load file $path!");
+				throw new \Exception("Can't load file '$path'");
 			
 			/** @noinspection PhpIncludeInspection */
 			require_once $path;
@@ -61,5 +61,13 @@ class CompiledPackages implements IPackageDefinitionManager
 	public function has($name)
 	{
 		return isset($this->cached[$name]) || is_file(Utils::getClassPath($name)); 
+	}
+	
+	/**
+	 * @return array Array of all existing package definitions
+	 */
+	public function getNames()
+	{
+		throw new \Exception('This class should not be used for compilation');
 	}
 }

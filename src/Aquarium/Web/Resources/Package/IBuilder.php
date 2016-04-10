@@ -8,12 +8,6 @@ use Aquarium\Web\Resources\Package;
 interface IBuilder
 {
 	/**
-	 * @param Package $package
-	 * @return static
-	 */
-	public function setup(Package $package);
-	
-	/**
 	 * @param string $style
 	 * @return static
 	 */

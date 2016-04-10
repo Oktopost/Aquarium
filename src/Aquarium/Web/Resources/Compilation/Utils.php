@@ -13,6 +13,7 @@ class Utils
 	
 	
 	const PACKAGE_CLASS_NAME_PREFIX = 'CompiledPackage_';
+	const FILE_NAME_PREFIX			= 'CompiledFile_';
 	
 	const COMPILED_CLASSES_NAMESPACE = 'Aquarium\Web\Resources\CompiledScripts';
 	
@@ -28,7 +29,7 @@ class Utils
 		
 		return 
 			self::PACKAGE_CLASS_NAME_PREFIX .
-			implode('_', explode(PackageUtils::PACKAGE_PATH_SEPARATOR, $packageName));
+			implode('_', explode(Package::PACKAGE_PATH_SEPARATOR, $packageName));
 	}
 	
 	/**
@@ -40,8 +41,7 @@ class Utils
 		if ($packageName instanceof Package) 
 			return self::getClassPath($packageName->Name);
 		
-		
-		return Config::instance()->Directories->ResourcesTargetDir . 
+		return Config::instance()->Directories->PhpTargetDir . 
 			DIRECTORY_SEPARATOR . self::getClassName($packageName) . '.php';
 	}
 	

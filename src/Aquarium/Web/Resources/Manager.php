@@ -41,7 +41,7 @@ class Manager implements IProvider
 		if (isset($this->dependencies[$name]))
 			return $this;
 		
-		if (!Utils\PackageUtils::isValidPackageName($name)) 
+		if (!Package::isValidPackageName($name)) 
 			throw new \Exception('Package name is invalid');
 		
 		$package = Config::instance()->DefinitionManager->get($name);

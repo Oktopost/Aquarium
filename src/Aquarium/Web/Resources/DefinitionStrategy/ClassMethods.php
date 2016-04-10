@@ -2,6 +2,8 @@
 namespace Aquarium\Web\Resources\DefinitionStrategy;
 
 
+use Aquarium\Web\Resources\Compilers\Gulp\GulpCommand;
+use Aquarium\Web\Resources\Config;
 use Aquarium\Web\Resources\Package;
 use Aquarium\Web\Resources\Utils\Builder;
 use Aquarium\Web\Resources\Utils\PackageUtils;
@@ -10,6 +12,9 @@ use Aquarium\Web\Resources\Package\IPackageDefinitionManager;
 
 class ClassMethods implements IPackageDefinitionManager
 {
+	const PACKAGE_METHOD_PREFIX	= 'Package_';
+	
+	
 	private $configClassName;
 	private $configObject = null;
 	
@@ -34,8 +39,8 @@ class ClassMethods implements IPackageDefinitionManager
 	 */
 	private function getFunctionName($name)
 	{
-		$path = explode(PackageUtils::PACKAGE_PATH_SEPARATOR, $name);
-		return strtolower(implode('_', $path));
+		$path = explode(Package::PACKAGE_PATH_SEPARATOR, $name);
+		return self::PACKAGE_METHOD_PREFIX . implode('_', $path);
 	}
 	
 	
@@ -82,5 +87,27 @@ class ClassMethods implements IPackageDefinitionManager
 		$funcName	= $this->getFunctionName($name);
 		
 		return method_exists($object, $funcName);
-	} 
+	}
+	
+	
+	/**
+	 * @return array Array of all existing package definitions
+	 */
+	public function getNames()
+	{
+		$object			= $this->getObject();
+		$reflection		= new \ReflectionClass($object);
+		$methods		= $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+		$packageNames	= [];
+		
+		foreach ($methods as $method)
+		{
+			if (strpos($method->name, self::PACKAGE_METHOD_PREFIX) === 0)
+			{
+				$packageNames[] = $method->name;
+			}
+		}
+		
+		return $packageNames;
+	}
 }

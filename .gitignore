@@ -12,3 +12,7 @@
 
 # Local test files
 test.php
+
+
+# Node
+node_modules

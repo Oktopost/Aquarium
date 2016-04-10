@@ -5,7 +5,7 @@ namespace Aquarium\Web\Resources\Package;
 use Aquarium\Web\Resources\Package;
 
 
-interface IPackageDefinitionManager
+interface IPackageDefinitionManager extends IPackagesCollection
 {
 	/**
 	 * @param string $name

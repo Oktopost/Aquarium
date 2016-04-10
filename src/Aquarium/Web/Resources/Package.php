@@ -2,12 +2,11 @@
 namespace Aquarium\Web\Resources;
 
 
-use Aquarium\Web\Resources\Utils\PackageUtils;
 use Aquarium\Web\Resources\Utils\ResourceCollection;
 
-use Objection\Enum\AccessRestriction;
 use Objection\LiteSetup;
 use Objection\LiteObject;
+use Objection\Enum\AccessRestriction;
 
 
 /**
@@ -19,6 +18,9 @@ use Objection\LiteObject;
  */
 class Package extends LiteObject
 {
+	const PACKAGE_PATH_SEPARATOR = '/';
+	
+	
 	/**
 	 * @return array
 	 */
@@ -42,7 +44,7 @@ class Package extends LiteObject
 		parent::__construct();
 		
 		$this->_p->Name		= $name;
-		$this->_p->Path		= explode(PackageUtils::PACKAGE_PATH_SEPARATOR, $name);
+		$this->_p->Path		= explode(self::PACKAGE_PATH_SEPARATOR, $name);
 		$this->_p->Requires = new ResourceCollection();
 		$this->_p->Styles	= new ResourceCollection();
 		$this->_p->Scripts	= new ResourceCollection();
@@ -61,5 +63,26 @@ class Package extends LiteObject
 			isset($this->Path[$at]) ? 
 				$this->Path[$at] : 
 				null);
+	}
+	
+	/**
+	 * @param string $glue
+	 * @return string
+	 */
+	public function getName($glue = '/') 
+	{
+		return implode($glue, $this->Path);
+	}
+	
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public static function isValidPackageName($name)
+	{
+		$allowed = 'a-z0-9';
+		$separator = Package::PACKAGE_PATH_SEPARATOR;
+		return (bool)preg_match("/^[$allowed]+(\\{$separator}[$allowed]+)*$/i", $name);
 	}
 }

@@ -9,7 +9,6 @@ use Aquarium\Web\Resources\Package\IBuilder;
 
 class DefaultPhpBuilder implements IPhpBuilder
 {
-	
 	/**
 	 * @param string $packageName
 	 * @return resource
@@ -43,23 +42,23 @@ class %s
 	public static function get(%s \$b) 
 	{
 TAG
-			,	
+			, 
 			Utils::PACKAGE_CLASS_NAME_PREFIX, 
-			$className,
+			$className, 
 			IBuilder::class);
 		
 		// Write main function body.
-		foreach ($package->Requires as $required) 
+		foreach ($package->Requires as $required)
 		{
 			fprintf($resource, "\t\t\$b->package(%s);%s", $required, PHP_EOL);
 		}
 		
-		foreach ($package->Styles as $style) 
+		foreach ($package->Styles as $style)
 		{
 			fprintf($resource, "\t\t\$b->style(%s);%s", $style, PHP_EOL);
 		}
 		
-		foreach ($package->Scripts as $script) 
+		foreach ($package->Scripts as $script)
 		{
 			fprintf($resource, "\t\t\$b->script(%s);%s", $script, PHP_EOL);
 		}
