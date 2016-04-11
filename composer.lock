@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e03d23e02a4344505be21b02ab347cf9",
+    "hash": "7451ac84dfdbaa5282c12f91ee32dceb",
     "content-hash": "f321127dc41d9503aedf243c2a6eb4bf",
     "packages": [
         {
@@ -51,12 +51,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/Skeleton.git",
-                "reference": "55fcf7c918ceb5866cbbcc255db35da3488ef611"
+                "reference": "683bad8ead1b2fa880d6e9fbfe4e613b5b2699cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/Skeleton/zipball/55fcf7c918ceb5866cbbcc255db35da3488ef611",
-                "reference": "55fcf7c918ceb5866cbbcc255db35da3488ef611",
+                "url": "https://api.github.com/repos/Oktopost/Skeleton/zipball/683bad8ead1b2fa880d6e9fbfe4e613b5b2699cc",
+                "reference": "683bad8ead1b2fa880d6e9fbfe4e613b5b2699cc",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,7 @@
             ],
             "description": "Inversion of Control library",
             "homepage": "https://github.com/Oktopost/Skeleton",
-            "time": "2016-04-03 09:16:12"
+            "time": "2016-04-11 07:57:42"
         }
     ],
     "packages-dev": [],
