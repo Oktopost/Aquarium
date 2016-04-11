@@ -2,13 +2,16 @@
 namespace Aquarium\Resources;
 
 
-use Aquarium\Resources\Compilation\ICompiler;
-use Aquarium\Resources\Compilation\DirConfig;
-use Aquarium\Resources\Package\IPackageDefinitionManager;
+use Aquarium\Resources\Modules\Package\IPackageDefinitionManager;
+use Aquarium\Resources\Modules\Compilation\DirConfig;
 
 use Objection\LiteSetup;
 use Objection\LiteObject;
 use Objection\Enum\AccessRestriction;
+
+use Skeleton\Skeleton;
+use Skeleton\ImplementersMap;
+use Skeleton\ConfigLoader\DirectoryConfigLoader;
 
 
 /**
@@ -23,6 +26,13 @@ class Config extends LiteObject
 	use \Objection\TSingleton;
 	
 	
+	/** @var ImplementersMap\TestMap|null */
+	private static $testMap = null;
+	
+	/** @var Skeleton */
+	private static $skeleton;
+	
+	
 	/**
 	 * @return array
 	 */
@@ -35,5 +45,49 @@ class Config extends LiteObject
 			'Directories'			=> LiteSetup::createInstanceOf(new DirConfig(), AccessRestriction::NO_SET),
 			'Compiler'				=> LiteSetup::createInstanceOf(ICompiler::class)
 		];
+	}
+	
+	
+	/** 
+	 * @param static $instance
+	 */
+	protected static function initialize(/** @noinspection PhpUnusedParameterInspection */ $instance) 
+	{
+		self::$skeleton = (new Skeleton())
+			->setMap(new ImplementersMap\SimpleMap())
+			->setConfigLoader(new DirectoryConfigLoader(__DIR__ . '/_skeleton'));
+	}
+	
+	
+	/**
+	 * @param string|null $interface Set to null to get the skeleton object.
+	 * @return mixed
+	 */
+	public static function skeleton($interface = null)
+	{
+		if (is_null($interface)) 
+			return self::$skeleton;
+			
+		return self::$skeleton->get($interface);
+	}
+	
+	/**
+	 * @param string $interface
+	 * @param mixed $definition
+	 */
+	public static function override($interface, $definition) 
+	{
+		if (is_null(self::$testMap)) 
+		{
+			self::$testMap = new ImplementersMap\TestMap(self::$skeleton->getMap());
+			self::$skeleton->setMap(self::$testMap);
+		}
+		
+		self::$testMap->override($interface, $definition);
+	}
+	
+	public static function reset() 
+	{
+		self::$testMap->reset();
 	}
 }
