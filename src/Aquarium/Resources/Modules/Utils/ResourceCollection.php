@@ -36,6 +36,41 @@ class ResourceCollection implements \Iterator
 	}
 	
 	/**
+	 * @param string $from
+	 * @param string $to
+	 * @return static
+	 */
+	public function replace($from, $to) 
+	{
+		$index = array_search($from, $this->collection);
+		
+		if ($index === false) return $this;
+		
+		array_splice($this->collection, $index, 1, $to);
+		
+		return $this;
+	}
+	
+	/**
+	 * @param array|string $target
+	 * @return static
+	 */
+	public function remove($target) 
+	{
+		if (!is_array($target)) $target = [$target];
+		
+		foreach ($target as $oldResource) 
+		{
+			$index = array_search($oldResource, $this->collection);
+			
+			if ($index !== false) 
+				array_splice($this->collection, $index, 1);
+		}
+		
+		return $this;
+	}
+	
+	/**
 	 * @return int
 	 */
 	public function count() 

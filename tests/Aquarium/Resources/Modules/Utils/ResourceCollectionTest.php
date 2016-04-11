@@ -56,6 +56,71 @@ class ResourceCollectionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	
+	public function test_replace_ElementNotFound() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('a');
+		$collection->replace('b', 'c');
+		
+		$this->assertEquals(['a'], $collection->get());
+	}
+	
+	public function test_replace_SingleElement() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('a');
+		$collection->replace('a', 'c');
+		
+		$this->assertEquals(['c'], $collection->get());
+	}
+	
+	public function test_replace_NumberOfElements() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('a')->add('b')->add('c');
+		$collection->replace('b', 'd');
+		
+		$this->assertEquals(['a', 'd', 'c'], $collection->get());
+	}
+	
+	
+	public function test_remove_ElementNotFound() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('a');
+		$collection->remove('b');
+		
+		$this->assertEquals(['a'], $collection->get());
+	}
+	
+	public function test_remove_ElementFound() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('a')->add('b');
+		$collection->remove('b');
+		
+		$this->assertEquals(['a'], $collection->get());
+	}
+	
+	public function test_remove_SingleElementAsArray() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('b')->add('c');
+		$collection->remove(['b']);
+		
+		$this->assertEquals(['c'], $collection->get());
+	}
+	
+	public function test_remove_NumberOfElements() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('a')->add('b')->add('c')->add('d');
+		$collection->remove(['b', 'd']);
+		
+		$this->assertEquals(['a', 'c'], $collection->get());
+	}
+	
+	
 	public function test_count() 
 	{
 		$collection = new ResourceCollection();
