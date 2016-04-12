@@ -46,6 +46,48 @@ class ResourceMap
 	}
 	
 	/**
+	 * @param ResourceMap $map
+	 */
+	public function modify(ResourceMap $map) 
+	{
+		$newMap = $map->getMap();
+		
+		// Collection of maps that does not exist in the new map.
+		$notCloned = $this->map;
+		
+		
+		foreach ($map->getMap() as $newResource => $oldResource) 
+		{
+			foreach ($this->map as $originalNewResource => $initialResource)
+			{
+				if (is_string($oldResource)) 
+				{
+					if ($originalNewResource == $oldResource) 
+					{
+						$newMap[$newResource] = $initialResource;
+						unset($notCloned[$originalNewResource]);
+					}
+				}
+				else 
+				{
+					$position = array_search($originalNewResource, $newMap[$newResource]);
+					
+					if ($position !== false)
+					{
+						array_splice($newMap[$newResource], $position, 1, $initialResource);
+						unset($notCloned[$originalNewResource]);
+					}
+				}
+			}
+		}
+		
+		$this->map = array_merge(
+			$newMap,
+			$notCloned
+		);
+	}
+	
+	/**
 	 * @return array
 	 */
 	public function getMap() 

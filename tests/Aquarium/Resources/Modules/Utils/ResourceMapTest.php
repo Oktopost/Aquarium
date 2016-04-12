@@ -85,4 +85,106 @@ class ResourceMapTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(['1', 'new', 'n'], $collection->get());
 	}
+	
+	
+	public function test_combine_NoChanges()
+	{
+		$original = new ResourceMap();
+		$original->map('a', 'b');
+		
+		$modified = new ResourceMap();
+		
+		$original->modify($modified);
+		
+		$this->assertEquals(['b' => 'a'], $original->getMap());
+	}
+	
+	public function test_combine_NewMapExists()
+	{
+		$original = new ResourceMap();
+		$original->map('a', 'b');
+		
+		$modified = new ResourceMap();
+		$modified->map('c', 'd');
+		
+		$original->modify($modified);
+		
+		$this->assertEquals(['b' => 'a', 'd' => 'c'], $original->getMap());
+	}
+	
+	public function test_combine_SingleValueModified()
+	{
+		$original = new ResourceMap();
+		$original->map('a', 'b');
+		
+		$modified = new ResourceMap();
+		$modified->map('b', 'c');
+		
+		$original->modify($modified);
+		
+		$this->assertEquals(['c' => 'a'], $original->getMap());
+	}
+	
+	public function test_combine_OriginalResourceWasAnArrayOfResources()
+	{
+		$original = new ResourceMap();
+		$original->map(['a1', 'a2'], 'b');
+		
+		$modified = new ResourceMap();
+		$modified->map('b', 'c');
+		
+		$original->modify($modified);
+		
+		$this->assertEquals(['c' => ['a1', 'a2']], $original->getMap());
+	}
+	
+	public function test_combine_OriginalNewResourceIsOneOfSourceResources()
+	{
+		$original = new ResourceMap();
+		$original->map('a', 'b');
+		
+		$modified = new ResourceMap();
+		$modified->map(['b', 'b2'], 'c');
+		
+		$original->modify($modified);
+		
+		$this->assertEquals(['c' => ['a', 'b2']], $original->getMap());
+	}
+	
+	public function test_combine_OriginalNewResourceIsOneOfSourceResources_OriginalResourceSourceIsArrayOfResources()
+	{
+		$original = new ResourceMap();
+		$original->map(['a1', 'a2'], 'b');
+		
+		$modified = new ResourceMap();
+		$modified->map(['b0', 'b', 'b2'], 'c');
+		
+		$original->modify($modified);
+		
+		$this->assertEquals(['c' => ['b0', 'a1', 'a2', 'b2']], $original->getMap());
+	}
+	
+	public function test_combine_Sanity()
+	{
+		$original = new ResourceMap();
+		$original->map(['a1', 'a2'], 'b');
+		$original->map('d', 'n');
+		$original->map('only', 'old');
+		
+		$modified = new ResourceMap();
+		$modified->map(['b0', 'b', 'b2'], 'c');
+		$modified->map('only', 'new');
+		$modified->map(['b', 'n'], 'm');
+		
+		$original->modify($modified);
+		
+		$this->assertEquals(
+			[
+				'c' => ['b0', 'a1', 'a2', 'b2'],
+				'new' => 'only',
+				'old' => 'only',
+				'm' => ['a1', 'a2', 'd']
+			], 
+			$original->getMap());
+	}
 }

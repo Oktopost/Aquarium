@@ -149,6 +149,14 @@ class ResourceCollectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(['a'], $collection->get());
 	}
 	
+	public function test_get_FilterUsed_FilterApplied() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add('a')->add('1abc')->add('abc')->add('1nnn');
+		$this->assertEquals(['1abc', '1nnn'], $collection->get('1*'));
+	}
+	
+	
 	
 	public function test_iteration() 
 	{

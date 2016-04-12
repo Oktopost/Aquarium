@@ -79,11 +79,19 @@ class ResourceCollection implements \Iterator
 	}
 	
 	/**
+	 * @param string|bool $filter
 	 * @return array
 	 */
-	public function get() 
+	public function get($filter = false) 
 	{
-		return $this->collection;
+		if (!$filter) return $this->collection;
+		
+		return array_values(array_filter($this->collection, 
+			function($value) 
+				use ($filter) 
+			{
+				return fnmatch($filter, $value); 
+			}));
 	}
 	
 	/**
