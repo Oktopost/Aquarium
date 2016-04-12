@@ -10,7 +10,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 {
 	public function test_getTimestamps_Sanity()
 	{
-		$result = PreCompileHelper::getTimestamps([__FILE__, __DIR__ . '/notfound']);
+		$result = (new PreCompileHelper())->getTimestamps([__FILE__, __DIR__ . '/notfound']);
 		
 		$this->assertEquals(
 			[
@@ -23,7 +23,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_NoData_ReturnEmptySetup()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(new ResourceMap(), []);
+		$setup = (new PreCompileHelper())->getRecompileTargets(new ResourceMap(), []);
 		
 		$this->assertEmpty($setup->CompileTarget->get());
 		$this->assertEmpty($setup->Unchanged->get());
@@ -31,7 +31,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_NoModifiedObjects_AllResourcesMarkedAsUnchanged()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(
+		$setup = (new PreCompileHelper())->getRecompileTargets(
 			(new ResourceMap())->map('a', 'b'), []);
 		
 		$this->assertEmpty($setup->CompileTarget->get());
@@ -40,7 +40,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_SingleSourceModified_SourceMarkedForRecompile()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(
+		$setup = (new PreCompileHelper())->getRecompileTargets(
 			(new ResourceMap())->map('a', 'b'), ['b']);
 		
 		$this->assertEquals(['a'], $setup->CompileTarget->get());
@@ -49,7 +49,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_SingleSourceModifiedWithNumberOfResources_SourcesMarkedForRecompile()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(
+		$setup = (new PreCompileHelper())->getRecompileTargets(
 			(new ResourceMap())->map(['a', 'n'], 'b'), ['b']);
 		
 		$this->assertEquals(['a', 'n'], $setup->CompileTarget->get());
@@ -58,7 +58,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_HaveUnmodifiedAndModified()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(
+		$setup = (new PreCompileHelper())->getRecompileTargets(
 			(new ResourceMap())->map('a', 'b')->map('c', 'd'), ['b']);
 		
 		$this->assertEquals(['a'], $setup->CompileTarget->get());
@@ -67,7 +67,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_ModifiedTargetRequestRecompileOfFileWithUnmodifiedTarget()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(
+		$setup = (new PreCompileHelper())->getRecompileTargets(
 			(new ResourceMap())->map('a', 'modified')->map('a', 'unmodified'), ['modified']);
 		
 		$this->assertEquals(['a'], $setup->CompileTarget->get());
@@ -76,7 +76,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_ModifiedFileAffectsChainOfFiles()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(
+		$setup = (new PreCompileHelper())->getRecompileTargets(
 			(new ResourceMap())
 				->map('a', 'modified')
 				->map(['a', 'n'], 'b') 
@@ -90,7 +90,7 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_ModifiedChainNotAffectOthers()
 	{
-		$setup = PreCompileHelper::getRecompileTargets(
+		$setup = (new PreCompileHelper())->getRecompileTargets(
 			(new ResourceMap())
 				->map('a', 'modified')
 				->map(['a', 'n'], 'b')
@@ -104,6 +104,6 @@ class PreCompileHelperTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_getRecompileTargets_SetupReturned()
 	{
-		$this->assertInstanceOf(CompilerSetup::class, PreCompileHelper::getRecompileTargets(new ResourceMap(), []));
+		$this->assertInstanceOf(CompilerSetup::class, (new PreCompileHelper())->getRecompileTargets(new ResourceMap(), []));
 	}
 }

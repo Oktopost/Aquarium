@@ -2,11 +2,11 @@
 namespace Aquarium\Resources\Compilers\Gulp\Utils;
 
 
-class TimestampHelper
+use Aquarium\Resources\Compilers\Gulp\Process\ITimestampHelper;
+
+
+class TimestampHelper implements ITimestampHelper
 {
-	use \Objection\TStaticClass;
-	
-	
 	const TIMESTAMP_PREFIX		= 'T-';
 	
 	
@@ -14,7 +14,7 @@ class TimestampHelper
 	 * @param string $source
 	 * @return int|bool
 	 */
-	public static function getTimestampFromFileName($source)
+	public function getTimestampFromFileName($source)
 	{
 		$matches = [];
 		
@@ -33,7 +33,7 @@ class TimestampHelper
 	 * @param string $source
 	 * @return string|bool Return false string if file does not exists.
 	 */
-	public static function findFileWithTimestamp($source)
+	public function findFileWithTimestamp($source)
 	{
 		$prefix = self::TIMESTAMP_PREFIX;
 		$findTimestampRegex = "/^((.*)(.css|.js)|(.*)())$/";
@@ -64,7 +64,7 @@ class TimestampHelper
 	 * @param int|bool $time
 	 * @return string
 	 */
-	public static function generateTimestamp($time = false)
+	public function generateTimestamp($time = false)
 	{
 		return self::TIMESTAMP_PREFIX . base_convert((string)($time ?: time()), 10, 36);
 	}
@@ -74,7 +74,7 @@ class TimestampHelper
 	 * @param int|bool $time
 	 * @return string|bool New file name with timestamp 
 	 */
-	public static function generateTimestampForFile($file, $time = false)
+	public function generateTimestampForFile($file, $time = false)
 	{
 		$timestamp = self::generateTimestamp($time);
 		$findTimestampRegex = "/^((.*)(.css|.js)|(.*))$/";

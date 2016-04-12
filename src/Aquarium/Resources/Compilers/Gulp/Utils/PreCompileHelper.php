@@ -4,18 +4,16 @@ namespace Aquarium\Resources\Compilers\Gulp\Utils;
 
 use Aquarium\Resources\Modules\Utils\ResourceMap;
 use Aquarium\Resources\Compilers\Gulp\CompilerSetup;
+use Aquarium\Resources\Compilers\Gulp\Process\IPreCompileHelper;
 
 
-class PreCompileHelper
+class PreCompileHelper implements IPreCompileHelper
 {
-	use \Objection\TStaticClass;
-	
-	
 	/**
 	 * @param array $files Array of full files path
 	 * @return array
 	 */
-	public static function getTimestamps(array $files)
+	public function getTimestamps(array $files)
 	{
 		$timestamps = [];
 		
@@ -39,7 +37,7 @@ class PreCompileHelper
 	 * @param array $modified Array of final Resource files that must be recompiled.
 	 * @return CompilerSetup
 	 */
-	public static function getRecompileTargets(ResourceMap $compilationMap, array $modified)
+	public function getRecompileTargets(ResourceMap $compilationMap, array $modified)
 	{
 		$recompileSource = [];
 		$unmodifiedFlipped = array_flip(array_keys($compilationMap->getMap()));

@@ -14,11 +14,11 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			TimestampHelper::TIMESTAMP_PREFIX . $this->encodedTime, 
-			TimestampHelper::generateTimestamp($this->time));
+			(new TimestampHelper())->generateTimestamp($this->time));
 		
 		$this->assertEquals(
 			strlen(TimestampHelper::TIMESTAMP_PREFIX) + 6, 
-			strlen(TimestampHelper::generateTimestamp()));
+			strlen((new TimestampHelper())->generateTimestamp()));
 	}
 	
 	
@@ -28,7 +28,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			$this->time,
-			TimestampHelper::getTimestampFromFileName($file)
+			(new TimestampHelper())->getTimestampFromFileName($file)
 		);
 	}
 	
@@ -38,7 +38,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			$this->time,
-			TimestampHelper::getTimestampFromFileName($file)
+			(new TimestampHelper())->getTimestampFromFileName($file)
 		);
 	}
 	
@@ -48,7 +48,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			$this->time,
-			TimestampHelper::getTimestampFromFileName($file)
+			(new TimestampHelper())->getTimestampFromFileName($file)
 		);
 	}
 	
@@ -59,7 +59,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			'/asdasd.' . TimestampHelper::TIMESTAMP_PREFIX . $this->encodedTime,
-			TimestampHelper::generateTimestampForFile($file, $this->time)
+			(new TimestampHelper())->generateTimestampForFile($file, $this->time)
 		);
 	}
 	
@@ -69,7 +69,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			'/asdasd.' . TimestampHelper::TIMESTAMP_PREFIX . $this->encodedTime . '.css',
-			TimestampHelper::generateTimestampForFile($file, $this->time)
+			(new TimestampHelper())->generateTimestampForFile($file, $this->time)
 		);
 	}
 	
@@ -80,12 +80,12 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			'/asdasd/b/asda.' . TimestampHelper::TIMESTAMP_PREFIX . $this->encodedTime,
-			TimestampHelper::generateTimestampForFile($file1, $this->time)
+			(new TimestampHelper())->generateTimestampForFile($file1, $this->time)
 		);
 		
 		$this->assertEquals(
 			'/asdasd/b/asda.' . TimestampHelper::TIMESTAMP_PREFIX . $this->encodedTime . '.css',
-			TimestampHelper::generateTimestampForFile($file2, $this->time)
+			(new TimestampHelper())->generateTimestampForFile($file2, $this->time)
 		);
 	}
 	
@@ -93,7 +93,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 	public function test_findFileWithTimestamp_NoFileWithTimestamp()
 	{
 		$file = $this->timestampFilesPath . '/NoFileWithTimestamp/a.js';
-		$this->assertFalse(TimestampHelper::findFileWithTimestamp($file));
+		$this->assertFalse((new TimestampHelper())->findFileWithTimestamp($file));
 	}
 	
 	public function test_findFileWithTimestamp_SingleFileWithTimestamp()
@@ -103,7 +103,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			$this->timestampFilesPath . "/SingleFileWithTimestamp/a.{$prefix}aaaaaa.js", 
-			TimestampHelper::findFileWithTimestamp($file)
+			(new TimestampHelper())->findFileWithTimestamp($file)
 		);
 	}
 	
@@ -114,7 +114,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			$this->timestampFilesPath . "/NumberOfFilesExist/a.{$prefix}caaaaa.js", 
-			TimestampHelper::findFileWithTimestamp($file)
+			(new TimestampHelper())->findFileWithTimestamp($file)
 		);
 	}
 	
@@ -125,7 +125,7 @@ class TimestampHelperTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(
 			$this->timestampFilesPath . "/FileWithoutFileType/a.{$prefix}aaaaaa", 
-			TimestampHelper::findFileWithTimestamp($file)
+			(new TimestampHelper())->findFileWithTimestamp($file)
 		);
 	}
 }
