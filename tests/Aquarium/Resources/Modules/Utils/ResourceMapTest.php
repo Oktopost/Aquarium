@@ -187,4 +187,23 @@ class ResourceMapTest extends \PHPUnit_Framework_TestCase
 			], 
 			$original->getMap());
 	}
+	
+	
+	public function test_getMapFor_NotFound_ReturnNull()
+	{
+		$map = new ResourceMap();
+		$map->map('a', 'b');
+		
+		$this->assertNull($map->getMapFor('d'));
+	}
+	
+	public function test_getMapFor_Found_ReturnValues()
+	{
+		$map = new ResourceMap();
+		$map->map('a', 'b');
+		$map->map(['a'], 'c');
+		
+		$this->assertEquals('a', $map->getMapFor('b'));
+		$this->assertEquals(['a'], $map->getMapFor('c'));
+	}
 }

@@ -8,14 +8,29 @@ class ResourceCollection implements \Iterator
 	
 	
 	/**
-	 * @param string $resource
+	 * @param array $collection
+	 */
+	public function __construct($collection = [])
+	{
+		$this->collection = $collection;
+	}
+	
+	
+	/**
+	 * @param array|string $resource
 	 * @return static
 	 */
 	public function add($resource)
 	{
-		if (in_array($resource, $this->collection)) return $this;
+		if (is_array($resource))
+		{
+			$this->collection = array_merge($this->collection, array_diff($resource, $this->collection));
+		}
+		else if (!in_array($resource, $this->collection))
+		{
+			$this->collection[] = $resource;
+		}
 		
-		$this->collection[] = $resource;
 		return $this;
 	}
 	

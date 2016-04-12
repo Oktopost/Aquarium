@@ -31,6 +31,32 @@ class ResourceCollectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($collection, $collection->add('a'));
 	}
 	
+	public function test_add_AddArray() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add(['a', 'b', 'c']);
+		
+		$this->assertEquals(['a', 'b', 'c'], $collection->get());
+	}
+	
+	public function test_add_AddArrayWithAlreadyExistingValues() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add(['a', 'b', 'c']);
+		$collection->add(['n', 'b', 'a']);
+		
+		$this->assertEquals(['a', 'b', 'c', 'n'], $collection->get());
+	}
+	
+	public function test_add_AddArray_ReturnsSelf() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add(['a', 'b', 'c']);
+		$collection->add(['n', 'b', 'a']);
+		
+		$this->assertEquals(['a', 'b', 'c', 'n'], $collection->get());
+	}
+	
 	
 	public function test_hasResource() 
 	{

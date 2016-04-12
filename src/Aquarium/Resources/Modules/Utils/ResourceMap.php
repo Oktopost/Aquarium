@@ -94,4 +94,16 @@ class ResourceMap
 	{
 		return $this->map;
 	}
+	
+	/**
+	 * @param string $resource
+	 * @return array|null
+	 */
+	public function getMapFor($resource) 
+	{
+		if (!isset($this->map[$resource]))
+			return null;
+		
+		return $this->map[$resource];
+	}
 }
