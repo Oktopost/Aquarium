@@ -5,6 +5,7 @@ namespace Aquarium\Resources\Compilers\Gulp\Utils;
 use Aquarium\Resources\Modules\Utils\ResourceMap;
 use Aquarium\Resources\Compilers\Gulp\CompilerSetup;
 use Aquarium\Resources\Compilers\Gulp\Process\IPreCompileHelper;
+use Aquarium\Resources\Package;
 
 
 class PreCompileHelper implements IPreCompileHelper
@@ -33,11 +34,12 @@ class PreCompileHelper implements IPreCompileHelper
 	}
 	
 	/**
+	 * @param Package $p
 	 * @param ResourceMap $compilationMap Aggregated compilation map.
 	 * @param array $modified Array of final Resource files that must be recompiled.
 	 * @return CompilerSetup
 	 */
-	public function getRecompileTargets(ResourceMap $compilationMap, array $modified)
+	public function getRecompileTargets(Package $p, ResourceMap $compilationMap, array $modified)
 	{
 		$recompileSource = [];
 		$unmodifiedFlipped = array_flip(array_keys($compilationMap->getMap()));
@@ -79,7 +81,7 @@ class PreCompileHelper implements IPreCompileHelper
 			}
 		}
 		
-		$setup = new CompilerSetup();
+		$setup = new CompilerSetup($p);
 		
 		if ($unmodifiedFlipped) $setup->Unchanged->add(array_keys($unmodifiedFlipped));
 		if ($recompileSource) $setup->CompileTarget->add($recompileSource);

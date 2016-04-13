@@ -11,6 +11,7 @@ use Aquarium\Resources\Compilers\Gulp\GulpCompileConfig;
 
 use Aquarium\Resources\Modules\Utils\ResourceMap;
 use Aquarium\Resources\Modules\Utils\ResourceCollection;
+use Aquarium\Resources\Package;
 
 
 class PreCompiler implements IPreCompiler
@@ -18,10 +19,10 @@ class PreCompiler implements IPreCompiler
 	/** @var GulpCompileConfig */
 	private $config;
 	
-	/** @var IPreCompiler */
+	/** @var IPreCompileHelper */
 	private $preCompileHelper;
 	
-	/** @var IPreCompiler */
+	/** @var ITimestampHelper */
 	private $timestampHelper;
 	
 	
@@ -68,11 +69,12 @@ class PreCompiler implements IPreCompiler
 	}
 	
 	/**
+	 * @param Package $p
 	 * @param IGulpAction[] $actions
 	 * @param ResourceCollection $collection
 	 * @return CompilerSetup
 	 */
-	private function preCompileActions(array $actions, ResourceCollection $collection)
+	private function preCompileActions(Package $p, array $actions, ResourceCollection $collection)
 	{
 		$modifiedCollection = clone $collection;
 		
@@ -84,7 +86,7 @@ class PreCompiler implements IPreCompiler
 		foreach ($actions as $action)
 		{
 			$action->setTargetDir($this->config->TargetDirectory);
-			$map = $action->getMap($modifiedCollection);
+			$map = $action->getMap($p, $modifiedCollection);
 			
 			$map->apply($modifiedCollection);
 			
@@ -93,7 +95,7 @@ class PreCompiler implements IPreCompiler
 		}
 		
 		$modified = $this->getModified($modifiedMap);
-		$setup = $this->preCompileHelper->getRecompileTargets($modifiedMap, $modified);
+		$setup = $this->preCompileHelper->getRecompileTargets($p, $modifiedMap, $modified);
 		
 		
 		// All resource files that have an unmodified target resource.
@@ -147,20 +149,20 @@ class PreCompiler implements IPreCompiler
 	}
 	
 	/**
-	 * @param ResourceCollection $collection
+	 * @param Package $p
 	 * @return CompilerSetup
 	 */
-	public function preCompileStyle(ResourceCollection $collection)
+	public function preCompileStyle(Package $p)
 	{
-		return $this->preCompileActions($this->config->StyleActions, $collection);
+		return $this->preCompileActions($p, $this->config->StyleActions, $p->Styles);
 	}
 	
 	/**
-	 * @param ResourceCollection $collection
+	 * @param Package $p
 	 * @return CompilerSetup
 	 */
-	public function preCompileScript(ResourceCollection $collection)
+	public function preCompileScript(Package $p)
 	{
-		return $this->preCompileActions($this->config->ScriptActions, $collection);
+		return $this->preCompileActions($p, $this->config->ScriptActions, $p->Scripts);
 	}
 }

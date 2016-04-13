@@ -4,6 +4,7 @@ namespace Aquarium\Resources\Compilers\Gulp;
 
 use Aquarium\Resources\Modules\Utils\ResourceMap;
 use Aquarium\Resources\Modules\Utils\ResourceCollection;
+use Aquarium\Resources\Package;
 
 
 interface IGulpAction
@@ -15,14 +16,16 @@ interface IGulpAction
 	
 	/**
 	 * Get map of the expected result when this action will be executed
+	 * @param Package $p
 	 * @param ResourceCollection $collection
 	 * @return ResourceMap
 	 */
-	public function getMap(ResourceCollection $collection);
+	public function getMap(Package $p, ResourceCollection $collection);
 	
 	/**
+	 * @param Package $p
 	 * @param ResourceCollection $collection
 	 * @return \stdClass
 	 */
-	public function getCommand(ResourceCollection $collection);
+	public function getCommand(Package $p, ResourceCollection $collection);
 }

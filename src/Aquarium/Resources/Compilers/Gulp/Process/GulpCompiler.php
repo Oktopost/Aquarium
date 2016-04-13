@@ -35,9 +35,9 @@ class GulpCompiler implements IGulpCompiler
 		foreach ($actions as $action)
 		{
 			$action->setTargetDir($this->config->TargetDirectory);
-			$map = $action->getMap($compiledCollection);
 			
-			$commands[] = $action->getCommand($compiledCollection);
+			$map = $action->getMap($setup->Package, $compiledCollection);
+			$commands[] = $action->getCommand($setup->Package, $compiledCollection);
 			
 			$map->apply($compiledCollection);
 		}

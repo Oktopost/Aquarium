@@ -2,7 +2,7 @@
 namespace Aquarium\Resources\Compilers\Gulp;
 
 
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
+use Aquarium\Resources\Package;
 
 
 interface IPreCompiler
@@ -14,14 +14,14 @@ interface IPreCompiler
 	public function setConfig(GulpCompileConfig $config);
 	
 	/**
-	 * @param ResourceCollection $collection
+	 * @param Package $p
 	 * @return CompilerSetup
 	 */
-	public function preCompileStyle(ResourceCollection $collection);
+	public function preCompileStyle(Package $p);
 	
 	/**
-	 * @param ResourceCollection $collection
+	 * @param Package $p
 	 * @return CompilerSetup
 	 */
-	public function preCompileScript(ResourceCollection $collection);
+	public function preCompileScript(Package $p);
 }
