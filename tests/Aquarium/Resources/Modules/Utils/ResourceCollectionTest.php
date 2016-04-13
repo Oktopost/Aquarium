@@ -57,6 +57,19 @@ class ResourceCollectionTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(['a', 'b', 'c', 'n'], $collection->get());
 	}
 	
+	public function test_add_AddResourceCollection() 
+	{
+		$collection = new ResourceCollection();
+		$collection->add(['a', 'b', 'c']);
+		
+		$added = new ResourceCollection();
+		$added->add(['n', 'b', 'h']);
+		
+		$collection->add($added);
+		
+		$this->assertEquals(['a', 'b', 'c', 'n', 'h'], $collection->get());
+	}
+	
 	
 	public function test_hasResource() 
 	{

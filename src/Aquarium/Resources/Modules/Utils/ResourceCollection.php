@@ -17,12 +17,16 @@ class ResourceCollection implements \Iterator
 	
 	
 	/**
-	 * @param array|string $resource
+	 * @param array|string|ResourceCollection $resource
 	 * @return static
 	 */
 	public function add($resource)
 	{
-		if (is_array($resource))
+		if ($resource instanceof ResourceCollection)
+		{
+			$this->add($resource->get());
+		}
+		else if (is_array($resource))
 		{
 			$this->collection = array_merge($this->collection, array_diff($resource, $this->collection));
 		}
