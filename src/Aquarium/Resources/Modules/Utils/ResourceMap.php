@@ -18,10 +18,7 @@ class ResourceMap
 	 */
 	public function map($from, $to) 
 	{
-		if (is_array($to) && count($to) === 1) 
-			$to = array_shift($to);
-		
-		$this->map[$to] = $from;
+		$this->map[$to] = (is_array($from) ? $from : [$from]);
 		return $this;
 	}
 	
@@ -55,28 +52,16 @@ class ResourceMap
 		// Collection of maps that does not exist in the new map.
 		$notCloned = $this->map;
 		
-		
 		foreach ($map->getMap() as $newResource => $oldResource) 
 		{
 			foreach ($this->map as $originalNewResource => $initialResource)
 			{
-				if (is_string($oldResource)) 
+				$position = array_search($originalNewResource, $newMap[$newResource]);
+				
+				if ($position !== false)
 				{
-					if ($originalNewResource == $oldResource) 
-					{
-						$newMap[$newResource] = $initialResource;
-						unset($notCloned[$originalNewResource]);
-					}
-				}
-				else 
-				{
-					$position = array_search($originalNewResource, $newMap[$newResource]);
-					
-					if ($position !== false)
-					{
-						array_splice($newMap[$newResource], $position, 1, $initialResource);
-						unset($notCloned[$originalNewResource]);
-					}
+					array_splice($newMap[$newResource], $position, 1, $initialResource);
+					unset($notCloned[$originalNewResource]);
 				}
 			}
 		}

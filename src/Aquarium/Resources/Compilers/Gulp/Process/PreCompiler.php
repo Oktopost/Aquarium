@@ -43,8 +43,6 @@ class PreCompiler implements IPreCompiler
 		
 		foreach ($map->getMap() as $compiledResource => $sourceFiles)
 		{
-			if (!is_array($sourceFiles)) $sourceFiles = [$sourceFiles];
-			
 			$maxTimestamp = max(array_values($this->preCompileHelper->getTimestamps($sourceFiles)));
 			$compiledTimestamp = 0;
 			

@@ -4,12 +4,12 @@ namespace Aquarium\Resources\Modules\Utils;
 
 class ResourceMapTest extends \PHPUnit_Framework_TestCase
 {
-	public function test_map()
+	public function test_map_ToSingleElement()
 	{
 		$map = new ResourceMap();
 		$map->map('a', 'b');
 		
-		$this->assertEquals(['b' => 'a'], $map->getMap());
+		$this->assertEquals(['b' => ['a']], $map->getMap());
 	}
 	
 	public function test_map_ToArray()
@@ -96,7 +96,7 @@ class ResourceMapTest extends \PHPUnit_Framework_TestCase
 		
 		$original->modify($modified);
 		
-		$this->assertEquals(['b' => 'a'], $original->getMap());
+		$this->assertEquals(['b' => ['a']], $original->getMap());
 	}
 	
 	public function test_combine_NewMapExists()
@@ -109,7 +109,7 @@ class ResourceMapTest extends \PHPUnit_Framework_TestCase
 		
 		$original->modify($modified);
 		
-		$this->assertEquals(['b' => 'a', 'd' => 'c'], $original->getMap());
+		$this->assertEquals(['b' => ['a'], 'd' => ['c']], $original->getMap());
 	}
 	
 	public function test_combine_SingleValueModified()
@@ -122,7 +122,7 @@ class ResourceMapTest extends \PHPUnit_Framework_TestCase
 		
 		$original->modify($modified);
 		
-		$this->assertEquals(['c' => 'a'], $original->getMap());
+		$this->assertEquals(['c' => ['a']], $original->getMap());
 	}
 	
 	public function test_combine_OriginalResourceWasAnArrayOfResources()
@@ -181,8 +181,8 @@ class ResourceMapTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(
 			[
 				'c' => ['b0', 'a1', 'a2', 'b2'],
-				'new' => 'only',
-				'old' => 'only',
+				'new' => ['only'],
+				'old' => ['only'],
 				'm' => ['a1', 'a2', 'd']
 			], 
 			$original->getMap());
@@ -201,9 +201,9 @@ class ResourceMapTest extends \PHPUnit_Framework_TestCase
 	{
 		$map = new ResourceMap();
 		$map->map('a', 'b');
-		$map->map(['a'], 'c');
+		$map->map(['a', 'n'], 'c');
 		
-		$this->assertEquals('a', $map->getMapFor('b'));
-		$this->assertEquals(['a'], $map->getMapFor('c'));
+		$this->assertEquals(['a'], $map->getMapFor('b'));
+		$this->assertEquals(['a', 'n'], $map->getMapFor('c'));
 	}
 }

@@ -56,8 +56,6 @@ class PreCompileHelper implements IPreCompileHelper
 			// This should not happen. Modified file that didn't have a map should not be present here.
 			if (is_null($resourceSources)) continue;
 			
-			if (!is_array($resourceSources)) $resourceSources = [$resourceSources];
-			
 			$recompileSourceFlipped = array_merge($recompileSourceFlipped, array_flip($resourceSources));
 		}
 		
