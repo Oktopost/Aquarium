@@ -98,12 +98,21 @@ abstract class AbstractGulpAction implements IGulpAction
 	/**
 	 * @param Package $p
 	 * @param ResourceCollection $collection
-	 * @return \stdClass
+	 * @return array
 	 */
 	public function getCommand(Package $p, ResourceCollection $collection)
 	{
-		$sourceFiles = $collection->get($this->filter);
+		$data = [
+			'action'	=> $this->getActionType(),
+			'filter'	=> $this->filter
+		];
 		
+		if ($this->isSingleFile())
+		{
+			$targetFile = $this->directory . DIRECTORY_SEPARATOR . $p->Name . '.' . $this->getFileType();
+			$data['target'] = $this->rename($targetFile);
+		}
 		
+		return $data;
 	}
 }

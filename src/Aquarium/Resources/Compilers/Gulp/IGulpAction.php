@@ -25,7 +25,7 @@ interface IGulpAction
 	/**
 	 * @param Package $p
 	 * @param ResourceCollection $collection
-	 * @return \stdClass
+	 * @return array
 	 */
 	public function getCommand(Package $p, ResourceCollection $collection);
 }
