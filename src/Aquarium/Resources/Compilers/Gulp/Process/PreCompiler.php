@@ -3,15 +3,15 @@ namespace Aquarium\Resources\Compilers\Gulp\Process;
 
 
 use Aquarium\Resources\Config;
+use Aquarium\Resources\Package;
 
 use Aquarium\Resources\Compilers\Gulp\IGulpAction;
 use Aquarium\Resources\Compilers\Gulp\IPreCompiler;
 use Aquarium\Resources\Compilers\Gulp\CompilerSetup;
 use Aquarium\Resources\Compilers\Gulp\GulpCompileConfig;
 
-use Aquarium\Resources\Modules\Utils\ResourceMap;
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
-use Aquarium\Resources\Package;
+use Aquarium\Resources\Utils\ResourceMap;
+use Aquarium\Resources\Utils\ResourceCollection;
 
 
 class PreCompiler implements IPreCompiler

@@ -6,8 +6,7 @@ use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\Compilers\Gulp\IShell;
 
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
-use Aquarium\Resources\Modules\Compilers\Gulp\GulpCommand;
+use Aquarium\Resources\Utils\ResourceCollection;
 
 use Aquarium\Resources\Compilers\Gulp\IGulpAction;
 use Aquarium\Resources\Compilers\Gulp\IGulpCommand;
@@ -31,11 +30,11 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	private function execute(Package $p, $commands)
 	{
-		/** @var GulpCommand $command */
+		/** @var IGulpCommand $command */
 		$command = Config::skeleton(IGulpCommand::class);
 		
 		$command->setAction('build');
-		$command->setGulpPath(__DIR__ . '/../../../Modules/Compilers/Gulp/GulpScript/');
+		$command->setGulpPath(__DIR__ . '/../GulpScript/');
 		
 		$command->setArg('commands', $commands);
 		$command->setArg(

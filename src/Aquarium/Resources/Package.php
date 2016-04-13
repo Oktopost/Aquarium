@@ -2,7 +2,7 @@
 namespace Aquarium\Resources;
 
 
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
+use Aquarium\Resources\Utils\ResourceCollection;
 
 use Objection\LiteSetup;
 use Objection\LiteObject;

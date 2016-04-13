@@ -3,8 +3,8 @@ namespace Aquarium\Resources\Compilers\Gulp\Actions;
 
 
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
-use Aquarium\Resources\Modules\Utils\ResourceMap;
+use Aquarium\Resources\Utils\ResourceMap;
+use Aquarium\Resources\Utils\ResourceCollection;
 use Aquarium\Resources\Compilers\Gulp\IGulpAction;
 
 

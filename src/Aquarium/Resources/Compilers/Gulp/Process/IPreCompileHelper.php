@@ -3,7 +3,7 @@ namespace Aquarium\Resources\Compilers\Gulp\Process;
 
 
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Modules\Utils\ResourceMap;
+use Aquarium\Resources\Utils\ResourceMap;
 use Aquarium\Resources\Compilers\Gulp\CompilerSetup;
 
 

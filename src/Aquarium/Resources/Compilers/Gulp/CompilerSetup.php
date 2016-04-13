@@ -3,7 +3,7 @@ namespace Aquarium\Resources\Compilers\Gulp;
 
 
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
+use Aquarium\Resources\Utils\ResourceCollection;
 
 use Objection\LiteSetup;
 use Objection\LiteObject;

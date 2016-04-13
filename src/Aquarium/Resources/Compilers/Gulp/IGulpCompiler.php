@@ -2,7 +2,7 @@
 namespace Aquarium\Resources\Compilers\Gulp;
 
 
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
+use Aquarium\Resources\Utils\ResourceCollection;
 
 
 interface IGulpCompiler

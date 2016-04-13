@@ -2,8 +2,8 @@
 namespace Aquarium\Resources;
 
 
-use Aquarium\Resources\Modules\Package\IPackageDefinitionManager;
-use Aquarium\Resources\Modules\Compilation\DirConfig;
+use Aquarium\Resources\Package\IPackageDefinitionManager;
+use Aquarium\Resources\Compilation\DirConfig;
 
 use Objection\LiteSetup;
 use Objection\LiteObject;

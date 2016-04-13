@@ -2,14 +2,16 @@
 namespace Aquarium\Resources\Compilers;
 
 
-use Aquarium\Resources\Compilers\Gulp\Process\GulpCompiler;
-use Aquarium\Resources\Compilers\Gulp\Process\ICompileHelper;
-use Aquarium\Resources\Compilers\Gulp\Process\PreCompiler;
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\ICompiler;
-use Aquarium\Resources\Modules\Compilation\IPhpBuilder;
+
+use Aquarium\Resources\Compilation\IPhpBuilder;
+
 use Aquarium\Resources\Compilers\Gulp\GulpCompileConfig;
+use Aquarium\Resources\Compilers\Gulp\Process\GulpCompiler;
+use Aquarium\Resources\Compilers\Gulp\Process\ICompileHelper;
+use Aquarium\Resources\Compilers\Gulp\Process\PreCompiler;
 use Aquarium\Resources\Compilers\Gulp\CompileConfig\ConfigBuilder;
 
 
@@ -52,23 +54,23 @@ class GulpPackageManager implements ICompiler
 		$compiled = new Package($package->Name);
 		
 		
-		$p = new PreCompiler();
+		$preCompiler = new PreCompiler();
 		
-		$p->setConfig($this->compileConfig);
+		$preCompiler->setConfig($this->compileConfig);
+		$styleSettings = $preCompiler->preCompileScript($package);
+		$scriptSettings = $preCompiler->preCompileScript($package);
 		
-		$styleSettings = $p->preCompileScript($package);
-		$scriptSettings = $p->preCompileScript($package);
+		$compiler = new GulpCompiler();
 		
-		$c = new GulpCompiler();
-		
-		$c->setCompilerConfig($this->compileConfig);
-		
-		$compiled->Scripts->add($c->compileScript($scriptSettings));
-		$compiled->Styles->add($c->compileScript($styleSettings));
+		$compiler->setCompilerConfig($this->compileConfig);
+		$compiled->Scripts->add($compiler->compileScript($scriptSettings));
+		$compiled->Styles->add($compiler->compileScript($styleSettings));
 		
 		/** @var ICompileHelper $compilerHelper */
 		$compilerHelper = Config::skeleton(ICompileHelper::class);
 		$compilerHelper->cleanDirectory($compiled);
+		
+		return $compiled;
 	}
 	
 	/**

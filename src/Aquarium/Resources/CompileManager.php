@@ -2,8 +2,8 @@
 namespace Aquarium\Resources;
 
 
-use Aquarium\Resources\Modules\Compilation\Utils;
-use Aquarium\Resources\Modules\Utils\FileSystem;
+use Aquarium\Resources\Compilation\Utils;
+use Aquarium\Resources\Utils\FileSystem;
 
 
 class CompileManager

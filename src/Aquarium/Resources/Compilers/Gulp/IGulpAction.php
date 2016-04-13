@@ -2,9 +2,9 @@
 namespace Aquarium\Resources\Compilers\Gulp;
 
 
-use Aquarium\Resources\Modules\Utils\ResourceMap;
-use Aquarium\Resources\Modules\Utils\ResourceCollection;
 use Aquarium\Resources\Package;
+use Aquarium\Resources\Utils\ResourceMap;
+use Aquarium\Resources\Utils\ResourceCollection;
 
 
 interface IGulpAction
