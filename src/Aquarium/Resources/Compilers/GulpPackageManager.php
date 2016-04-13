@@ -13,6 +13,7 @@ use Aquarium\Resources\Compilers\Gulp\Process\GulpCompiler;
 use Aquarium\Resources\Compilers\Gulp\Process\ICompileHelper;
 use Aquarium\Resources\Compilers\Gulp\Process\PreCompiler;
 use Aquarium\Resources\Compilers\Gulp\CompileConfig\ConfigBuilder;
+use Aquarium\Resources\Utils\FileSystem;
 
 
 class GulpPackageManager implements ICompiler
@@ -78,6 +79,8 @@ class GulpPackageManager implements ICompiler
 	 */
 	public function compile()
 	{
+		(new FileSystem())->deleteFilesByFilter(Config::instance()->Directories->PhpTargetDir, '*.php');
+		
 		foreach (Config::instance()->DefinitionManager->getNames() as $name)
 		{
 			$package = $this->compilePackage(Config::instance()->DefinitionManager->get($name));

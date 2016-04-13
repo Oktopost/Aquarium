@@ -50,7 +50,7 @@ class FileSystem
 	 * @param string $prefix
 	 * @return int Number of deleted files.
 	 */
-	public function deleteFilesByPrefix($dir, $prefix) 
+	public function deleteFilesByFilter($dir, $prefix) 
 	{
 		$deleted = 0;
 		
@@ -59,7 +59,7 @@ class FileSystem
 		
 		foreach (glob("$dir/$prefix") as $item) 
 		{
-			if (is_file($item)) continue;
+			if (!is_file($item)) continue;
 			
 			$deleted++;
 			
