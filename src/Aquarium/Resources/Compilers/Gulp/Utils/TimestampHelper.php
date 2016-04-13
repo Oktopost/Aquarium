@@ -7,7 +7,7 @@ use Aquarium\Resources\Compilers\Gulp\Process\ITimestampHelper;
 
 class TimestampHelper implements ITimestampHelper
 {
-	const TIMESTAMP_PREFIX		= 'T-';
+	const TIMESTAMP_PREFIX		= 't';
 	
 	
 	/**
