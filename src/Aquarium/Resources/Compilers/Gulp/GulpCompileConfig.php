@@ -30,22 +30,22 @@ class GulpCompileConfig extends LiteObject
 	
 	
 	/**
-	 * @param IGulpAction $action
+	 * @param IGulpAction|IGulpAction[] $action
 	 * @return static
 	 */
-	public function addStyleAction(IGulpAction $action)
+	public function addStyleAction($action)
 	{
-		$this->_p->StyleActions[] = $action;
+		$this->_p->StyleActions = array_merge($this->_p->StyleActions, (is_array($action) ? $action : [$action]));
 		return $this;
 	}
 	
 	/**
-	 * @param IGulpAction $action
+	 * @param IGulpAction|IGulpAction[] $action
 	 * @return static
 	 */
-	public function addScriptAction(IGulpAction $action)
+	public function addScriptAction($action)
 	{
-		$this->_p->ScriptActions[] = $action;
+		$this->_p->ScriptActions = array_merge($this->_p->ScriptActions, (is_array($action) ? $action : [$action]));
 		return $this;
 	}
 }
