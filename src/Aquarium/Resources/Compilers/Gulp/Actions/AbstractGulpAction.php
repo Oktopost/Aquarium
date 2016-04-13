@@ -2,10 +2,10 @@
 namespace Aquarium\Resources\Compilers\Gulp\Actions;
 
 
+use Aquarium\Resources\Package;
 use Aquarium\Resources\Modules\Utils\ResourceCollection;
 use Aquarium\Resources\Modules\Utils\ResourceMap;
 use Aquarium\Resources\Compilers\Gulp\IGulpAction;
-use Aquarium\Resources\Package;
 
 
 abstract class AbstractGulpAction implements IGulpAction
@@ -20,9 +20,29 @@ abstract class AbstractGulpAction implements IGulpAction
 	 */
 	private function moveToTargetDirectory($filePath)
 	{
-		return 
-			$this->directory . DIRECTORY_SEPARATOR . 
-			substr($filePath, strrpos($filePath, DIRECTORY_SEPARATOR)); 
+		return $this->directory . substr($filePath, strrpos($filePath, DIRECTORY_SEPARATOR)); 
+	}
+	
+	/**
+	 * @param Package $p
+	 * @param array $sourceFiles
+	 * @return string
+	 */
+	private function generateSingleFileName(Package $p, array $sourceFiles)
+	{
+		$targetFile = $this->directory . DIRECTORY_SEPARATOR . $p->Name;
+		
+		if ($this->getFileType())
+		{
+			$targetFile .= ".{$this->getFileType()}";
+		}
+		else 
+		{
+			$first = reset($sourceFiles);
+			$targetFile .= substr($first, strrpos($first, '.'));
+		}
+		
+		return $targetFile;
 	}
 	
 	
@@ -40,12 +60,6 @@ abstract class AbstractGulpAction implements IGulpAction
 	 * @return string
 	 */
 	protected abstract function getActionType();
-	
-	/**
-	 * @param string $sourceName
-	 * @return string New name after compilation.
-	 */
-	protected function rename($sourceName) { return $sourceName; }
 	
 	
 	/**
@@ -76,19 +90,18 @@ abstract class AbstractGulpAction implements IGulpAction
 		$map = new ResourceMap();
 		$sourceFiles = $collection->get($this->filter);
 		
+		if (!$sourceFiles) 
+			return $map;
+		
 		if ($this->isSingleFile())
 		{
-			$targetFile = $this->directory . DIRECTORY_SEPARATOR . $p->Name . '.' . $this->getFileType();
-			$targetFile = $this->rename($targetFile);
-			
-			$map->map($sourceFiles, $targetFile);
+			$map->map($sourceFiles, $this->generateSingleFileName($p, $sourceFiles));
 		}
 		else 
 		{
 			foreach ($sourceFiles as $filePath)
 			{
-				$newFilePath = $this->rename($this->moveToTargetDirectory($filePath));
-				$map->map($filePath, $newFilePath);
+				$map->map($filePath, $this->moveToTargetDirectory($filePath));
 			}
 		}
 		
@@ -109,8 +122,7 @@ abstract class AbstractGulpAction implements IGulpAction
 		
 		if ($this->isSingleFile())
 		{
-			$targetFile = $this->directory . DIRECTORY_SEPARATOR . $p->Name . '.' . $this->getFileType();
-			$data['target'] = $this->rename($targetFile);
+			$data['target'] = $this->directory . DIRECTORY_SEPARATOR . $p->Name . '.' . $this->getFileType();
 		}
 		
 		return $data;

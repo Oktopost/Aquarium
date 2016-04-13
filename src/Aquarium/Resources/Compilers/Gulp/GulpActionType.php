@@ -9,6 +9,6 @@ class GulpActionType
 	
 	const SCSS_PROCESS		= 'scss-process';
 	const CONCATENATE		= 'concatenate';
-	const MINIFY			= 'minify';
-	const ADD_TIME_MODIFIED	= 'add-tm';
+	const CSS_MINIFY		= 'css-minify';
+	const JS_MINIFY			= 'js-minify';
 }
