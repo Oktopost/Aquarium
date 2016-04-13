@@ -3,8 +3,14 @@ namespace Aquarium\Resources\Compilers\Gulp\Process;
 
 
 use Aquarium\Resources\Config;
+use Aquarium\Resources\Package;
+use Aquarium\Resources\Compilers\Gulp\IShell;
+
 use Aquarium\Resources\Modules\Utils\ResourceCollection;
+use Aquarium\Resources\Modules\Compilers\Gulp\GulpCommand;
+
 use Aquarium\Resources\Compilers\Gulp\IGulpAction;
+use Aquarium\Resources\Compilers\Gulp\IGulpCommand;
 use Aquarium\Resources\Compilers\Gulp\IGulpCompiler;
 use Aquarium\Resources\Compilers\Gulp\CompilerSetup;
 use Aquarium\Resources\Compilers\Gulp\GulpCompileConfig;
@@ -17,6 +23,28 @@ class GulpCompiler implements IGulpCompiler
 	
 	/** @var ITimestampHelper $timeHelper */
 	private $timeHelper;
+	
+	
+	/**
+	 * @param Package $p
+	 * @param array $commands
+	 */
+	private function execute(Package $p, $commands)
+	{
+		/** @var GulpCommand $command */
+		$command = Config::skeleton(IGulpCommand::class);
+		
+		$command->setAction('build');
+		$command->setGulpPath(__DIR__ . '/../../../Modules/Compilers/Gulp/GulpScript/');
+		
+		$command->setArg('commands', $commands);
+		$command->setArg(
+			'targetDir', 
+			Config::instance()->Directories->ResourcesTargetDir . DIRECTORY_SEPARATOR . $p->getName('_')
+		);
+		
+		$command->execute(Config::skeleton(IShell::class));
+	}
 	
 	
 	/**
@@ -41,6 +69,8 @@ class GulpCompiler implements IGulpCompiler
 			
 			$map->apply($compiledCollection);
 		}
+		
+		$this->execute($setup->Package, $commands);
 		
 		if ($this->config->IsAddTimestamp)
 		{

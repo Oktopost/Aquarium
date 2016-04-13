@@ -3,6 +3,7 @@ namespace Aquarium\Resources\Compilers;
 
 
 use Aquarium\Resources\Compilers\Gulp\Process\GulpCompiler;
+use Aquarium\Resources\Compilers\Gulp\Process\ICompileHelper;
 use Aquarium\Resources\Compilers\Gulp\Process\PreCompiler;
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
@@ -64,6 +65,10 @@ class GulpPackageManager implements ICompiler
 		
 		$compiled->Scripts->add($c->compileScript($scriptSettings));
 		$compiled->Styles->add($c->compileScript($styleSettings));
+		
+		/** @var ICompileHelper $compilerHelper */
+		$compilerHelper = Config::skeleton(ICompileHelper::class);
+		$compilerHelper->cleanDirectory($compiled);
 	}
 	
 	/**

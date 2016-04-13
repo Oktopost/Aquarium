@@ -33,6 +33,12 @@ class Config extends LiteObject
 	private static $skeleton;
 	
 	
+	public function __construct()
+	{
+		parent::__construct();
+	}
+	
+	
 	/**
 	 * @return array
 	 */
