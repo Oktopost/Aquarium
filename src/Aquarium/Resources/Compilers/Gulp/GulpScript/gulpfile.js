@@ -13,16 +13,8 @@ var clean 	= require('gulp-clean');
 var argv	= require('yargs').argv;
 
 
-var source = {
-	js:		JSON.parse(argv.js || '[]'),
-	css:	JSON.parse(argv.css || '[]')
-};
-
-var target = {
-	js:		argv["js-target"] || '',
-	css:	argv["css-target"] || '',
-	dir:	argv.dir || ''
-};
+var targetDir = argv.targetDir;
+var commands = JSON.parse(argv.commands || '[]');
 
 
 gulp.task('default', function () {
@@ -31,20 +23,48 @@ gulp.task('default', function () {
 
 
 gulp.task('build', function () {
-
-	// Compile css.
-	if (source.css.length > 0) {
-		gulp.src(source.css)
-			.pipe(concat(target.css))
-			.pipe(cssmin())
-			.pipe(gulp.dest(target.dir));
+	var commandsCount = commands.length,
+		currCommand,
+		target,
+		action,
+		source,
+		pipeline;
+	
+	if (commands.length === 0) {
+		return;
 	}
 	
-	// Compile scripts.
-	if (source.js.length > 0) {
-		gulp.src(source.js)
-			.pipe(concat(target.js))
-			.pipe(uglify())
-			.pipe(gulp.dest(target.dir));
+	for (var currCommandIndex = 0; currCommandIndex < commandsCount; currCommandIndex++) {
+		currCommand = commands[currCommandIndex];
+		
+		action = currCommand.action;
+		target = currCommand.target || false;
+		source = currCommand.source || false;
+		
+		if (currCommand.source === false) {
+			continue;
+		}
+		
+		pipeline = gulp.src(source);
+		
+		switch (action) {
+			case 'scss-process':
+				pipeline.pipe(sass());
+				break;
+				
+			case 'concatenate':
+				pipeline.pipe(concat(target));
+				break;
+			
+			case 'css-minify':
+				pipeline.pipe(cssmin());
+				break;
+			
+			case 'js-minify':
+				pipeline.pipe(uglify());
+				break;
+		}
+		
+		pipeline.pipe(gulp.dest(targetDir));
 	}
 });

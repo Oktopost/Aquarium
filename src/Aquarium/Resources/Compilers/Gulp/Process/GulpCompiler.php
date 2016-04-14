@@ -27,20 +27,25 @@ class GulpCompiler implements IGulpCompiler
 	/**
 	 * @param Package $p
 	 * @param array $commands
+	 * @param array $files
 	 */
-	private function execute(Package $p, $commands)
+	private function execute(Package $p, array $commands, array $files)
 	{
+		$targetDir = Config::instance()->Directories->ResourcesTargetDir . DIRECTORY_SEPARATOR . $p->getName('_');
+		
 		/** @var IGulpCommand $command */
 		$command = Config::skeleton(IGulpCommand::class);
 		
 		$command->setAction('build');
 		$command->setGulpPath(__DIR__ . '/../GulpScript/');
+			
+		if (!file_exists($targetDir)) {
+			mkdir($targetDir, 0777, true);
+		}
 		
 		$command->setArg('commands', $commands);
-		$command->setArg(
-			'targetDir', 
-			Config::instance()->Directories->ResourcesTargetDir . DIRECTORY_SEPARATOR . $p->getName('_')
-		);
+		$command->setArg('targetDir', $targetDir);
+		$command->setArg('source', $files);
 		
 		$command->execute(Config::skeleton(IShell::class));
 	}
@@ -49,9 +54,10 @@ class GulpCompiler implements IGulpCompiler
 	/**
 	 * @param IGulpAction[] $actions
 	 * @param CompilerSetup $setup
+	 * @param array $files
 	 * @return ResourceCollection
 	 */
-	private function compile(array $actions, CompilerSetup $setup)
+	private function compile(array $actions, CompilerSetup $setup, array $files)
 	{
 		if (!$actions)
 			return clone ($setup->Unchanged->add($setup->CompileTarget));
@@ -69,7 +75,7 @@ class GulpCompiler implements IGulpCompiler
 			$map->apply($compiledCollection);
 		}
 		
-		$this->execute($setup->Package, $commands);
+		$this->execute($setup->Package, $commands, $files);
 		
 		if ($this->config->IsAddTimestamp)
 		{
@@ -107,7 +113,7 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	public function compileStyle(CompilerSetup $setup)
 	{
-		return $this->compile($this->config->StyleActions, $setup);
+		return $this->compile($this->config->StyleActions, $setup, $setup->Package->Styles->get());
 	}
 	
 	/**
@@ -116,6 +122,6 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	public function compileScript(CompilerSetup $setup) 
 	{
-		return $this->compile($this->config->ScriptActions, $setup);
+		return $this->compile($this->config->ScriptActions, $setup, $setup->Package->Scripts->get());
 	}
 }

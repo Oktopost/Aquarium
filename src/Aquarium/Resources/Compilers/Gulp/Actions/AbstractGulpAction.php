@@ -117,7 +117,7 @@ abstract class AbstractGulpAction implements IGulpAction
 	{
 		$data = [
 			'action'	=> $this->getActionType(),
-			'filter'	=> $this->filter
+			'source'	=> $collection->get($this->filter)
 		];
 		
 		if ($this->isSingleFile())
