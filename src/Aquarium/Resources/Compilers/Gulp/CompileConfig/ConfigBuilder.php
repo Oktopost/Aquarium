@@ -20,6 +20,8 @@ class ConfigBuilder
 	
 	public function __construct()
 	{
+		$this->styleChain = new ActionChainBuilder();
+		$this->scriptChain = new ActionChainBuilder();
 		$this->configSetup = new GulpCompileConfig();
 	}
 	
@@ -36,7 +38,7 @@ class ConfigBuilder
 	 */
 	public function script()
 	{
-		return $this->styleChain;
+		return $this->scriptChain;
 	}
 	
 	/**

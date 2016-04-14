@@ -54,23 +54,17 @@ class Config extends LiteObject
 	}
 	
 	
-	/** 
-	 * @param static $instance
-	 */
-	protected static function initialize(/** @noinspection PhpUnusedParameterInspection */ $instance) 
-	{
-		self::$skeleton = (new Skeleton())
-			->setMap(new ImplementersMap\SimpleMap())
-			->setConfigLoader(new DirectoryConfigLoader(__DIR__ . '/_skeleton'));
-	}
-	
-	
 	/**
 	 * @param string|null $interface Set to null to get the skeleton object.
 	 * @return mixed
 	 */
 	public static function skeleton($interface = null)
 	{
+		if (is_null(self::$skeleton))
+			self::$skeleton = (new Skeleton())
+				->setMap(new ImplementersMap\LazyLoadMap())
+				->setConfigLoader(new DirectoryConfigLoader(__DIR__ . '/_skeleton'));
+		
 		if (is_null($interface)) 
 			return self::$skeleton;
 			
@@ -85,8 +79,8 @@ class Config extends LiteObject
 	{
 		if (is_null(self::$testMap)) 
 		{
-			self::$testMap = new ImplementersMap\TestMap(self::$skeleton->getMap());
-			self::$skeleton->setMap(self::$testMap);
+			self::$testMap = new ImplementersMap\TestMap(self::skeleton()->getMap());
+			self::skeleton()->setMap(self::$testMap);
 		}
 		
 		self::$testMap->override($interface, $definition);

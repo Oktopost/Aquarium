@@ -28,31 +28,35 @@ class ActionChainBuilder
 	public function scss() 
 	{
 		$this->collection[] = $this->factory->scss();
+		return $this;
 	}
 	
 	/**
 	 * @param string|bool $filter
-	 * @return IGulpAction
+	 * @return static
 	 */
 	public function concatenate($filter = false)
 	{
 		$this->collection[] = $this->factory->concatenate($filter);
+		return $this;
 	}
 	
 	/**
-	 * @return IGulpAction
+	 * @return static
 	 */
 	public function jsmin() 
 	{
 		$this->collection[] = $this->factory->jsmin();
+		return $this;
 	}
 	
 	/**
-	 * @return IGulpAction
+	 * @return static
 	 */
 	public function cssmin()
 	{
 		$this->collection[] = $this->factory->cssmin();
+		return $this;
 	}
 	
 	
