@@ -10,7 +10,7 @@ use Aquarium\Resources\Package\IPackageDefinitionManager;
 class ClassMethods implements IPackageDefinitionManager
 {
 	const PACKAGE_METHOD_PREFIX	= 'Package_';
-	
+	const PACKAGE_PATH_SEPARATOR = '_';
 	
 	private $configClassName;
 	private $configObject = null;
@@ -37,7 +37,7 @@ class ClassMethods implements IPackageDefinitionManager
 	private function getFunctionName($name)
 	{
 		$path = explode(Package::PACKAGE_PATH_SEPARATOR, $name);
-		return self::PACKAGE_METHOD_PREFIX . implode('_', $path);
+		return self::PACKAGE_METHOD_PREFIX . implode(self::PACKAGE_PATH_SEPARATOR, $path);
 	}
 	
 	
@@ -62,6 +62,9 @@ class ClassMethods implements IPackageDefinitionManager
 			$package	= new Package($name);
 			$object		= $this->getObject();
 			$funcName	= $this->getFunctionName($name);
+			
+			if (!method_exists($object, $funcName)) 
+				throw new \Exception("Package '$name' is not defined");
 			
 			$builder->setup($package);
 			call_user_func([$object, $funcName], $builder);
@@ -101,7 +104,10 @@ class ClassMethods implements IPackageDefinitionManager
 		{
 			if (strpos($method->name, self::PACKAGE_METHOD_PREFIX) === 0)
 			{
-				$packageNames[] = $method->name;
+				$name = substr($method->name, strlen(self::PACKAGE_METHOD_PREFIX));
+				$name = str_replace(self::PACKAGE_PATH_SEPARATOR, Package::PACKAGE_PATH_SEPARATOR, $name);
+				
+				$packageNames[] = $name;
 			}
 		}
 		

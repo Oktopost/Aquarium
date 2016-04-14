@@ -12,6 +12,7 @@ class Utils
 	
 	
 	const PACKAGE_CLASS_NAME_PREFIX = 'CompiledPackage_';
+	const PACKAGE_PATH_SEPARATOR	= '_';
 	const FILE_NAME_PREFIX			= 'CompiledFile_';
 	
 	const COMPILED_CLASSES_NAMESPACE = 'Aquarium\Resources\CompiledScripts';
@@ -24,11 +25,22 @@ class Utils
 	public static function getClassName($packageName) 
 	{
 		if ($packageName instanceof Package) 
-			return self::getClassName($packageName->Name);
+			return 
+				self::PACKAGE_CLASS_NAME_PREFIX . 
+				$packageName->getName(self::PACKAGE_PATH_SEPARATOR);
 		
 		return 
 			self::PACKAGE_CLASS_NAME_PREFIX .
-			implode('_', explode(Package::PACKAGE_PATH_SEPARATOR, $packageName));
+			str_replace(Package::PACKAGE_PATH_SEPARATOR, self::PACKAGE_PATH_SEPARATOR, $packageName);
+	}
+	
+	/**
+	 * @param Package|string $packageName
+	 * @return string
+	 */
+	public static function getFullClassName($packageName) 
+	{
+		return self::COMPILED_CLASSES_NAMESPACE . '\\' . Utils::getClassName($packageName);
 	}
 	
 	/**
@@ -42,20 +54,5 @@ class Utils
 		
 		return Config::instance()->Directories->PhpTargetDir . 
 			DIRECTORY_SEPARATOR . self::getClassName($packageName) . '.php';
-	}
-	
-	/**
-	 * @param string $fileName Current file name.
-	 * @param int|bool $time Unix timestamp.
-	 * @return string New name base on last modified date. 
-	 */
-	public static function resourceNameGenerator($fileName, $time = false)
-	{
-		$timeMask = base_convert((string)($time ?: time()), 10, 36);
-		$fileNameParts = explode('.', $fileName);
-		
-		array_splice($fileNameParts, count($fileNameParts) - 1, 0, $timeMask);
-		
-		return implode('.', $fileNameParts);
 	}
 }

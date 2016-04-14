@@ -23,7 +23,7 @@ class CompiledPackages implements IPackageDefinitionManager
 		if (!isset($this->cached[$name]))
 		{
 			$path = Utils::getClassPath($name);
-			$namespace = Utils::getClassName($name);
+			$fullClassName = Utils::getFullClassName($name);
 			
 			$package = new Package($name);
 			$builder = new Builder();
@@ -31,14 +31,14 @@ class CompiledPackages implements IPackageDefinitionManager
 			$this->cached[$name] = $package;
 			$builder->setup($package);
 			
-			if (!is_file($name) || !is_readable($name))
+			if (!is_file($path) || !is_readable($path))
 				throw new \Exception("Can't load file '$path'");
 			
 			/** @noinspection PhpIncludeInspection */
 			require_once $path;
 			
 			/** @noinspection PhpUndefinedMethodInspection */
-			$namespace::get($builder); 
+			$fullClassName::get($builder); 
 		}
 		
 		return $this->cached[$name];
