@@ -12,6 +12,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	
 	
 	/**
+	 * @runInSeparateProcess
 	 * @expectedException \Exception
 	 */
 	public function test_getNames_ThrowsException()
@@ -20,6 +21,9 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	
+	/**
+	 * @runInSeparateProcess
+	 */
 	public function test_has()
 	{
 		Config::instance()->Directories->PhpTargetDir = self::PATH;
@@ -30,6 +34,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	
 	
 	/**
+	 * @runInSeparateProcess
 	 * @expectedException  \Exception
 	 */
 	public function test_get_PackageNotFound_ErrorThrown()
@@ -38,12 +43,18 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 		(new CompiledPackages())->get('not/found');
 	}
 	
+	/**
+	 * @runInSeparateProcess
+	 */
 	public function test_get_PackageFound_PackageObjectReturned()
 	{
 		Config::instance()->Directories->PhpTargetDir = self::PATH;
 		$this->assertInstanceOf(Package::class, (new CompiledPackages())->get('a/b'));
 	}
 	
+	/**
+	 * @runInSeparateProcess
+	 */
 	public function test_get_PackageFound_PackageIsBuilt()
 	{
 		Config::instance()->Directories->PhpTargetDir = self::PATH;
@@ -54,6 +65,9 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(['3'], $p->Requires->get());
 	}
 	
+	/**
+	 * @runInSeparateProcess
+	 */
 	public function test_get_LoadedPackageCached()
 	{
 		Config::instance()->Directories->PhpTargetDir = self::PATH;
@@ -61,6 +75,9 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($cp->get('a/b'), $cp->get('a/b'));
 	}
 	
+	/**
+	 * @runInSeparateProcess
+	 */
 	public function test_get_DifferentPackageRequested()
 	{
 		Config::instance()->Directories->PhpTargetDir = self::PATH;
