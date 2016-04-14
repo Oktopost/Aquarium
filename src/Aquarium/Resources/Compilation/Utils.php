@@ -13,7 +13,6 @@ class Utils
 	
 	const PACKAGE_CLASS_NAME_PREFIX = 'CompiledPackage_';
 	const PACKAGE_PATH_SEPARATOR	= '_';
-	const FILE_NAME_PREFIX			= 'CompiledFile_';
 	
 	const COMPILED_CLASSES_NAMESPACE = 'Aquarium\Resources\CompiledScripts';
 	

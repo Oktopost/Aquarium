@@ -17,9 +17,6 @@ class CompileManager
 		
 		echo "Clearing: " . Config::instance()->Directories->PhpTargetDir . PHP_EOL;
 		$fs->deleteFilesByFilter(Config::instance()->Directories->PhpTargetDir, Utils::PACKAGE_CLASS_NAME_PREFIX);
-		
-		echo "Clearing: " . Config::instance()->Directories->ResourcesTargetDir . PHP_EOL;
-		$fs->deleteFilesByFilter(Config::instance()->Directories->ResourcesTargetDir, Utils::FILE_NAME_PREFIX);
 	}
 	
 	

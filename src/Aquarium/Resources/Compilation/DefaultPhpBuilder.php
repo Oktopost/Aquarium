@@ -16,7 +16,7 @@ class DefaultPhpBuilder implements IPhpBuilder
 	private function createFile($packageName)
 	{
 		$filePath = Config::instance()->Directories->PhpTargetDir . DIRECTORY_SEPARATOR . $packageName . '.php';
-		$handle = fopen($filePath, 'W');
+		$handle = fopen($filePath, 'w');
 		
 		if (!$handle) 
 			throw new \Exception("Failed to open file for writing: [$filePath]");
@@ -39,28 +39,29 @@ namespace %s;
 
 class %s 
 {
-	public static function get(%s \$b) 
+	public static function get(\%s \$b) 
 	{
+
 TAG
 			, 
-			Utils::PACKAGE_CLASS_NAME_PREFIX, 
+			Utils::COMPILED_CLASSES_NAMESPACE, 
 			$className, 
 			IBuilder::class);
 		
 		// Write main function body.
 		foreach ($package->Requires as $required)
 		{
-			fprintf($resource, "\t\t\$b->package(%s);%s", $required, PHP_EOL);
+			fprintf($resource, "\t\t\$b->package('%s');%s", $required, PHP_EOL);
 		}
 		
 		foreach ($package->Styles as $style)
 		{
-			fprintf($resource, "\t\t\$b->style(%s);%s", $style, PHP_EOL);
+			fprintf($resource, "\t\t\$b->style('%s');%s", $style, PHP_EOL);
 		}
 		
 		foreach ($package->Scripts as $script)
 		{
-			fprintf($resource, "\t\t\$b->script(%s);%s", $script, PHP_EOL);
+			fprintf($resource, "\t\t\$b->script('%s');%s", $script, PHP_EOL);
 		}
 		
 		// Write tail.
