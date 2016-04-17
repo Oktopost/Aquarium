@@ -53,7 +53,7 @@ class GulpPackageManager implements ICompiler
 		}
 		
 		$compiled = new Package($package->Name);
-		
+		$compiled->Requires->add($package->Requires);
 		
 		$preCompiler = new PreCompiler();
 		
@@ -79,16 +79,15 @@ class GulpPackageManager implements ICompiler
 	 */
 	public function compile()
 	{
-		(new FileSystem())->deleteFilesByFilter(Config::instance()->Directories->PhpTargetDir, '*.php');
-		
 		foreach (Config::instance()->DefinitionManager->getNames() as $name)
 		{
-			$package = $this->compilePackage(Config::instance()->DefinitionManager->get($name));
+			$originalPackage = Config::instance()->DefinitionManager->get($name);
+			$compiledPackage = $this->compilePackage($originalPackage);
 			
 			/** @var IPhpBuilder $builder */
 			$builder = Config::skeleton(IPhpBuilder::class);
 			
-			$builder->buildPhpFile($package);
+			$builder->buildPhpFile($compiledPackage);
 		}
 	}
 }

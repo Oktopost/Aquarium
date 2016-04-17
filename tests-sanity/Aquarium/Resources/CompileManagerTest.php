@@ -48,9 +48,10 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	private function setupWithPackageLoader(GulpPackageManager $gulp, $class)
 	{
-		Config::instance()->Compiler			= $gulp;
-		Config::instance()->DefinitionManager	= new ClassMethods($class);
 		Config::instance()->Provider			= new Manager();
+		Config::instance()->Compiler			= $gulp;
+		
+		Config::instance()->DefinitionManager	= new ClassMethods($class);
 		Config::instance()->Consumer			= new TestConsumer();
 	}
 	
@@ -217,6 +218,34 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->assertFileExists(self::SANITY_DIR . '/target/scss_a/a.css');
 		$this->assertFileExists(self::SANITY_DIR . '/target/scss_a/b.css');
 	}
+	
+	
+	public function test_compiler_full_test()
+	{
+		$gulpCompiler = new GulpPackageManager();
+		
+		$gulpCompiler->setup()->addTimestamp();
+		
+		$gulpCompiler->setup()
+			->style()
+			->sass()
+			->concatenate()
+			->cssmin();
+		
+		$gulpCompiler->setup()
+			->script()
+			->concatenate()
+			->jsmin();
+		
+		$this->setupWithPackageLoader($gulpCompiler, SanityTestHelper_Compiler_FullStuck::class);
+		$this->setupDirectories();
+		
+		CompileManager::compile();
+		
+		$this->assertFileExists('/home/alexey/Dev/Aquarium/tests-sanity/Aquarium/Resources/Sanity/php/CompiledPackage_A.php');
+		$this->assertFileExists('/home/alexey/Dev/Aquarium/tests-sanity/Aquarium/Resources/Sanity/php/CompiledPackage_A_B.php');
+		$this->assertFileExists('/home/alexey/Dev/Aquarium/tests-sanity/Aquarium/Resources/Sanity/php/CompiledPackage_A_DEP_B.php');
+	}
 }
 
 
@@ -269,5 +298,39 @@ class SanityTestHelper_FullStuck
 		$builder
 			->style('a.js')
 			->style('b.js');
+	}
+}
+
+class SanityTestHelper_Compiler_FullStuck
+{
+	public function Package_A(IBuilder $builder)
+	{
+		$builder
+			->style('a.css')
+			->style('b.css');
+		
+		$builder
+			->script('a.js');
+	}
+	
+	public function Package_A_B(IBuilder $builder)
+	{
+		$builder
+			->style('a.css')
+			->style('b.css')
+			->style('a.scss');
+		
+		$builder
+			->script('a.js')
+			->script('b.js');
+	}
+	
+	public function Package_A_DEP_B(IBuilder $builder)
+	{
+		$builder
+			->package('A/B');
+		
+		$builder
+			->script('dir/in-dir.js');
 	}
 }

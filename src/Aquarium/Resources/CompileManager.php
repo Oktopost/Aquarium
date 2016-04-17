@@ -11,11 +11,11 @@ class CompileManager
 	use \Objection\TStaticClass;
 	
 	
-	private function prepare()
+	private static function prepare()
 	{
 		$fs = new FileSystem();
 		
-		echo "Clearing: " . Config::instance()->Directories->PhpTargetDir . PHP_EOL;
+		Config::instance()->Log->info('Clearing: ' . Config::instance()->Directories->PhpTargetDir);
 		$fs->deleteFilesByFilter(Config::instance()->Directories->PhpTargetDir, Utils::PACKAGE_CLASS_NAME_PREFIX);
 	}
 	
@@ -26,15 +26,17 @@ class CompileManager
 		{
 			self::prepare();
 			
-			echo "Compiling..." . PHP_EOL;
+			Config::instance()->Log->info('Compiling...');
 			Config::instance()->Compiler->compile();
 		}
 		catch (\Exception $e)
 		{
-			echo "Error encounter during compilation: " . PHP_EOL;
-			echo $e->getMessage() . PHP_EOL;
-			echo $e->getTraceAsString() . PHP_EOL;
-			echo "Aborting compilation!" . PHP_EOL;
+			Config::instance()->Log->error(
+				'Error encounter during compilation', 
+				[
+					'Error' => $e->getMessage(),
+					'Trace' => $e->getTraceAsString()
+				]);
 		}
 	}
 }

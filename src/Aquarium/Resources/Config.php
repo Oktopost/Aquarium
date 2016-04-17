@@ -13,6 +13,8 @@ use Skeleton\Skeleton;
 use Skeleton\ImplementersMap;
 use Skeleton\ConfigLoader\DirectoryConfigLoader;
 
+use Psr\Log\LoggerInterface;
+
 
 /**
  * @property IConsumer 					$Consumer
@@ -20,6 +22,7 @@ use Skeleton\ConfigLoader\DirectoryConfigLoader;
  * @property IPackageDefinitionManager 	$DefinitionManager
  * @property DirConfig 					$Directories
  * @property ICompiler 					$Compiler
+ * @property LoggerInterface 			$Log
  */
 class Config extends LiteObject
 {
@@ -36,6 +39,7 @@ class Config extends LiteObject
 	public function __construct()
 	{
 		parent::__construct();
+		$this->Log = new CmdLogger();
 	}
 	
 	
@@ -45,11 +49,12 @@ class Config extends LiteObject
 	protected function _setup()
 	{
 		return [
-			'Consumer'				=> LiteSetup::createInstanceOf(IConsumer::class), 
-			'Provider'				=> LiteSetup::createInstanceOf(IProvider::class), 
-			'DefinitionManager'		=> LiteSetup::createInstanceOf(IPackageDefinitionManager::class),
-			'Directories'			=> LiteSetup::createInstanceOf(new DirConfig(), AccessRestriction::NO_SET),
-			'Compiler'				=> LiteSetup::createInstanceOf(ICompiler::class)
+			'Consumer'			=> LiteSetup::createInstanceOf(IConsumer::class), 
+			'Provider'			=> LiteSetup::createInstanceOf(IProvider::class), 
+			'DefinitionManager'	=> LiteSetup::createInstanceOf(IPackageDefinitionManager::class),
+			'Directories'		=> LiteSetup::createInstanceOf(new DirConfig(), AccessRestriction::NO_SET),
+			'Compiler'			=> LiteSetup::createInstanceOf(ICompiler::class),
+			'Log'				=> LiteSetup::createInstanceOf(LoggerInterface::class),
 		];
 	}
 	
