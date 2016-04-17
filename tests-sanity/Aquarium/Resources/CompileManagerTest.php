@@ -274,6 +274,40 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.js')); 
 		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.css'));
 	}
+	
+	public function test_compiler_filesWithOlderTimestampExists()
+	{
+		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler->setup()->addTimestamp();
+		$gulpCompiler->setup()->style()->concatenate();
+		$gulpCompiler->setup()->script()->concatenate();
+		
+		$this->setupWithPackageLoader($gulpCompiler, SanityTestHelper_Compiler_UsingTimestamp::class);
+		$this->setupDirectories();
+		
+		CompileManager::compile();
+		
+		$js = glob(self::SANITY_DIR . '/target/A/a.*.js');
+		$css = glob(self::SANITY_DIR . '/target/A/a.*.css');
+		$js = end($js);
+		$css = end($css);
+		rename($js, self::SANITY_DIR . '/target/A/a.t000001.js');
+		rename($css, self::SANITY_DIR . '/target/A/a.t000001.css');
+		
+		CompileManager::compile();
+		
+		$this->assertFileExists(self::SANITY_DIR . '/target/A/a.t000001.js');
+		$this->assertFileExists(self::SANITY_DIR . '/target/A/a.t000001.css');
+		
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.js')); 
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.css'));
+	}
+}
+
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
 }
 
 

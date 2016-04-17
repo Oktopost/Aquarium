@@ -56,6 +56,9 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	private function compile(array $actions, CompilerSetup $setup)
 	{
+		if (!$setup->CompileTarget->hasAny())
+			return clone $setup->Unchanged;
+		
 		if (!$actions)
 			return clone ($setup->Unchanged->add($setup->CompileTarget));
 		
