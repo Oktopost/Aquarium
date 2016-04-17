@@ -42,7 +42,7 @@ class ConfigBuilderTest extends \PHPUnit_Framework_TestCase
 	public function test_getConfig_StylesAdded()
 	{
 		$b = new ConfigBuilder();
-		$b->style()->scss();
+		$b->style()->sass();
 		
 		$config = $b->getConfig();
 		

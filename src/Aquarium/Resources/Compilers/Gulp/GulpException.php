@@ -14,7 +14,7 @@ class GulpException extends \Exception
 	public function __construct($returnCode, $output)
 	{
 		$this->output = $output;
-		parent::__construct("Gulp exit with none zero code: $returnCode", $returnCode);
+		parent::__construct("Gulp exit with none zero code: $returnCode. Output: $output", $returnCode);
 	}
 	
 	

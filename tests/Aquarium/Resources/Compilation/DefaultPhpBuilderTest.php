@@ -14,12 +14,12 @@ class DefaultPhpBuilderTest extends \PHPUnit_Framework_TestCase
 	
 	public static function setUpBeforeClass()
 	{
-		foreach (glob(self::PATH . '/*') as $file) { unlink($file); }
+		foreach (glob(self::PATH . '/*.php') as $file) { unlink($file); }
 	}
 	
 	public static function tearDownAfterClass()
 	{
-		foreach (glob(self::PATH . '/*') as $file) { unlink($file); }
+		foreach (glob(self::PATH . '/*.php') as $file) { unlink($file); }
 	}
 	
 	

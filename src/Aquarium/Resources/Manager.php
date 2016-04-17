@@ -45,6 +45,12 @@ class Manager implements IProvider
 			throw new \Exception('Package name is invalid');
 		
 		$package = Config::instance()->DefinitionManager->get($name);
+		
+		if (Config::instance()->Compiler)
+		{
+			$package = Config::instance()->Compiler->compilePackage($package);
+		}
+		
 		$this->appendPackage($package);
 		
 		return $this;

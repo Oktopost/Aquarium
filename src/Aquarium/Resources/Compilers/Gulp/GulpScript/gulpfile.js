@@ -49,19 +49,20 @@ gulp.task('build', function () {
 		
 		switch (action) {
 			case 'scss-process':
-				pipeline.pipe(sass());
+				pipeline = pipeline.pipe(sass());
 				break;
 				
 			case 'concatenate':
-				pipeline.pipe(concat(target));
+				target = target.substr(target.lastIndexOf('/') + 1);
+				pipeline = pipeline.pipe(concat(target));
 				break;
 			
 			case 'css-minify':
-				pipeline.pipe(cssmin());
+				pipeline = pipeline.pipe(cssmin());
 				break;
 			
 			case 'js-minify':
-				pipeline.pipe(uglify());
+				pipeline = pipeline.pipe(uglify());
 				break;
 		}
 		

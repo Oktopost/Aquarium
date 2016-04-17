@@ -8,11 +8,6 @@ use Aquarium\Resources\Compilers\Gulp\GulpActionType;
 class ConcatenateAction extends AbstractGulpAction
 {
 	/**
-	 * @return bool Will this action result in a single file.
-	 */
-	protected function isSingleFile() { return true; }
-	
-	/**
 	 * @return string Type of the file generated (should be css or js)
 	 */
 	protected function getFileType() { return false; }

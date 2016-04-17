@@ -14,14 +14,13 @@ class DirConfigTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(['a', 'b'], $d->ResourcesSourceDirs);
 	}
 	
-	/**
-	 * @expectedException \Exception
-	 */
-	public function test_addSourceDir_DirectoryAlreadyExists_ErrorThrown()
+	public function test_addSourceDir_DirectoryAlreadyExists_NotDuplicated()
 	{
 		$d = new DirConfig();
 		
 		$d->addSourceDir('a');
 		$d->addSourceDir('a');
+		
+		$this->assertEquals(['a'], $d->ResourcesSourceDirs);
 	}
 }

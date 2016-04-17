@@ -77,7 +77,7 @@ class PreCompiler implements IPreCompiler
 		$modifiedCollection = clone $collection;
 		
 		/** @var ResourceMap $modifiedMap */
-		$modifiedMap = null;
+		$modifiedMap = new ResourceMap();
 		
 		
 		// Detect changes.
@@ -88,8 +88,7 @@ class PreCompiler implements IPreCompiler
 			
 			$map->apply($modifiedCollection);
 			
-			if (is_null($modifiedMap)) $modifiedMap = $map;
-			else $modifiedMap->modify($map); 
+			$modifiedMap->modify($map); 
 		}
 		
 		$modified = $this->getModified($modifiedMap);

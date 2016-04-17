@@ -7,7 +7,7 @@ interface IGulpActionFactory
 	/**
 	 * @return IGulpAction
 	 */
-	public function scss();
+	public function sass();
 	
 	/**
 	 * @param string|bool $filter

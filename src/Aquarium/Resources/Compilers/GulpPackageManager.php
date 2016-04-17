@@ -58,14 +58,14 @@ class GulpPackageManager implements ICompiler
 		$preCompiler = new PreCompiler();
 		
 		$preCompiler->setConfig($this->compileConfig);
-		$styleSettings = $preCompiler->preCompileScript($package);
+		$styleSettings = $preCompiler->preCompileStyle($package);
 		$scriptSettings = $preCompiler->preCompileScript($package);
 		
 		$compiler = new GulpCompiler();
 		
 		$compiler->setCompilerConfig($this->compileConfig);
+		$compiled->Styles->add($compiler->compileStyle($styleSettings));
 		$compiled->Scripts->add($compiler->compileScript($scriptSettings));
-		$compiled->Styles->add($compiler->compileScript($styleSettings));
 		
 		/** @var ICompileHelper $compilerHelper */
 		$compilerHelper = Config::skeleton(ICompileHelper::class);

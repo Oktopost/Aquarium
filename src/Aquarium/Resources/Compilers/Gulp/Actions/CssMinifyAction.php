@@ -8,11 +8,6 @@ use Aquarium\Resources\Compilers\Gulp\GulpActionType;
 class CssMinifyAction extends AbstractGulpAction
 {
 	/**
-	 * @return bool Will this action result in a single file.
-	 */
-	protected function isSingleFile() { return false; }
-	
-	/**
 	 * @return string Type of the file generated (should be css or js)
 	 */
 	protected function getFileType() { return 'css'; }

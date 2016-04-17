@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\Compilers\Gulp\Actions;
 
 
+use Aquarium\Resources\Compilers\Gulp\GulpActionType;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\Utils\ResourceMap;
 use Aquarium\Resources\Utils\ResourceCollection;
@@ -15,12 +16,24 @@ abstract class AbstractGulpAction implements IGulpAction
 	
 	
 	/**
+	 * @param Package $p
 	 * @param string $filePath
 	 * @return string
 	 */
-	private function moveToTargetDirectory($filePath)
+	private function moveToTargetDirectory(Package $p, $filePath)
 	{
-		return $this->directory . substr($filePath, strrpos($filePath, DIRECTORY_SEPARATOR)); 
+		$path = $this->directory . DIRECTORY_SEPARATOR . $p->getName('_'); 
+		
+		if ($this->getFileType())
+		{
+			$nameStartPos = strrpos($filePath, DIRECTORY_SEPARATOR) + 1;
+			$name = substr($filePath, $nameStartPos, strrpos($filePath, '.') - $nameStartPos);
+			$name = "$name.{$this->getFileType()}";
+			
+			return $path . DIRECTORY_SEPARATOR . $name;
+		}
+		
+		return $path . substr($filePath, strrpos($filePath, DIRECTORY_SEPARATOR)); 
 	}
 	
 	/**
@@ -30,26 +43,13 @@ abstract class AbstractGulpAction implements IGulpAction
 	 */
 	private function generateSingleFileName(Package $p, array $sourceFiles)
 	{
-		$targetFile = $this->directory . DIRECTORY_SEPARATOR . $p->Name;
-		
-		if ($this->getFileType())
-		{
-			$targetFile .= ".{$this->getFileType()}";
-		}
-		else 
-		{
-			$first = reset($sourceFiles);
-			$targetFile .= substr($first, strrpos($first, '.'));
-		}
+		$targetFile = $this->directory . DIRECTORY_SEPARATOR . $p->getName('_');
+		$first = reset($sourceFiles);
+		$targetFile .= substr($first, strrpos($first, DIRECTORY_SEPARATOR));
 		
 		return $targetFile;
 	}
 	
-	
-	/**
-	 * @return bool Will this action result in a single file.
-	 */
-	protected abstract function isSingleFile();
 	
 	/**
 	 * @return string Type of the file generated (should be css or js)
@@ -93,7 +93,7 @@ abstract class AbstractGulpAction implements IGulpAction
 		if (!$sourceFiles) 
 			return $map;
 		
-		if ($this->isSingleFile())
+		if ($this->getActionType() == GulpActionType::CONCATENATE)
 		{
 			$map->map($sourceFiles, $this->generateSingleFileName($p, $sourceFiles));
 		}
@@ -101,7 +101,7 @@ abstract class AbstractGulpAction implements IGulpAction
 		{
 			foreach ($sourceFiles as $filePath)
 			{
-				$map->map($filePath, $this->moveToTargetDirectory($filePath));
+				$map->map($filePath, $this->moveToTargetDirectory($p, $filePath));
 			}
 		}
 		
@@ -115,14 +115,16 @@ abstract class AbstractGulpAction implements IGulpAction
 	 */
 	public function getCommand(Package $p, ResourceCollection $collection)
 	{
+		$resources = $collection->get($this->filter);
+		
 		$data = [
 			'action'	=> $this->getActionType(),
 			'source'	=> $collection->get($this->filter)
 		];
 		
-		if ($this->isSingleFile())
+		if ($this->getActionType() == GulpActionType::CONCATENATE)
 		{
-			$data['target'] = $this->directory . DIRECTORY_SEPARATOR . $p->Name . '.' . $this->getFileType();
+			$data['target'] = $this->generateSingleFileName($p, $resources);
 		}
 		
 		return $data;

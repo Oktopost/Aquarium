@@ -54,6 +54,7 @@ class GulpCommand implements IGulpCommand
 			{
 				$value = json_encode($value, JSON_UNESCAPED_SLASHES);
 				$value = str_replace('"', '\\"', $value);
+				$value = str_replace(',', '\\,', $value);
 			}
 			
 			$this->arguments[] = "$arg $value";

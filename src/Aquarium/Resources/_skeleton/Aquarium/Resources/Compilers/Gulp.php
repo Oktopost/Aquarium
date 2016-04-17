@@ -19,3 +19,4 @@ $skeleton->set(IGulpActionFactory::class, Actions\ActionFactory::class,	Type::Si
 // Utils
 $skeleton->set(Process\ITimestampHelper::class,		Utils\TimestampHelper::class,	Type::Singleton);
 $skeleton->set(Process\IPreCompileHelper::class,	Utils\PreCompileHelper::class,	Type::Singleton);
+$skeleton->set(Process\ICompileHelper::class,		Utils\CompileHelper::class,		Type::Singleton);

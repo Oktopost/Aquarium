@@ -11,7 +11,7 @@ class ActionFactory implements IGulpActionFactory
 	/**
 	 * @return IGulpAction
 	 */
-	public function scss()
+	public function sass()
 	{
 		return new ScssAction();
 	}

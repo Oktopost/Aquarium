@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\Utils;
 
 
+use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\Package\IBuilder;
 
@@ -10,6 +11,24 @@ class Builder implements IBuilder
 {
 	/** @var Package */
 	private $package = null;
+	
+	
+	/**
+	 * @param string $resource
+	 * @return string|int|bool
+	 */
+	private function getFullPath($resource)
+	{
+		if ($resource[0] == DIRECTORY_SEPARATOR)
+			return $resource;
+		
+		$fullPath = Config::instance()->Directories->getPathToSource($resource);
+		
+		if (!$fullPath)
+			throw new \Exception("Can't find path to source file '$resource'");
+		
+		return $fullPath;
+	}
 	
 	
 	/**
@@ -28,7 +47,7 @@ class Builder implements IBuilder
 	 */
 	public function style($style)
 	{
-		$this->package->Styles->add($style);
+		$this->package->Styles->add($this->getFullPath($style));
 		return $this;
 	}
 	
@@ -38,7 +57,7 @@ class Builder implements IBuilder
 	 */
 	public function script($script)
 	{
-		$this->package->Scripts->add($script);
+		$this->package->Scripts->add($this->getFullPath($script));
 		return $this;
 	}
 	

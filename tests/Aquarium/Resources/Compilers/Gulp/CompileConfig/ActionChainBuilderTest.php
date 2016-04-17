@@ -18,7 +18,7 @@ class ActionChainBuilderTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($c, $c->concatenate());
 		$this->assertSame($c, $c->jsmin());
 		$this->assertSame($c, $c->cssmin());
-		$this->assertSame($c, $c->scss());
+		$this->assertSame($c, $c->sass());
 	}
 	
 	
@@ -30,7 +30,7 @@ class ActionChainBuilderTest extends \PHPUnit_Framework_TestCase
 		$c->concatenate();
 		$c->jsmin();
 		$c->cssmin();
-		$c->scss();
+		$c->sass();
 		
 		$collection = $c->getCollection();
 		

@@ -27,9 +27,8 @@ class GulpCompiler implements IGulpCompiler
 	/**
 	 * @param Package $p
 	 * @param array $commands
-	 * @param array $files
 	 */
-	private function execute(Package $p, array $commands, array $files)
+	private function execute(Package $p, array $commands)
 	{
 		$targetDir = Config::instance()->Directories->ResourcesTargetDir . DIRECTORY_SEPARATOR . $p->getName('_');
 		
@@ -43,9 +42,8 @@ class GulpCompiler implements IGulpCompiler
 			mkdir($targetDir, 0777, true);
 		}
 		
-		$command->setArg('commands', $commands);
-		$command->setArg('targetDir', $targetDir);
-		$command->setArg('source', $files);
+		$command->setArg('--commands', $commands);
+		$command->setArg('--targetDir', $targetDir);
 		
 		$command->execute(Config::skeleton(IShell::class));
 	}
@@ -54,10 +52,9 @@ class GulpCompiler implements IGulpCompiler
 	/**
 	 * @param IGulpAction[] $actions
 	 * @param CompilerSetup $setup
-	 * @param array $files
 	 * @return ResourceCollection
 	 */
-	private function compile(array $actions, CompilerSetup $setup, array $files)
+	private function compile(array $actions, CompilerSetup $setup)
 	{
 		if (!$actions)
 			return clone ($setup->Unchanged->add($setup->CompileTarget));
@@ -75,7 +72,10 @@ class GulpCompiler implements IGulpCompiler
 			$map->apply($compiledCollection);
 		}
 		
-		$this->execute($setup->Package, $commands, $files);
+		foreach ($commands as $command)
+		{
+			$this->execute($setup->Package, [$command]);
+		}
 		
 		if ($this->config->IsAddTimestamp)
 		{
@@ -113,7 +113,7 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	public function compileStyle(CompilerSetup $setup)
 	{
-		return $this->compile($this->config->StyleActions, $setup, $setup->Package->Styles->get());
+		return $this->compile($this->config->StyleActions, $setup);
 	}
 	
 	/**
@@ -122,6 +122,6 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	public function compileScript(CompilerSetup $setup) 
 	{
-		return $this->compile($this->config->ScriptActions, $setup, $setup->Package->Scripts->get());
+		return $this->compile($this->config->ScriptActions, $setup);
 	}
 }

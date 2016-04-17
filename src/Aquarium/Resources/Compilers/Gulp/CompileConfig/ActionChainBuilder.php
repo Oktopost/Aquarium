@@ -25,9 +25,9 @@ class ActionChainBuilder
 	/**
 	 * @return static
 	 */
-	public function scss() 
+	public function sass() 
 	{
-		$this->collection[] = $this->factory->scss();
+		$this->collection[] = $this->factory->sass();
 		return $this;
 	}
 	

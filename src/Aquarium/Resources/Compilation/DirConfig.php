@@ -29,13 +29,33 @@ class DirConfig extends LiteObject
 	
 	/**
 	 * @param string $source
-	 * @throws \Exception
 	 */
 	public function addSourceDir($source)
 	{
-		if (in_array($source, $this->ResourcesSourceDirs)) 
-			throw new \Exception("Source directory already defined: [$source]");
+		if (in_array($source, $this->ResourcesSourceDirs)) return;
 		
 		$this->_p->ResourcesSourceDirs[] = $source;
+	}
+	
+	/**
+	 * @param string $source
+	 * @return string|bool
+	 */
+	public function getPathToSource($source)
+	{
+		foreach ($this->ResourcesSourceDirs as $dir) 
+		{
+			$fullPath = DIRECTORY_SEPARATOR . join(
+				DIRECTORY_SEPARATOR, 
+				[
+					trim($dir, DIRECTORY_SEPARATOR), 
+					trim($source, DIRECTORY_SEPARATOR)
+				]
+			);
+			
+			if (file_exists($fullPath)) return $fullPath;
+		}
+		
+		return false;
 	}
 }
