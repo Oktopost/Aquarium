@@ -2,6 +2,7 @@
 namespace Aquarium\Resources;
 
 
+use Aquarium\Resources\Utils\Builder;
 use Aquarium\Resources\Package\IBuilder;
 use Aquarium\Resources\Compilers\GulpPackageManager;
 use Aquarium\Resources\ConsumerStrategy\TestConsumer;
@@ -64,6 +65,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		$this->clean();
+		Builder::setTestMode(false);
 	}
 	
 	public function tearDown()

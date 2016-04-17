@@ -3,13 +3,20 @@ namespace Aquarium\Resources\Compilation;
 
 
 use Aquarium\Resources\Config;
-use Aquarium\Resources\DefinitionStrategy\CompiledPackages;
 use Aquarium\Resources\Package;
+use Aquarium\Resources\Utils\Builder;
+use Aquarium\Resources\DefinitionStrategy\CompiledPackages;
 
 
 class DefaultPhpBuilderTest extends \PHPUnit_Framework_TestCase
 {
 	const PATH = __DIR__ . '/DefaultPhpBuilderDir';
+	
+	
+	public function setUp()
+	{
+		Builder::setTestMode(true);
+	}
 	
 	
 	public static function setUpBeforeClass()

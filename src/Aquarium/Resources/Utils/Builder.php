@@ -12,6 +12,18 @@ class Builder implements IBuilder
 	/** @var Package */
 	private $package = null;
 	
+	/** @var bool */
+	private static $isTestMode = false;
+	
+	
+	/**
+	 * @param bool$isTestMode
+	 */
+	public static function setTestMode($isTestMode = false)
+	{
+		self::$isTestMode = $isTestMode;
+	}
+	
 	
 	/**
 	 * @param string $resource
@@ -19,7 +31,7 @@ class Builder implements IBuilder
 	 */
 	private function getFullPath($resource)
 	{
-		if ($resource[0] == DIRECTORY_SEPARATOR)
+		if (self::$isTestMode || $resource[0] == DIRECTORY_SEPARATOR)
 			return $resource;
 		
 		$fullPath = Config::instance()->Directories->getPathToSource($resource);

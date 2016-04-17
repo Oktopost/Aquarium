@@ -7,6 +7,11 @@ use Aquarium\Resources\Package;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
+	public function setUp()
+	{
+		Builder::setTestMode(true);
+	}
+	
 	public function test_ReturnSelf()
 	{
 		$b = new Builder();

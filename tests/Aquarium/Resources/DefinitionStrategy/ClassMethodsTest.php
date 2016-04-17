@@ -3,6 +3,7 @@ namespace Aquarium\Resources\DefinitionStrategy;
 
 
 use Aquarium\Resources\Package;
+use Aquarium\Resources\Utils\Builder;
 use Aquarium\Resources\Package\IBuilder;
 
 
@@ -31,6 +32,12 @@ class ClassMethodsTestHelper
 
 class ClassMethodsTest extends \PHPUnit_Framework_TestCase
 {
+	public function setUp()
+	{
+		Builder::setTestMode(true);
+	}
+	
+	
 	public function test_has_Found()
 	{
 		$cm = new ClassMethods(ClassMethodsTestHelper::class);

@@ -4,11 +4,18 @@ namespace Aquarium\Resources\DefinitionStrategy;
 
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
+use Aquarium\Resources\Utils\Builder;
 
 
 class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 {
 	const PATH = __DIR__ . '/CompiledPackagesClasses';
+	
+	
+	public function setUp()
+	{
+		Builder::setTestMode(true);
+	}
 	
 	
 	/**
