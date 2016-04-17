@@ -1,5 +1,5 @@
 <?php
-namespace Aquarium\Resources;
+namespace Aquarium\Resources\Logger;
 
 
 use Psr\Log\LoggerInterface;

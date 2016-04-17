@@ -5,7 +5,7 @@ namespace Aquarium\Resources\Compilers\Gulp\Process;
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\Compilers\Gulp\IShell;
-
+use Aquarium\Resources\Utils\FileSystem;
 use Aquarium\Resources\Utils\ResourceCollection;
 
 use Aquarium\Resources\Compilers\Gulp\IGulpAction;
@@ -79,9 +79,24 @@ class GulpCompiler implements IGulpCompiler
 		
 		if ($this->config->IsAddTimestamp)
 		{
-			foreach (array_diff($compiledCollection->get(), $setup->CompileTarget->get()) as $compiledFile)
+			foreach ($compiledCollection->get() as $compiledFile)
 			{
-				$compiledCollection->replace($compiledFile, $this->timeHelper->findFileWithTimestamp($compiledFile));
+				$timestampFile = $this->timeHelper->findFileWithTimestamp($compiledFile);
+				
+				if ($timestampFile && (new FileSystem())->isFilesSame($timestampFile, $compiledFile))
+				{
+					// Make sure on next compilation this file will not be affected.
+					touch($timestampFile);
+					$compiledCollection->replace($compiledFile, $timestampFile);
+					continue;
+				}
+				
+				if ($timestampFile)
+					unlink($timestampFile);
+				
+				$timestampName = $this->timeHelper->generateTimestampForFile($compiledFile);
+				$compiledCollection->replace($compiledFile, $timestampName);
+				rename($compiledFile, $timestampName);
 			}
 		}
 		

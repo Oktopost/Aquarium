@@ -2,6 +2,7 @@
 namespace Aquarium\Resources;
 
 
+use Aquarium\Resources\Logger\CmdLogger;
 use Aquarium\Resources\Package\IPackageDefinitionManager;
 use Aquarium\Resources\Compilation\DirConfig;
 

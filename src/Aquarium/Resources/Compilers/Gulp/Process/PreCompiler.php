@@ -9,7 +9,7 @@ use Aquarium\Resources\Compilers\Gulp\IGulpAction;
 use Aquarium\Resources\Compilers\Gulp\IPreCompiler;
 use Aquarium\Resources\Compilers\Gulp\CompilerSetup;
 use Aquarium\Resources\Compilers\Gulp\GulpCompileConfig;
-
+use Aquarium\Resources\Utils\FileSystem;
 use Aquarium\Resources\Utils\ResourceMap;
 use Aquarium\Resources\Utils\ResourceCollection;
 
@@ -50,8 +50,11 @@ class PreCompiler implements IPreCompiler
 			{
 				$compiledWithTimestamp = $this->timestampHelper->findFileWithTimestamp($compiledResource);
 				
-				if ($compiledWithTimestamp)
-					$compiledTimestamp = $this->timestampHelper->getTimestampFromFileName($compiledWithTimestamp);
+				if ($compiledWithTimestamp) 
+				{
+					$data = $this->preCompileHelper->getTimestamps([$compiledWithTimestamp]);
+					$compiledTimestamp = end($data);
+				}
 			}
 			else
 			{

@@ -2,6 +2,7 @@
 namespace Aquarium\Resources;
 
 
+use Aquarium\Resources\Logger\VoidLogger;
 use Aquarium\Resources\Utils\Builder;
 use Aquarium\Resources\Package\IBuilder;
 use Aquarium\Resources\Compilers\GulpPackageManager;
@@ -67,6 +68,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->clean();
 		Builder::setTestMode(false);
+		Config::instance()->Log = new VoidLogger();
 	}
 	
 	public function tearDown()
@@ -224,8 +226,6 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	{
 		$gulpCompiler = new GulpPackageManager();
 		
-		$gulpCompiler->setup()->addTimestamp();
-		
 		$gulpCompiler->setup()
 			->style()
 			->sass()
@@ -242,9 +242,37 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		
 		CompileManager::compile();
 		
-		$this->assertFileExists('/home/alexey/Dev/Aquarium/tests-sanity/Aquarium/Resources/Sanity/php/CompiledPackage_A.php');
-		$this->assertFileExists('/home/alexey/Dev/Aquarium/tests-sanity/Aquarium/Resources/Sanity/php/CompiledPackage_A_B.php');
-		$this->assertFileExists('/home/alexey/Dev/Aquarium/tests-sanity/Aquarium/Resources/Sanity/php/CompiledPackage_A_DEP_B.php');
+		$this->assertFileExists(self::SANITY_DIR . '/php/CompiledPackage_A.php');
+		$this->assertFileExists(self::SANITY_DIR . '/php/CompiledPackage_A_B.php');
+		$this->assertFileExists(self::SANITY_DIR . '/php/CompiledPackage_A_DEP_B.php');
+	}
+	
+	public function test_compiler_using_timestamp()
+	{
+		$gulpCompiler = new GulpPackageManager();
+		
+		$gulpCompiler->setup()->addTimestamp();
+		
+		$gulpCompiler->setup()
+			->style()
+			->concatenate();
+		
+		$gulpCompiler->setup()
+			->script()
+			->concatenate();
+		
+		$this->setupWithPackageLoader($gulpCompiler, SanityTestHelper_Compiler_UsingTimestamp::class);
+		$this->setupDirectories();
+		
+		CompileManager::compile();
+		
+		$this->assertFileExists(self::SANITY_DIR . '/php/CompiledPackage_A.php');
+		
+		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/a.js');
+		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/a.css');
+		
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.js')); 
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.css'));
 	}
 }
 
@@ -332,5 +360,14 @@ class SanityTestHelper_Compiler_FullStuck
 		
 		$builder
 			->script('dir/in-dir.js');
+	}
+}
+
+class SanityTestHelper_Compiler_UsingTimestamp
+{
+	public function Package_A(IBuilder $builder)
+	{
+		$builder->style('a.css');
+		$builder->script('a.js');
 	}
 }
