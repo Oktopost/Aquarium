@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\Compilation;
 
 
+use Aquarium\Resources\Package;
 use Objection\LiteSetup;
 use Objection\LiteObject;
 use Objection\Enum\AccessRestriction;
@@ -57,5 +58,52 @@ class DirConfig extends LiteObject
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * @param string $source
+	 * @return string|bool
+	 */
+	public function getRelativePathToSource($source)
+	{
+		$options = array_merge(
+			[$this->ResourcesTargetDir],
+			$this->ResourcesSourceDirs
+		);
+		
+		foreach ($options as $path)
+		{
+			if (strpos($source, $path) === 0)
+			{
+				$source = substr($source, strlen($path));
+				
+				if ($source[0] == DIRECTORY_SEPARATOR)
+					return substr($source, 1);
+				
+				return $source;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * @param Package $p
+	 */
+	public function getRelativePathToPackageResources(Package $p)
+	{
+		foreach ($p->Scripts as $script)
+		{
+			$relative = $this->getRelativePathToSource($script);
+			
+			if ($relative) $p->Scripts->replace($script, $relative);
+		}
+		
+		foreach ($p->Styles as $style)
+		{
+			$relative = $this->getRelativePathToSource($style);
+			
+			if ($relative) $p->Styles->replace($style, $relative);
+		}
 	}
 }

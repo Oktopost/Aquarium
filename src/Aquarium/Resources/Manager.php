@@ -13,6 +13,8 @@ class Manager implements IProvider
 	 */
 	private function appendPackage(Package $package)
 	{
+		Config::instance()->Directories->getRelativePathToPackageResources($package);
+		
 		$this->dependencies[$package->Name] = true;
 		
 		foreach ($package->Requires as $required)

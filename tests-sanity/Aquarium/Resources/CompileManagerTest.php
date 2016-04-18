@@ -271,7 +271,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/a.js');
 		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/a.css');
 		
-		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.js')); 
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.js'));
 		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.css'));
 	}
 	

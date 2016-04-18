@@ -81,6 +81,8 @@ TAG
 		$className = Utils::getClassName($package->Name);
 		$resource = $this->createFile($className);
 		
+		Config::instance()->Directories->getRelativePathToPackageResources($package);
+		
 		try 
 		{
 			$this->writePhpFile($resource, $package);
