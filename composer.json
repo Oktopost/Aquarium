@@ -15,7 +15,7 @@
 		"php": ">=5.5-stable",
 		"oktopost/objection": "~1.0.0",
 		"oktopost/skeleton": "dev-master",
-		"monolog/monolog": "^1.19"
+		"psr/log": "^1.0"
 	},
 	
 	"autoload": {
