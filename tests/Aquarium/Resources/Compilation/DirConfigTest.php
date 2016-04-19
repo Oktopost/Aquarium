@@ -2,6 +2,9 @@
 namespace Aquarium\Resources\Compilation;
 
 
+use Aquarium\Resources\Package;
+
+
 class DirConfigTest extends \PHPUnit_Framework_TestCase
 {
 	public function test_addSourceDir()
@@ -25,44 +28,29 @@ class DirConfigTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	
-	public function test_getRelativePathToSource_NotFound_ReturnFalse()
+	public function test_truncateResourcesToPublicDir_ScriptTrancated()
 	{
 		$d = new DirConfig();
+		$d->PublicDir = 'b';
 		
-		$d->addSourceDir('a');
-		$d->ResourcesTargetDir = 'b';
+		$p = new Package('a');
+		$p->Scripts->add('b/c');
 		
-		$this->assertFalse($d->getRelativePathToSource('c'));
+		$d->truncateResourcesToPublicDir($p);
+		
+		$this->assertEquals(['c'], $p->Scripts->get());
 	}
 	
-	public function test_getRelativePathToSource_FoundInTargetDir_FixedPathReturned()
+	public function test_truncateResourcesToPublicDir_StyleTrancated()
 	{
 		$d = new DirConfig();
+		$d->PublicDir = 'b';
 		
-		$d->ResourcesTargetDir = 'b';
+		$p = new Package('a');
+		$p->Styles->add('b/c');
 		
-		$this->assertEquals('d', $d->getRelativePathToSource('b/d'));
-	}
-	
-	public function test_getRelativePathToSource_FoundInOnOfSourceDirs_FixedPathReturned()
-	{
-		$d = new DirConfig();
+		$d->truncateResourcesToPublicDir($p);
 		
-		$d->ResourcesTargetDir = 'n';
-		$d->addSourceDir('a');
-		$d->addSourceDir('b');
-		
-		$this->assertEquals('d', $d->getRelativePathToSource('b/d'));
-	}
-	
-	public function test_getRelativePathToSource_ResourceAlwaysReturnedWithoutSlash()
-	{
-		$d = new DirConfig();
-		$d->ResourcesTargetDir = 'n/';
-		$this->assertEquals('m', $d->getRelativePathToSource('n/m'));
-		
-		$d = new DirConfig();
-		$d->ResourcesTargetDir = 'n';
-		$this->assertEquals('m', $d->getRelativePathToSource('n/m'));
+		$this->assertEquals(['c'], $p->Styles->get());
 	}
 }

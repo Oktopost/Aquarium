@@ -57,22 +57,19 @@ class ResourceCollection implements \Iterator
 	/**
 	 * @param string $from
 	 * @param string $to
-	 * @return static
 	 */
 	public function replace($from, $to) 
 	{
 		$index = array_search($from, $this->collection);
 		
-		if ($index === false) return $this;
-		
-		array_splice($this->collection, $index, 1, $to);
-		
-		return $this;
+		if ($index !== false)
+		{
+			array_splice($this->collection, $index, 1, $to);
+		}
 	}
 	
 	/**
 	 * @param array|string $target
-	 * @return static
 	 */
 	public function remove($target) 
 	{
@@ -85,8 +82,30 @@ class ResourceCollection implements \Iterator
 			if ($index !== false) 
 				array_splice($this->collection, $index, 1);
 		}
+	}
+	
+	/**
+	 * @param string $dir
+	 */
+	public function truncatePath($dir) 
+	{
+		$dirPathLength = strlen($dir);
 		
-		return $this;
+		if (strrpos($dir, DIRECTORY_SEPARATOR) !== $dirPathLength - 1) 
+		{
+			$dir .= DIRECTORY_SEPARATOR;
+			$dirPathLength++;
+		}
+		
+		foreach ($this->collection as &$value) 
+		{
+			$position = strpos($value, $dir);
+			
+			if ($position !== false)
+			{
+				$value = substr($value, $dirPathLength);
+			}
+		}
 	}
 	
 	/**

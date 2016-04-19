@@ -196,6 +196,39 @@ class ResourceCollectionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	
+	public function test_setToRelativePath_CollectionEmpty()
+	{
+		$collection = new ResourceCollection();
+		$collection->truncatePath('a');
+	}
+	
+	public function test_setToRelativePath_PathFixed()
+	{
+		$collection = new ResourceCollection();
+		$collection->add('/a/1')->add('/a/bc/dd');
+		$collection->truncatePath('/a/');
+		
+		$this->assertEquals(['1', 'bc/dd'], $collection->get());
+	}
+	
+	public function test_setToRelativePath_DirectorySeparatorAddedToDirPath()
+	{
+		$collection = new ResourceCollection();
+		$collection->add('/a/1');
+		$collection->truncatePath('/a');
+		
+		$this->assertEquals(['1'], $collection->get());
+	}
+	
+	public function test_setToRelativePath_UnmatchedPath_NotModified()
+	{
+		$collection = new ResourceCollection();
+		$collection->add('/a/1');
+		$collection->truncatePath('/b');
+		
+		$this->assertEquals(['/a/1'], $collection->get());
+	}
+	
 	
 	public function test_iteration() 
 	{

@@ -11,6 +11,8 @@ use Objection\Enum\AccessRestriction;
 /**
  * @property string $PhpTargetDir			Directory were all compiled PHP classes are stored.
  * @property string $ResourcesTargetDir		Directory were all compiled resources should be stored.
+ * @property string	$PublicDir				After compilation all paths to the compiled resources are 
+ * 											truncated to be relative to this path.
  * @property array	$ResourcesSourceDirs	Directories that contain the resources to compile.
  */
 class DirConfig extends LiteObject
@@ -23,6 +25,7 @@ class DirConfig extends LiteObject
 		return [
 			'PhpTargetDir'			=> LiteSetup::createString(),
 			'ResourcesTargetDir'	=> LiteSetup::createString(),
+			'PublicDir'				=> LiteSetup::createString(),
 			'ResourcesSourceDirs'	=> LiteSetup::createArray([], AccessRestriction::NO_SET)
 		];
 	}
@@ -61,49 +64,11 @@ class DirConfig extends LiteObject
 	}
 	
 	/**
-	 * @param string $source
-	 * @return string|bool
-	 */
-	public function getRelativePathToSource($source)
-	{
-		$options = array_merge(
-			[$this->ResourcesTargetDir],
-			$this->ResourcesSourceDirs
-		);
-		
-		foreach ($options as $path)
-		{
-			if (strpos($source, $path) === 0)
-			{
-				$source = substr($source, strlen($path));
-				
-				if ($source[0] == DIRECTORY_SEPARATOR)
-					return substr($source, 1);
-				
-				return $source;
-			}
-		}
-		
-		return false;
-	}
-	
-	/**
 	 * @param Package $p
 	 */
-	public function getRelativePathToPackageResources(Package $p)
+	public function truncateResourcesToPublicDir(Package $p)
 	{
-		foreach ($p->Scripts as $script)
-		{
-			$relative = $this->getRelativePathToSource($script);
-			
-			if ($relative) $p->Scripts->replace($script, $relative);
-		}
-		
-		foreach ($p->Styles as $style)
-		{
-			$relative = $this->getRelativePathToSource($style);
-			
-			if ($relative) $p->Styles->replace($style, $relative);
-		}
+		$p->Scripts->truncatePath($this->PublicDir);
+		$p->Styles->truncatePath($this->PublicDir);
 	}
 }

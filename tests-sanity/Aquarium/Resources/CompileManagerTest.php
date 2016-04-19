@@ -61,6 +61,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		Config::instance()->Directories->addSourceDir(self::SANITY_DIR . '/source');
 		Config::instance()->Directories->PhpTargetDir		= self::SANITY_DIR . '/php';
 		Config::instance()->Directories->ResourcesTargetDir	= self::SANITY_DIR . '/target';
+		Config::instance()->Directories->PublicDir			= self::SANITY_DIR;
 	}
 	
 	

@@ -81,7 +81,7 @@ TAG
 		$className = Utils::getClassName($package->Name);
 		$resource = $this->createFile($className);
 		
-		Config::instance()->Directories->getRelativePathToPackageResources($package);
+		Config::instance()->Directories->truncateResourcesToPublicDir($package);
 		
 		try 
 		{
