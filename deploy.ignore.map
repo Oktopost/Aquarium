@@ -1,5 +1,6 @@
 # Root directory
 tests
+.gitignore
 tests-sanity
 composer.*
 README.md
