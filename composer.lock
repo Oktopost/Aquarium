@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6add998c5a56b1928704396942b7fa79",
-    "content-hash": "6737ccb5317659af5384f7bec9770707",
+    "hash": "88aa4120e51915ff748ceb3b7769a72e",
+    "content-hash": "da4ef0267f9870eb7bbe11c2b000005a",
     "packages": [
         {
             "name": "oktopost/objection",
-            "version": "1.0.2",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/Objection.git",
-                "reference": "ffb3bbfc21cc1f34adef03729e0a283e3786a663"
+                "reference": "238ba1b3236d7612b56f6514ead8c723076ec877"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/ffb3bbfc21cc1f34adef03729e0a283e3786a663",
-                "reference": "ffb3bbfc21cc1f34adef03729e0a283e3786a663",
+                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/238ba1b3236d7612b56f6514ead8c723076ec877",
+                "reference": "238ba1b3236d7612b56f6514ead8c723076ec877",
                 "shasum": ""
             },
             "require": {
@@ -48,24 +48,24 @@
             ],
             "description": "Objects in PHP",
             "homepage": "https://github.com/Oktopost/Objection",
-            "time": "2016-06-06 08:58:54"
+            "time": "2016-07-20 07:10:42"
         },
         {
             "name": "oktopost/skeleton",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/Skeleton.git",
-                "reference": "a60da8b707595363dbb1b2c2cb6c3b3c82ed5982"
+                "reference": "67432782fd975dce7f7b33559381d5b35b70e34a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/Skeleton/zipball/a60da8b707595363dbb1b2c2cb6c3b3c82ed5982",
-                "reference": "a60da8b707595363dbb1b2c2cb6c3b3c82ed5982",
+                "url": "https://api.github.com/repos/Oktopost/Skeleton/zipball/67432782fd975dce7f7b33559381d5b35b70e34a",
+                "reference": "67432782fd975dce7f7b33559381d5b35b70e34a",
                 "shasum": ""
             },
             "require": {
-                "oktopost/objection": "1.0.*",
+                "oktopost/objection": "^1.0.0",
                 "php": ">=5.5"
             },
             "type": "library",
@@ -87,7 +87,7 @@
             ],
             "description": "Inversion of Control library",
             "homepage": "https://github.com/Oktopost/Skeleton",
-            "time": "2016-07-14 15:11:11"
+            "time": "2016-07-20 07:08:58"
         },
         {
             "name": "psr/log",
