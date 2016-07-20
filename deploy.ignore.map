@@ -1,0 +1,4 @@
+# Root directory
+tests
+tests-sanity
+composer.*
