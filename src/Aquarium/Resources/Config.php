@@ -11,7 +11,7 @@ use Objection\LiteObject;
 use Objection\Enum\AccessRestriction;
 
 use Skeleton\Skeleton;
-use Skeleton\ImplementersMap;
+use Skeleton\UnitTestSkeleton;
 use Skeleton\ConfigLoader\DirectoryConfigLoader;
 
 use Psr\Log\LoggerInterface;
@@ -30,7 +30,7 @@ class Config extends LiteObject
 	use \Objection\TSingleton;
 	
 	
-	/** @var ImplementersMap\TestMap|null */
+	/** @var UnitTestSkeleton */
 	private static $testMap = null;
 	
 	/** @var Skeleton */
@@ -68,7 +68,7 @@ class Config extends LiteObject
 	{
 		if (is_null(self::$skeleton))
 			self::$skeleton = (new Skeleton())
-				->setMap(new ImplementersMap\LazyLoadMap())
+				->enableKnot()
 				->setConfigLoader(new DirectoryConfigLoader(__DIR__ . '/_skeleton'));
 		
 		if (is_null($interface)) 
@@ -85,7 +85,7 @@ class Config extends LiteObject
 	{
 		if (is_null(self::$testMap)) 
 		{
-			self::$testMap = new ImplementersMap\TestMap(self::skeleton()->getMap());
+			self::$testMap = new UnitTestSkeleton(self::skeleton());
 			self::skeleton()->setMap(self::$testMap);
 		}
 		
@@ -94,6 +94,6 @@ class Config extends LiteObject
 	
 	public static function reset() 
 	{
-		self::$testMap->reset();
+		self::$testMap->clear();
 	}
 }
