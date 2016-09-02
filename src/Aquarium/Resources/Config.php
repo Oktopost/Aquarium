@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
  * @property IProvider					$Provider
  * @property IPackageDefinitionManager 	$DefinitionManager
  * @property DirConfig 					$Directories
- * @property ICompiler 					$Compiler
+ * @property ICompiler 					$GulpCompiler
  * @property LoggerInterface 			$Log
  */
 class Config extends LiteObject
@@ -54,7 +54,7 @@ class Config extends LiteObject
 			'Provider'			=> LiteSetup::createInstanceOf(IProvider::class), 
 			'DefinitionManager'	=> LiteSetup::createInstanceOf(IPackageDefinitionManager::class),
 			'Directories'		=> LiteSetup::createInstanceOf(new DirConfig(), AccessRestriction::NO_SET),
-			'Compiler'			=> LiteSetup::createInstanceOf(ICompiler::class),
+			'GulpCompiler'			=> LiteSetup::createInstanceOf(ICompiler::class),
 			'Log'				=> LiteSetup::createInstanceOf(LoggerInterface::class),
 		];
 	}
