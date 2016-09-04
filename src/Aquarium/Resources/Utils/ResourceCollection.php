@@ -18,11 +18,19 @@ class ResourceCollection implements \Iterator
 	
 	/**
 	 * @param array|string|ResourceCollection $resource
+	 * @param bool $loadDirectory
 	 * @return static
 	 */
-	public function add($resource)
+	public function add($resource, $loadDirectory = false)
 	{
-		if ($resource instanceof ResourceCollection)
+		if(is_array($resource) && $loadDirectory)
+		{
+			foreach($resource as $item)
+			{
+				$this->add($item);
+			}
+		}
+		else if ($resource instanceof ResourceCollection)
 		{
 			$this->add($resource->get());
 		}
@@ -40,6 +48,7 @@ class ResourceCollection implements \Iterator
 	
 	/**
 	 * @param string $resource
+	 * @return bool
 	 */
 	public function hasResource($resource) 
 	{

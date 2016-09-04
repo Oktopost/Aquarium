@@ -12,6 +12,9 @@ class Builder implements IBuilder
 	/** @var Package */
 	private $package = null;
 	
+	private $loadDirectory = false;
+	
+	
 	/** @var bool */
 	private static $isTestMode = false;
 	
@@ -25,21 +28,99 @@ class Builder implements IBuilder
 	}
 	
 	
+	private function addAllFilesInDirectory($resource)
+	{
+		$result = [];
+		
+		$splitted = explode('*', $resource);
+		
+		if (isset($splitted[2]))
+		{
+			throw new \Exception('Can not use more than one asterisk in path');
+		}
+		
+		$dir = $splitted[0];
+		$prefix = $this->setPrefix($dir);
+		$suffix = $this->setSuffix($splitted[1]);
+		$path = Config::instance()->Directories->getPathToSource($dir);
+		$scan = scandir($path);
+		
+		foreach ($scan as $item)
+		{
+			$endPoint = $path . DIRECTORY_SEPARATOR . $item;
+			if (
+				$item != '.' &&
+				$item != '..' &&
+				!is_dir($endPoint) &&
+				preg_match($prefix, $item) &&
+				preg_match($suffix, $item)
+			)
+			{
+				$result[] = $endPoint;
+				
+			}
+		}
+		
+		return $result;
+	}
+	
 	/**
 	 * @param string $resource
-	 * @return string|int|bool
+	 * @return bool|int|string
 	 */
 	private function getFullPath($resource)
 	{
 		if (self::$isTestMode || $resource[0] == DIRECTORY_SEPARATOR)
 			return $resource;
 		
-		$fullPath = Config::instance()->Directories->getPathToSource($resource);
+		if (preg_match('/(\*)/', $resource))
+		{
+			$this->loadDirectory = true;
+			$fullPath = $this->addAllFilesInDirectory($resource);
+		}
+		else
+		{
+			$this->loadDirectory = false;
+			$fullPath = Config::instance()->Directories->getPathToSource($resource);
+		}
 		
 		if (!$fullPath)
 			throw new \Exception("Can't find path to source file '$resource'");
 		
 		return $fullPath;
+	}
+	
+	
+	/**
+	 * @param $dir
+	 * @return string
+	 */
+	private function setPrefix(&$dir)
+	{
+		if ($dir[strlen($dir) - 1] != DIRECTORY_SEPARATOR)
+		{
+			$pathAsArray = explode(DIRECTORY_SEPARATOR, $dir);
+			$prefix = '/^' . array_pop($pathAsArray) . '/';
+			$dir = implode(DIRECTORY_SEPARATOR, $pathAsArray);
+			
+			return $prefix;
+		}
+		
+		return '//';
+	}
+	
+	/**
+	 * @param $string
+	 * @return string
+	 */
+	private function setSuffix($string)
+	{
+		if ($string == null)
+		{
+			return '//';
+		}
+		
+		return '/' . $string . '$/';
 	}
 	
 	
@@ -59,7 +140,7 @@ class Builder implements IBuilder
 	 */
 	public function style($style)
 	{
-		$this->package->Styles->add($this->getFullPath($style));
+		$this->package->Styles->add($this->getFullPath($style), $this->loadDirectory);
 		return $this;
 	}
 	
@@ -69,7 +150,7 @@ class Builder implements IBuilder
 	 */
 	public function script($script)
 	{
-		$this->package->Scripts->add($this->getFullPath($script));
+		$this->package->Scripts->add($this->getFullPath($script), $this->loadDirectory);
 		return $this;
 	}
 	
