@@ -2,7 +2,7 @@
 namespace Aquarium\Resources\Package;
 
 
-interface IBuilder
+interface IPackageBuilder
 {
 	/**
 	 * @param string $style
@@ -21,4 +21,10 @@ interface IBuilder
 	 * @return static
 	 */
 	public function package($name);
+	
+	/**
+	 * @param string $package
+	 * @return static
+	 */
+	public function inscribe($package);
 }

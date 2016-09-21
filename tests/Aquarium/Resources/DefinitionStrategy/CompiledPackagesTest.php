@@ -4,7 +4,7 @@ namespace Aquarium\Resources\DefinitionStrategy;
 
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Utils\Builder;
+use Aquarium\Resources\Utils\PackageBuilder;
 
 
 class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +14,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	
 	public function setUp()
 	{
-		Builder::setTestMode(true);
+		PackageBuilder::setTestMode(true);
 	}
 	
 	

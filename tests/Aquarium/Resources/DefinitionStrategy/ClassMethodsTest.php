@@ -3,27 +3,27 @@ namespace Aquarium\Resources\DefinitionStrategy;
 
 
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Utils\Builder;
-use Aquarium\Resources\Package\IBuilder;
+use Aquarium\Resources\Utils\PackageBuilder;
+use Aquarium\Resources\Package\IPackageBuilder;
 
 
 class ClassMethodsTestHelper
 {
-	public function Package_a_b(IBuilder $b)
+	public function Package_a_b(IPackageBuilder $b)
 	{
 		$b->script('a');
 		$b->style('b');
 		$b->package('n');
 	}
 	
-	public function Package_c_d(IBuilder $b)
+	public function Package_c_d(IPackageBuilder $b)
 	{
 		$b->script('a');
 		$b->style('b');
 		$b->package('n');
 	}
 	
-	public function Package_case_TEST(IBuilder $b)
+	public function Package_case_TEST(IPackageBuilder $b)
 	{
 		
 	}
@@ -34,7 +34,7 @@ class ClassMethodsTest extends \PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
-		Builder::setTestMode(true);
+		PackageBuilder::setTestMode(true);
 	}
 	
 	

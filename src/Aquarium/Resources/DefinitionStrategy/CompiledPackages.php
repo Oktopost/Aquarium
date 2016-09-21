@@ -3,7 +3,7 @@ namespace Aquarium\Resources\DefinitionStrategy;
 
 
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Utils\Builder;
+use Aquarium\Resources\Utils\PackageBuilder;
 use Aquarium\Resources\Package\IPackageDefinitionManager;
 use Aquarium\Resources\Compilation\Utils;
 
@@ -26,7 +26,7 @@ class CompiledPackages implements IPackageDefinitionManager
 			$fullClassName = Utils::getFullClassName($name);
 			
 			$package = new Package($name);
-			$builder = new Builder();
+			$builder = new PackageBuilder();
 			
 			$this->cached[$name] = $package;
 			$builder->setup($package);

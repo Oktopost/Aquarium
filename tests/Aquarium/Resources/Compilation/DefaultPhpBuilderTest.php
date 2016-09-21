@@ -4,7 +4,7 @@ namespace Aquarium\Resources\Compilation;
 
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Utils\Builder;
+use Aquarium\Resources\Utils\PackageBuilder;
 use Aquarium\Resources\DefinitionStrategy\CompiledPackages;
 
 
@@ -15,7 +15,7 @@ class DefaultPhpBuilderTest extends \PHPUnit_Framework_TestCase
 	
 	public function setUp()
 	{
-		Builder::setTestMode(true);
+		PackageBuilder::setTestMode(true);
 	}
 	
 	
@@ -36,6 +36,9 @@ class DefaultPhpBuilderTest extends \PHPUnit_Framework_TestCase
 		
 		$p->Requires->add('req-a');
 		$p->Requires->add('req-1');
+		
+		$p->Inscribed->add('ins-a');
+		$p->Inscribed->add('ins-1');
 		
 		$p->Styles->add('style1');
 		$p->Styles->add('style2');
@@ -59,8 +62,9 @@ class DefaultPhpBuilderTest extends \PHPUnit_Framework_TestCase
 		
 		$pLoaded = (new CompiledPackages())->get($p->Name);
 		
-		$this->assertEquals($pLoaded->Requires->get(), $p->Requires->get());
-		$this->assertEquals($pLoaded->Scripts->get(), $p->Scripts->get());
-		$this->assertEquals($pLoaded->Styles->get(), $p->Styles->get());
+		$this->assertEquals(['req-a', 'req-1'],			$pLoaded->Requires->get());
+		$this->assertEquals(['script-a', 'script-b'],	$pLoaded->Scripts->get());
+		$this->assertEquals(['style1', 'style2'],		$pLoaded->Styles->get());
+		$this->assertEquals(['ins-a', 'ins-1'],			$pLoaded->Inscribed->get());
 	}
 }

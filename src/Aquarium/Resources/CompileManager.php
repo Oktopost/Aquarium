@@ -28,6 +28,7 @@ class CompileManager
 			
 			Config::instance()->Log->info('Compiling...');
 			Config::instance()->Compiler->compile();
+			Config::instance()->Log->info('Complete!');
 		}
 		catch (\Exception $e)
 		{

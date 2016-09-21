@@ -4,10 +4,10 @@ namespace Aquarium\Resources\Utils;
 
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Package\IBuilder;
+use Aquarium\Resources\Package\IPackageBuilder;
 
 
-class Builder implements IBuilder
+class PackageBuilder implements IPackageBuilder
 {
 	/** @var Package */
 	private $package = null;
@@ -161,6 +161,16 @@ class Builder implements IBuilder
 	public function package($name)
 	{
 		$this->package->Requires->add($name);
+		return $this;
+	}
+	
+	/**
+	 * @param string $package
+	 * @return static
+	 */
+	public function inscribe($package)
+	{
+		$this->package->Inscribed->add($package);
 		return $this;
 	}
 }

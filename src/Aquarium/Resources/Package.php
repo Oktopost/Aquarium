@@ -13,6 +13,7 @@ use Objection\Enum\AccessRestriction;
  * @property string 			$Name
  * @property array				$Path
  * @property ResourceCollection	$Requires
+ * @property ResourceCollection	$Inscribed
  * @property ResourceCollection	$Styles
  * @property ResourceCollection	$Scripts
  */
@@ -30,6 +31,7 @@ class Package extends LiteObject
 			'Name'		=> LiteSetup::createString('', AccessRestriction::NO_SET),
 			'Path'		=> LiteSetup::createArray([], AccessRestriction::NO_SET),
 			'Requires'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
+			'Inscribed'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
 			'Styles'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
 			'Scripts'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET)
 		];
@@ -43,11 +45,12 @@ class Package extends LiteObject
 	{
 		parent::__construct();
 		
-		$this->_p->Name		= $name;
-		$this->_p->Path		= explode(self::PACKAGE_PATH_SEPARATOR, $name);
-		$this->_p->Requires = new ResourceCollection();
-		$this->_p->Styles	= new ResourceCollection();
-		$this->_p->Scripts	= new ResourceCollection();
+		$this->_p->Name			= $name;
+		$this->_p->Path			= explode(self::PACKAGE_PATH_SEPARATOR, $name);
+		$this->_p->Requires 	= new ResourceCollection();
+		$this->_p->Inscribed	= new ResourceCollection();
+		$this->_p->Styles		= new ResourceCollection();
+		$this->_p->Scripts		= new ResourceCollection();
 	}
 	
 	

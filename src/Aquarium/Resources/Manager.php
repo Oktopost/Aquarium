@@ -22,6 +22,11 @@ class Manager implements IProvider
 			$this->package($required);
 		}
 		
+		foreach ($package->Inscribed as $inscribed)
+		{
+			$this->package($inscribed);
+		}
+		
 		foreach ($package->Styles as $style)
 		{
 			Config::instance()->Consumer->addStyle($style);

@@ -4,7 +4,7 @@ namespace Aquarium\Resources\Compilation;
 
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Package\IBuilder;
+use Aquarium\Resources\Package\IPackageBuilder;
 
 
 class DefaultPhpBuilder implements IPhpBuilder
@@ -26,14 +26,13 @@ class DefaultPhpBuilder implements IPhpBuilder
 	
 	/**
 	 * @param resource $resource
-	 * @param \Aquarium\Resources\Package $package
+	 * @param Package $package
 	 */
-	private function writePhpFile($resource, Package $package)
+	private function startFile($resource, Package $package)
 	{
 		$className = Utils::getClassName($package->Name);
 		
-		// Write head.
-		fprintf($resource, <<<TAG
+		$data = <<<TAG
 <?php
 namespace %s;
 
@@ -43,15 +42,30 @@ class %s
 	{
 
 TAG
-			, 
-			Utils::COMPILED_CLASSES_NAMESPACE, 
-			$className, 
-			IBuilder::class);
+		;
 		
-		// Write main function body.
+		fprintf(
+			$resource,
+			$data,
+			Utils::COMPILED_CLASSES_NAMESPACE,
+			$className,
+			IPackageBuilder::class);
+	}
+	
+	/**
+	 * @param resource $resource
+	 * @param Package $package
+	 */
+	private function writePackage($resource, Package $package)
+	{
 		foreach ($package->Requires as $required)
 		{
 			fprintf($resource, "\t\t\$b->package('%s');%s", $required, PHP_EOL);
+		}
+		
+		foreach ($package->Inscribed as $inscribed)
+		{
+			fprintf($resource, "\t\t\$b->inscribe('%s');%s", $inscribed, PHP_EOL);
 		}
 		
 		foreach ($package->Styles as $style)
@@ -63,13 +77,31 @@ TAG
 		{
 			fprintf($resource, "\t\t\$b->script('%s');%s", $script, PHP_EOL);
 		}
-		
-		// Write tail.
-		fprintf($resource, <<<TAG
+	}
+	
+	/**
+	 * @param resource $resource
+	 */
+	private function endFile($resource)
+	{
+		$data = <<<TAG
 	}
 }
 TAG
-		); 
+		;
+		
+		fprintf($resource, $data); 
+	}
+	
+	/**
+	 * @param resource $resource
+	 * @param Package $package
+	 */
+	private function writePhpFile($resource, Package $package)
+	{
+		$this->startFile($resource, $package);
+		$this->writePackage($resource, $package);
+		$this->endFile($resource);
 	}
 	
 	

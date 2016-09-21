@@ -154,7 +154,11 @@ class PreCompiler implements IPreCompiler
 	 */
 	public function preCompileStyle(Package $p)
 	{
-		return $this->preCompileActions($p, $this->config->StyleActions, $p->Styles);
+		$unroll = new PackageUnroll(Config::instance()->DefinitionManager);
+		$unroll->setOriginPackage($p);
+		$styles = $unroll->getStyles();
+			
+		return $this->preCompileActions($p, $this->config->StyleActions, $styles);
 	}
 	
 	/**
@@ -163,6 +167,10 @@ class PreCompiler implements IPreCompiler
 	 */
 	public function preCompileScript(Package $p)
 	{
-		return $this->preCompileActions($p, $this->config->ScriptActions, $p->Scripts);
+		$unroll = new PackageUnroll(Config::instance()->DefinitionManager);
+		$unroll->setOriginPackage($p);
+		$scripts = $unroll->getScripts();
+		
+		return $this->preCompileActions($p, $this->config->ScriptActions, $scripts);
 	}
 }

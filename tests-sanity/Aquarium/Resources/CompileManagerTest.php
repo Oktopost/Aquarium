@@ -3,8 +3,8 @@ namespace Aquarium\Resources;
 
 
 use Aquarium\Resources\Logger\VoidLogger;
-use Aquarium\Resources\Utils\Builder;
-use Aquarium\Resources\Package\IBuilder;
+use Aquarium\Resources\Utils\PackageBuilder;
+use Aquarium\Resources\Package\IPackageBuilder;
 use Aquarium\Resources\Compilers\GulpPackageManager;
 use Aquarium\Resources\ConsumerStrategy\TestConsumer;
 use Aquarium\Resources\DefinitionStrategy\ClassMethods;
@@ -68,7 +68,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		$this->clean();
-		Builder::setTestMode(false);
+		PackageBuilder::setTestMode(false);
 		Config::instance()->Log = new VoidLogger();
 	}
 	
@@ -314,7 +314,7 @@ function microtime_float()
 
 class SanityTestHelper_Script
 {
-	public function Package_js_a(IBuilder $builder)
+	public function Package_js_a(IPackageBuilder $builder)
 	{
 		$builder
 			->script('a.js')
@@ -324,7 +324,7 @@ class SanityTestHelper_Script
 
 class SanityTestHelper_Style
 {
-	public function Package_css_a(IBuilder $builder)
+	public function Package_css_a(IPackageBuilder $builder)
 	{
 		$builder
 			->style('a.css')
@@ -334,7 +334,7 @@ class SanityTestHelper_Style
 
 class SanityTestHelper_Scss
 {
-	public function Package_scss_a(IBuilder $builder)
+	public function Package_scss_a(IPackageBuilder $builder)
 	{
 		$builder->style('a.scss');
 	}
@@ -342,7 +342,7 @@ class SanityTestHelper_Scss
 
 class SanityTestHelper_Scss_And_Css
 {
-	public function Package_scss_a(IBuilder $builder)
+	public function Package_scss_a(IPackageBuilder $builder)
 	{
 		$builder->style('b.css');
 		$builder->style('a.scss');
@@ -351,7 +351,7 @@ class SanityTestHelper_Scss_And_Css
 
 class SanityTestHelper_FullStuck
 {
-	public function Package_full_stuck(IBuilder $builder)
+	public function Package_full_stuck(IPackageBuilder $builder)
 	{
 		$builder
 			->style('a.css')
@@ -366,7 +366,7 @@ class SanityTestHelper_FullStuck
 
 class SanityTestHelper_Compiler_FullStuck
 {
-	public function Package_A(IBuilder $builder)
+	public function Package_A(IPackageBuilder $builder)
 	{
 		$builder
 			->style('a.css')
@@ -376,7 +376,7 @@ class SanityTestHelper_Compiler_FullStuck
 			->script('a.js');
 	}
 	
-	public function Package_A_B(IBuilder $builder)
+	public function Package_A_B(IPackageBuilder $builder)
 	{
 		$builder
 			->style('a.css')
@@ -388,7 +388,7 @@ class SanityTestHelper_Compiler_FullStuck
 			->script('b.js');
 	}
 	
-	public function Package_A_DEP_B(IBuilder $builder)
+	public function Package_A_DEP_B(IPackageBuilder $builder)
 	{
 		$builder
 			->package('A/B');
@@ -400,7 +400,7 @@ class SanityTestHelper_Compiler_FullStuck
 
 class SanityTestHelper_Compiler_UsingTimestamp
 {
-	public function Package_A(IBuilder $builder)
+	public function Package_A(IPackageBuilder $builder)
 	{
 		$builder->style('a.css');
 		$builder->script('a.js');

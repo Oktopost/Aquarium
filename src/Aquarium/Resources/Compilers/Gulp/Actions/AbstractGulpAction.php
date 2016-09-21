@@ -45,7 +45,7 @@ abstract class AbstractGulpAction implements IGulpAction
 	{
 		$targetFile = $this->directory . DIRECTORY_SEPARATOR . $p->getName('_');
 		$first = reset($sourceFiles);
-		$targetFile .= substr($first, strrpos($first, DIRECTORY_SEPARATOR));
+		$targetFile .= '/' . $p->getName('_') . substr($first, strrpos($first, '.'));
 		
 		return $targetFile;
 	}

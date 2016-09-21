@@ -3,7 +3,7 @@ namespace Aquarium\Resources\DefinitionStrategy;
 
 
 use Aquarium\Resources\Package;
-use Aquarium\Resources\Utils\Builder;
+use Aquarium\Resources\Utils\PackageBuilder;
 use Aquarium\Resources\Package\IPackageDefinitionManager;
 
 
@@ -58,7 +58,7 @@ class ClassMethods implements IPackageDefinitionManager
 	{
 		if (!isset($this->cached[$name]))
 		{
-			$builder	= new Builder();
+			$builder	= new PackageBuilder();
 			$package	= new Package($name);
 			$object		= $this->getObject();
 			$funcName	= $this->getFunctionName($name);
