@@ -15,7 +15,7 @@ class CompileHelper implements ICompileHelper
 	 */
 	public function cleanDirectory(Package $p)
 	{
-		$targetDir = Config::instance()->Directories->ResourcesTargetDir;
+		$targetDir = Config::instance()->directories()->CompiledResourcesDir;
 		$packageDir = $targetDir . DIRECTORY_SEPARATOR . $p->getName('_');
 		
 		$allFiles = array_merge($p->Scripts->get(), $p->Styles->get());

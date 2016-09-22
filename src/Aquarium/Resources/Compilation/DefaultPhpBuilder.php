@@ -15,7 +15,7 @@ class DefaultPhpBuilder implements IPhpBuilder
 	 */
 	private function createFile($packageName)
 	{
-		$filePath = Config::instance()->Directories->PhpTargetDir . DIRECTORY_SEPARATOR . $packageName . '.php';
+		$filePath = Config::instance()->directories()->PhpTargetDir . DIRECTORY_SEPARATOR . $packageName . '.php';
 		$handle = fopen($filePath, 'w');
 		
 		if (!$handle) 
@@ -113,7 +113,7 @@ TAG
 		$className = Utils::getClassName($package->Name);
 		$resource = $this->createFile($className);
 		
-		Config::instance()->Directories->truncateResourcesToPublicDir($package);
+		Config::instance()->directories()->truncateResourcesToPublicDir($package);
 		
 		try 
 		{

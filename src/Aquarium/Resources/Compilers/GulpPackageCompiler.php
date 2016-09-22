@@ -13,10 +13,9 @@ use Aquarium\Resources\Compilers\Gulp\Process\GulpCompiler;
 use Aquarium\Resources\Compilers\Gulp\Process\ICompileHelper;
 use Aquarium\Resources\Compilers\Gulp\Process\PreCompiler;
 use Aquarium\Resources\Compilers\Gulp\CompileConfig\ConfigBuilder;
-use Aquarium\Resources\Utils\FileSystem;
 
 
-class GulpPackageManager implements ICompiler
+class GulpPackageCompiler implements ICompiler
 {
 	/** @var ConfigBuilder $configBuilder */
 	private $configBuilder = null;
@@ -49,7 +48,7 @@ class GulpPackageManager implements ICompiler
 		if (!$this->compileConfig)
 		{
 			$this->compileConfig = $this->configBuilder->getConfig();
-			$this->compileConfig->TargetDirectory = Config::instance()->Directories->ResourcesTargetDir;
+			$this->compileConfig->TargetDirectory = Config::instance()->directories()->CompiledResourcesDir;
 		}
 		
 		$compiled = new Package($package->Name);
@@ -79,15 +78,21 @@ class GulpPackageManager implements ICompiler
 	 */
 	public function compile()
 	{
-		foreach (Config::instance()->DefinitionManager->getNames() as $name)
+		$packageDefinitionManager = Config::instance()->packageDefinitionManager();
+		
+		foreach ($packageDefinitionManager->getNames() as $name)
 		{
-			$originalPackage = Config::instance()->DefinitionManager->get($name);
+			$originalPackage = $packageDefinitionManager->get($name);
+			Config::log()->logPackageBuildStart($originalPackage);
+			
 			$compiledPackage = $this->compilePackage($originalPackage);
 			
 			/** @var IPhpBuilder $builder */
 			$builder = Config::skeleton(IPhpBuilder::class);
 			
 			$builder->buildPhpFile($compiledPackage);
+			
+			Config::log()->logPackageBuildComplete($compiledPackage);
 		}
 	}
 }

@@ -51,7 +51,7 @@ class Utils
 		if ($packageName instanceof Package) 
 			return self::getClassPath($packageName->Name);
 		
-		return Config::instance()->Directories->PhpTargetDir . 
+		return Config::instance()->directories()->PhpTargetDir . 
 			DIRECTORY_SEPARATOR . self::getClassName($packageName) . '.php';
 	}
 }

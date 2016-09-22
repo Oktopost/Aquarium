@@ -46,8 +46,8 @@ class DefaultPhpBuilderTest extends \PHPUnit_Framework_TestCase
 		$p->Scripts->add('script-a');
 		$p->Scripts->add('script-b');
 		
-		Config::instance()->Directories->ResourcesTargetDir = 'a';
-		Config::instance()->Directories->PhpTargetDir = self::PATH;
+		Config::instance()->directories()->CompiledResourcesDir = 'a';
+		Config::instance()->directories()->PhpTargetDir = self::PATH;
 		
 		
 		// TEST:

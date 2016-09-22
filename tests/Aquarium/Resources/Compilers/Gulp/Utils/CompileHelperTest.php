@@ -28,7 +28,7 @@ class CompileHelperTest extends \PHPUnit_Framework_TestCase
 		$package->Scripts->add($this->packagePath . '/inp_a');
 		$package->Styles->add($this->packagePath . '/inp_b');
 		
-		Config::instance()->Directories->ResourcesTargetDir = $this->targetPath;
+		Config::instance()->directories()->CompiledResourcesDir = $this->targetPath;
 		
 		(new CompileHelper())->cleanDirectory($package);
 		

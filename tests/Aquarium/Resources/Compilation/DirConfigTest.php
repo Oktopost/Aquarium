@@ -31,7 +31,7 @@ class DirConfigTest extends \PHPUnit_Framework_TestCase
 	public function test_truncateResourcesToPublicDir_ScriptTrancated()
 	{
 		$d = new DirConfig();
-		$d->PublicDir = 'b';
+		$d->RootWWWDirectory = 'b';
 		
 		$p = new Package('a');
 		$p->Scripts->add('b/c');
@@ -44,7 +44,7 @@ class DirConfigTest extends \PHPUnit_Framework_TestCase
 	public function test_truncateResourcesToPublicDir_StyleTrancated()
 	{
 		$d = new DirConfig();
-		$d->PublicDir = 'b';
+		$d->RootWWWDirectory = 'b';
 		
 		$p = new Package('a');
 		$p->Styles->add('b/c');

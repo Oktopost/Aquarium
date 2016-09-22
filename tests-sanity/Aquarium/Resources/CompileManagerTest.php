@@ -2,10 +2,11 @@
 namespace Aquarium\Resources;
 
 
-use Aquarium\Resources\Logger\VoidLogger;
+use Aquarium\Resources\Log\LogStream\ConsoleLogStream;
+use Aquarium\Resources\Log\LogStream\VoidStream;
 use Aquarium\Resources\Utils\PackageBuilder;
 use Aquarium\Resources\Package\IPackageBuilder;
-use Aquarium\Resources\Compilers\GulpPackageManager;
+use Aquarium\Resources\Compilers\GulpPackageCompiler;
 use Aquarium\Resources\ConsumerStrategy\TestConsumer;
 use Aquarium\Resources\DefinitionStrategy\ClassMethods;
 
@@ -31,37 +32,38 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		}
 	}
 	
-	private function setupScriptTest(GulpPackageManager $gulp)
+	private function basicSetup(GulpPackageCompiler $gulp)
 	{
-		Config::instance()->GulpCompiler		= $gulp;
-		Config::instance()->DefinitionManager	= new ClassMethods(SanityTestHelper_Script::class);
-		Config::instance()->Provider			= new Manager();
-		Config::instance()->Consumer			= new TestConsumer();
+		Config::instance()->setCompiler($gulp);
+		Config::instance()->setProvider(new Manager());
+		Config::instance()->setConsumer(new TestConsumer());
 	}
 	
-	private function setupStyleTest(GulpPackageManager $gulp)
+	
+	private function setupScriptTest(GulpPackageCompiler $gulp)
 	{
-		Config::instance()->GulpCompiler		= $gulp;
-		Config::instance()->DefinitionManager	= new ClassMethods(SanityTestHelper_Style::class);
-		Config::instance()->Provider			= new Manager();
-		Config::instance()->Consumer			= new TestConsumer();
+		$this->basicSetup($gulp);
+		Config::instance()->setPackageDefinitionManager(new ClassMethods(SanityTestHelper_Script::class));
 	}
 	
-	private function setupWithPackageLoader(GulpPackageManager $gulp, $class)
+	private function setupStyleTest(GulpPackageCompiler $gulp)
 	{
-		Config::instance()->Provider			= new Manager();
-		Config::instance()->GulpCompiler		= $gulp;
-		
-		Config::instance()->DefinitionManager	= new ClassMethods($class);
-		Config::instance()->Consumer			= new TestConsumer();
+		$this->basicSetup($gulp);
+		Config::instance()->setPackageDefinitionManager(new ClassMethods(SanityTestHelper_Style::class));
+	}
+	
+	private function setupWithPackageLoader(GulpPackageCompiler $gulp, $class)
+	{
+		$this->basicSetup($gulp);
+		Config::instance()->setPackageDefinitionManager(new ClassMethods($class));
 	}
 	
 	private function setupDirectories()
 	{
-		Config::instance()->Directories->addSourceDir(self::SANITY_DIR . '/source');
-		Config::instance()->Directories->PhpTargetDir		= self::SANITY_DIR . '/php';
-		Config::instance()->Directories->ResourcesTargetDir	= self::SANITY_DIR . '/target';
-		Config::instance()->Directories->PublicDir			= self::SANITY_DIR;
+		Config::instance()->directories()->addSourceDir(self::SANITY_DIR . '/source');
+		Config::instance()->directories()->PhpTargetDir			= self::SANITY_DIR . '/php';
+		Config::instance()->directories()->CompiledResourcesDir	= self::SANITY_DIR . '/target';
+		Config::instance()->directories()->RootWWWDirectory			= self::SANITY_DIR;
 	}
 	
 	
@@ -69,7 +71,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->clean();
 		PackageBuilder::setTestMode(false);
-		Config::instance()->Log = new VoidLogger();
+		Config::instance()->logConfig()->setLogStream(new VoidStream());
 	}
 	
 	public function tearDown()
@@ -80,7 +82,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_script_minify()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->script()
 			->jsmin();
@@ -88,18 +90,18 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupScriptTest($gulpCompiler);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('js/a');
+		Config::instance()->provider()->package('js/n');
 		
-		$this->assertFileExists(self::SANITY_DIR . '/target/js_a/a.js');
-		$this->assertFileExists(self::SANITY_DIR . '/target/js_a/b.js');
+		$this->assertFileExists(self::SANITY_DIR . '/target/js_n/a.js');
+		$this->assertFileExists(self::SANITY_DIR . '/target/js_n/b.js');
 		
-		$this->assertFileNotEquals(self::SANITY_DIR . '/source/a.js', self::SANITY_DIR . '/target/js_a/a.js');
-		$this->assertFileNotEquals(self::SANITY_DIR . '/source/b.js', self::SANITY_DIR . '/target/js_a/b.js');
+		$this->assertFileNotEquals(self::SANITY_DIR . '/source/a.js', self::SANITY_DIR . '/target/js_n/a.js');
+		$this->assertFileNotEquals(self::SANITY_DIR . '/source/b.js', self::SANITY_DIR . '/target/js_n/b.js');
 	}
 	
 	public function test_script_concatenate()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->script()
 			->concatenate();
@@ -107,17 +109,17 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupScriptTest($gulpCompiler);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('js/a');
+		Config::instance()->provider()->package('js/n');
 		
-		$this->assertFileExists(self::SANITY_DIR . '/target/js_a/a.js');
+		$this->assertFileExists(self::SANITY_DIR . '/target/js_n/js_n.js');
 		$this->assertEquals(
 			file_get_contents(self::SANITY_DIR . '/source/a.js') . "\n" . file_get_contents(self::SANITY_DIR . '/source/b.js'),
-			file_get_contents(self::SANITY_DIR . '/target/js_a/a.js'));
+			file_get_contents(self::SANITY_DIR . '/target/js_n/js_n.js'));
 	}
 	
 	public function test_script_concatenate_and_minify()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->script()
 			->concatenate()
@@ -126,18 +128,18 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupScriptTest($gulpCompiler);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('js/a');
+		Config::instance()->provider()->package('js/n');
 		
-		$this->assertFileExists(self::SANITY_DIR . '/target/js_a/a.js');
+		$this->assertFileExists(self::SANITY_DIR . '/target/js_n/js_n.js');
 		$this->assertNotEquals(
 			file_get_contents(self::SANITY_DIR . '/source/a.js') . "\n" . file_get_contents(self::SANITY_DIR . '/source/b.js'),
-			file_get_contents(self::SANITY_DIR . '/target/js_a/a.js'));
+			file_get_contents(self::SANITY_DIR . '/target/js_n/js_n.js'));
 	}
 	
 	
 	public function test_style_minify()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->style()
 			->cssmin();
@@ -145,7 +147,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupStyleTest($gulpCompiler);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('css/a');
+		Config::instance()->provider()->package('css/a');
 		
 		$this->assertFileExists(self::SANITY_DIR . '/target/css_a/a.css');
 		$this->assertFileExists(self::SANITY_DIR . '/target/css_a/b.css');
@@ -156,7 +158,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_style_concatenate()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->style()
 			->concatenate();
@@ -164,17 +166,17 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupStyleTest($gulpCompiler);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('css/a');
+		Config::instance()->provider()->package('css/a');
 		
-		$this->assertFileExists(self::SANITY_DIR . '/target/css_a/a.css');
+		$this->assertFileExists(self::SANITY_DIR . '/target/css_a/css_a.css');
 		$this->assertEquals(
 			file_get_contents(self::SANITY_DIR . '/source/a.css') . "\n" . file_get_contents(self::SANITY_DIR . '/source/b.css'),
-			file_get_contents(self::SANITY_DIR . '/target/css_a/a.css'));
+			file_get_contents(self::SANITY_DIR . '/target/css_a/css_a.css'));
 	}
 	
 	public function test_style_sass()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->style()
 			->sass();
@@ -182,14 +184,14 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupWithPackageLoader($gulpCompiler, SanityTestHelper_Scss::class);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('scss/a');
+		Config::instance()->provider()->package('scss/a');
 		
 		$this->assertFileExists(self::SANITY_DIR . '/target/scss_a/a.css');
 	}
 	
 	public function test_style_sass_and_css()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->style()
 			->sass()
@@ -198,7 +200,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupWithPackageLoader($gulpCompiler, SanityTestHelper_Scss_And_Css::class);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('scss/a');
+		Config::instance()->provider()->package('scss/a');
 		
 		$this->assertFileExists(self::SANITY_DIR . '/target/scss_a/a.css');
 		$this->assertFileExists(self::SANITY_DIR . '/target/scss_a/b.css');
@@ -207,7 +209,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_fullStuck_NoPhpBuild()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()
 			->style()
 			->sass()
@@ -216,7 +218,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		$this->setupWithPackageLoader($gulpCompiler, SanityTestHelper_Scss_And_Css::class);
 		$this->setupDirectories();
 		
-		Config::instance()->Provider->package('scss/a');
+		Config::instance()->provider()->package('scss/a');
 		
 		$this->assertFileExists(self::SANITY_DIR . '/target/scss_a/a.css');
 		$this->assertFileExists(self::SANITY_DIR . '/target/scss_a/b.css');
@@ -225,7 +227,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_compiler_full_test()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		
 		$gulpCompiler->setup()
 			->style()
@@ -250,7 +252,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	public function test_compiler_using_timestamp()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		
 		$gulpCompiler->setup()->addTimestamp();
 		
@@ -269,16 +271,16 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		
 		$this->assertFileExists(self::SANITY_DIR . '/php/CompiledPackage_A.php');
 		
-		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/a.js');
-		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/a.css');
+		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/A.js');
+		$this->assertFileNotExists(self::SANITY_DIR . '/target/A/A.css');
 		
-		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.js'));
-		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.css'));
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/A.*.js'));
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/A.*.css'));
 	}
 	
 	public function test_compiler_filesWithOlderTimestampExists()
 	{
-		$gulpCompiler = new GulpPackageManager();
+		$gulpCompiler = new GulpPackageCompiler();
 		$gulpCompiler->setup()->addTimestamp();
 		$gulpCompiler->setup()->style()->concatenate();
 		$gulpCompiler->setup()->script()->concatenate();
@@ -288,20 +290,20 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		
 		CompileManager::compile();
 		
-		$js = glob(self::SANITY_DIR . '/target/A/a.*.js');
-		$css = glob(self::SANITY_DIR . '/target/A/a.*.css');
+		$js = glob(self::SANITY_DIR . '/target/A/A.*.js');
+		$css = glob(self::SANITY_DIR . '/target/A/A.*.css');
 		$js = end($js);
 		$css = end($css);
-		rename($js, self::SANITY_DIR . '/target/A/a.t000001.js');
-		rename($css, self::SANITY_DIR . '/target/A/a.t000001.css');
+		rename($js, self::SANITY_DIR . '/target/A/A.t000001.js');
+		rename($css, self::SANITY_DIR . '/target/A/A.t000001.css');
 		
 		CompileManager::compile();
 		
-		$this->assertFileExists(self::SANITY_DIR . '/target/A/a.t000001.js');
-		$this->assertFileExists(self::SANITY_DIR . '/target/A/a.t000001.css');
+		$this->assertFileExists(self::SANITY_DIR . '/target/A/A.t000001.js');
+		$this->assertFileExists(self::SANITY_DIR . '/target/A/A.t000001.css');
 		
-		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.js')); 
-		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/a.*.css'));
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/A.*.js')); 
+		$this->assertCount(1, glob(self::SANITY_DIR . '/target/A/A.*.css'));
 	}
 }
 
@@ -314,7 +316,7 @@ function microtime_float()
 
 class SanityTestHelper_Script
 {
-	public function Package_js_a(IPackageBuilder $builder)
+	public function Package_js_n(IPackageBuilder $builder)
 	{
 		$builder
 			->script('a.js')

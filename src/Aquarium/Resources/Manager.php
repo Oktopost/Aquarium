@@ -13,7 +13,9 @@ class Manager implements IProvider
 	 */
 	private function appendPackage(Package $package)
 	{
-		Config::instance()->Directories->truncateResourcesToPublicDir($package);
+		$consumer = Config::instance()->consumer();
+		
+		Config::instance()->directories()->truncateResourcesToPublicDir($package);
 		
 		$this->dependencies[$package->Name] = true;
 		
@@ -29,12 +31,12 @@ class Manager implements IProvider
 		
 		foreach ($package->Styles as $style)
 		{
-			Config::instance()->Consumer->addStyle($style);
+			$consumer->addStyle($style);
 		}
 		
 		foreach ($package->Scripts as $script)
 		{
-			Config::instance()->Consumer->addScript($script);
+			$consumer->addScript($script);
 		}
 	}
 	
@@ -51,11 +53,11 @@ class Manager implements IProvider
 		if (!Package::isValidPackageName($name)) 
 			throw new \Exception('Package name is invalid');
 		
-		$package = Config::instance()->DefinitionManager->get($name);
+		$package = Config::instance()->packageDefinitionManager()->get($name);
 		
-		if (Config::instance()->GulpCompiler)
+		if (Config::instance()->compiler())
 		{
-			$package = Config::instance()->GulpCompiler->compilePackage($package);
+			$package = Config::instance()->compiler()->compilePackage($package);
 		}
 		
 		$this->appendPackage($package);
@@ -69,7 +71,7 @@ class Manager implements IProvider
 	 */
 	public function script($path) 
 	{
-		Config::instance()->Consumer->addScript($path);
+		Config::instance()->consumer()->addScript($path);
 		return $this;
 	}
 	
@@ -79,7 +81,7 @@ class Manager implements IProvider
 	 */
 	public function style($path)
 	{
-		Config::instance()->Consumer->addStyle($path);
+		Config::instance()->consumer()->addStyle($path);
 		return $this;
 	}
 }

@@ -2,32 +2,39 @@
 namespace Aquarium\Resources;
 
 
-use Aquarium\Resources\Logger\CmdLogger;
+use Aquarium\Resources\Base\Log\ILogHandler;
+use Aquarium\Resources\Base\Config\ILogConfig;
 use Aquarium\Resources\Package\IPackageDefinitionManager;
+use Aquarium\Resources\Compilers\GulpPackageCompiler;
 use Aquarium\Resources\Compilation\DirConfig;
-
-use Objection\LiteSetup;
-use Objection\LiteObject;
-use Objection\Enum\AccessRestriction;
 
 use Skeleton\Skeleton;
 use Skeleton\UnitTestSkeleton;
 use Skeleton\ConfigLoader\DirectoryConfigLoader;
 
-use Psr\Log\LoggerInterface;
 
-
-/**
- * @property IConsumer 					$Consumer
- * @property IProvider					$Provider
- * @property IPackageDefinitionManager 	$DefinitionManager
- * @property DirConfig 					$Directories
- * @property ICompiler 					$GulpCompiler
- * @property LoggerInterface 			$Log
- */
-class Config extends LiteObject
+class Config
 {
 	use \Objection\TSingleton;
+	
+	
+	/** @var ILogConfig */
+	private $logConfig;
+	
+	/** @var DirConfig */
+	private $directories;
+	
+	/** @var IConsumer */
+	private $consumer = null;
+	
+	/** @var IProvider */
+	private $provider = null;
+	
+	/** @var IPackageDefinitionManager */
+	private $packageDefinitionManager = null;
+	
+	/** @var ICompiler */
+	private $compiler = null;
 	
 	
 	/** @var UnitTestSkeleton */
@@ -37,26 +44,115 @@ class Config extends LiteObject
 	private static $skeleton;
 	
 	
-	public function __construct()
+	/**
+	 * @param static $instance
+	 */
+	protected static function initialize($instance) 
 	{
-		parent::__construct();
-		$this->Log = new CmdLogger();
+		$instance->directories = new DirConfig();
+		$instance->logConfig = self::skeleton(ILogConfig::class);
 	}
 	
 	
 	/**
-	 * @return array
+	 * @return ILogConfig
 	 */
-	protected function _setup()
+	public function logConfig()
 	{
-		return [
-			'Consumer'			=> LiteSetup::createInstanceOf(IConsumer::class), 
-			'Provider'			=> LiteSetup::createInstanceOf(IProvider::class), 
-			'DefinitionManager'	=> LiteSetup::createInstanceOf(IPackageDefinitionManager::class),
-			'Directories'		=> LiteSetup::createInstanceOf(new DirConfig(), AccessRestriction::NO_SET),
-			'GulpCompiler'			=> LiteSetup::createInstanceOf(ICompiler::class),
-			'Log'				=> LiteSetup::createInstanceOf(LoggerInterface::class),
-		];
+		return $this->logConfig;
+	}
+	
+	/**
+	 * @return DirConfig
+	 */
+	public function directories()
+	{
+		return $this->directories;
+	}
+	
+	/**
+	 * @return IConsumer 
+	 */
+	public function consumer()
+	{
+		if (!$this->consumer)
+			throw new \Exception('Consumer was not defined');
+			
+		return $this->consumer;
+	}
+	
+	/**
+	 * @return IProvider
+	 */
+	public function provider()
+	{
+		if (!$this->provider)
+			throw new \Exception('Provider was not defined');
+		
+		return $this->provider;
+	}
+	
+	/**
+	 * @return IPackageDefinitionManager
+	 */
+	public function packageDefinitionManager()
+	{
+		if (!$this->packageDefinitionManager)
+			throw new \Exception('PackageDefinitionManager was not defined');
+		
+		return $this->packageDefinitionManager;
+	}
+	
+	/**
+	 * @return ICompiler
+	 */
+	public function compiler()
+	{
+		if (!$this->compiler)
+			$this->compiler = new GulpPackageCompiler();
+		
+		return $this->compiler;
+	}
+	
+	
+	/**
+	 * @param IConsumer $consumer
+	 * @return static
+	 */
+	public function setConsumer(IConsumer $consumer)
+	{
+		$this->consumer = $consumer;
+		return $this;
+	}
+	
+	/**
+	 * @param IProvider $provider
+	 * @return static
+	 */
+	public function setProvider(IProvider $provider)
+	{
+		$this->provider = $provider;
+		return $this;
+	}
+	
+	/**
+	 * @param IPackageDefinitionManager $manager
+	 * @return static
+	 */
+	public function setPackageDefinitionManager(IPackageDefinitionManager $manager)
+	{
+		$this->packageDefinitionManager = $manager;
+		return $this;
+	}
+	
+	/**
+	 * @param ICompiler $compiler
+	 * @return static
+	 */
+	public function setCompiler(ICompiler $compiler)
+	{
+		$this->compiler = $compiler;
+		return $this;
 	}
 	
 	
@@ -90,6 +186,16 @@ class Config extends LiteObject
 		}
 		
 		self::$testMap->override($interface, $definition);
+	}
+	
+	/**
+	 * @return ILogHandler
+	 */
+	public static function log()
+	{
+		/** @var ILogConfig $logConfig */
+		$logConfig = self::skeleton(ILogConfig::class);
+		return $logConfig->log();
 	}
 	
 	public static function reset() 

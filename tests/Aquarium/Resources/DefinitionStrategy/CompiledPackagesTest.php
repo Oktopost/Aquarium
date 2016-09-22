@@ -33,7 +33,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_has()
 	{
-		Config::instance()->Directories->PhpTargetDir = self::PATH;
+		Config::instance()->directories()->PhpTargetDir = self::PATH;
 		$this->assertTrue((new CompiledPackages())->has('a/b'));
 		$this->assertTrue((new CompiledPackages())->has('c/d'));
 		$this->assertFalse((new CompiledPackages())->has('not/found'));
@@ -46,7 +46,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_get_PackageNotFound_ErrorThrown()
 	{
-		Config::instance()->Directories->PhpTargetDir = self::PATH;
+		Config::instance()->directories()->PhpTargetDir = self::PATH;
 		(new CompiledPackages())->get('not/found');
 	}
 	
@@ -55,7 +55,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_get_PackageFound_PackageObjectReturned()
 	{
-		Config::instance()->Directories->PhpTargetDir = self::PATH;
+		Config::instance()->directories()->PhpTargetDir = self::PATH;
 		$this->assertInstanceOf(Package::class, (new CompiledPackages())->get('a/b'));
 	}
 	
@@ -64,7 +64,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_get_PackageFound_PackageIsBuilt()
 	{
-		Config::instance()->Directories->PhpTargetDir = self::PATH;
+		Config::instance()->directories()->PhpTargetDir = self::PATH;
 		$p = (new CompiledPackages())->get('a/b');
 		
 		$this->assertEquals(['1'], $p->Styles->get());
@@ -77,7 +77,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_get_LoadedPackageCached()
 	{
-		Config::instance()->Directories->PhpTargetDir = self::PATH;
+		Config::instance()->directories()->PhpTargetDir = self::PATH;
 		$cp = new CompiledPackages();
 		$this->assertSame($cp->get('a/b'), $cp->get('a/b'));
 	}
@@ -87,7 +87,7 @@ class CompiledPackagesTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_get_DifferentPackageRequested()
 	{
-		Config::instance()->Directories->PhpTargetDir = self::PATH;
+		Config::instance()->directories()->PhpTargetDir = self::PATH;
 		$cp = new CompiledPackages();
 		$this->assertNotSame($cp->get('a/b'), $cp->get('c/d'));
 	}

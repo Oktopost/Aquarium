@@ -82,7 +82,6 @@ class PreCompiler implements IPreCompiler
 		/** @var ResourceMap $modifiedMap */
 		$modifiedMap = new ResourceMap();
 		
-		
 		// Detect changes.
 		foreach ($actions as $action)
 		{
@@ -154,7 +153,7 @@ class PreCompiler implements IPreCompiler
 	 */
 	public function preCompileStyle(Package $p)
 	{
-		$unroll = new PackageUnroll(Config::instance()->DefinitionManager);
+		$unroll = new PackageUnroll(Config::instance()->packageDefinitionManager());
 		$unroll->setOriginPackage($p);
 		$styles = $unroll->getStyles();
 			
@@ -167,7 +166,7 @@ class PreCompiler implements IPreCompiler
 	 */
 	public function preCompileScript(Package $p)
 	{
-		$unroll = new PackageUnroll(Config::instance()->DefinitionManager);
+		$unroll = new PackageUnroll(Config::instance()->packageDefinitionManager());
 		$unroll->setOriginPackage($p);
 		$scripts = $unroll->getScripts();
 		

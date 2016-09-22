@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\Compilers\Gulp\Cmd;
 
 
+use Aquarium\Resources\Config;
 use Aquarium\Resources\Compilers\Gulp\IShell;
 use Aquarium\Resources\Compilers\Gulp\IGulpCommand;
 use Aquarium\Resources\Compilers\Gulp\GulpException;
@@ -79,7 +80,7 @@ class GulpCommand implements IGulpCommand
 	public function execute(IShell $shell) 
 	{
 		$commandParts = array_merge(
-			['export HOME="' . $this->getHomeDirectory() . '" && '], 
+			['export HOME="' . $this->getHomeDirectory() . '" &&'], 
 			["cd {$this->path} &&"],
 			['gulp'],
 			[$this->action],
@@ -91,7 +92,10 @@ class GulpCommand implements IGulpCommand
 		$result = $shell->execute($command, $this->output);
 		
 		if ($result !== 0) 
+		{
+			Config::log()->logBuildException($this->output);
 			throw new GulpException($result, $this->output);
+		}
 	}
 	
 	/**

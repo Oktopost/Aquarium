@@ -2,6 +2,8 @@
 namespace Aquarium\Resources\Compilers\Gulp\Cmd;
 
 
+use Aquarium\Resources\Config;
+use Aquarium\Resources\Log\LogStream\VoidStream;
 use Aquarium\Resources\Compilers\Gulp\IShell;
 
 
@@ -20,15 +22,40 @@ class GulpCommandTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @param string $command
+	 * @return string
+	 */
+	private function getHomeDirectory()
+	{
+		$shell_user = posix_getpwuid(posix_getuid());
+		return $shell_user['dir'];
+	}
+	
+	/**
+	 * @param string $expectedCommand
 	 * @param int $return
 	 * @return \PHPUnit_Framework_MockObject_MockObject|IShell
 	 */
-	private function mockIShell($command, $return = 0) 
+	private function mockIShell($expectedCommand, $return = 0) 
 	{
+		$home = $this->getHomeDirectory();
+		$expectedCommand = "export HOME=\"$home\" && $expectedCommand 2>&1";
+		
 		$shell = $this->getMock(IShell::class);
-		$shell->expects($this->once())->method('execute')->with($command, $this->anything())->willReturn($return);
+		$shell
+			->expects($this->once())
+			->method('execute')->with(
+				$expectedCommand, 
+				$this->anything()
+			)
+			->willReturn($return);
+		
 		return $shell;
+	}
+	
+	
+	protected function setUp()
+	{
+		Config::instance()->logConfig()->setLogStream(new VoidStream());
 	}
 	
 	

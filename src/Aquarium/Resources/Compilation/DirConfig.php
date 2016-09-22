@@ -10,8 +10,8 @@ use Objection\Enum\AccessRestriction;
 
 /**
  * @property string $PhpTargetDir			Directory were all compiled PHP classes are stored.
- * @property string $ResourcesTargetDir		Directory were all compiled resources should be stored.
- * @property string	$PublicDir				After compilation all paths to the compiled resources are 
+ * @property string $CompiledResourcesDir	Directory were all compiled resources should be stored.
+ * @property string	$RootWWWDirectory		After compilation all paths to the compiled resources are 
  * 											truncated to be relative to this path.
  * @property array	$ResourcesSourceDirs	Directories that contain the resources to compile.
  */
@@ -24,8 +24,8 @@ class DirConfig extends LiteObject
 	{
 		return [
 			'PhpTargetDir'			=> LiteSetup::createString(),
-			'ResourcesTargetDir'	=> LiteSetup::createString(),
-			'PublicDir'				=> LiteSetup::createString(),
+			'CompiledResourcesDir'	=> LiteSetup::createString(),
+			'RootWWWDirectory'		=> LiteSetup::createString(),
 			'ResourcesSourceDirs'	=> LiteSetup::createArray([], AccessRestriction::NO_SET)
 		];
 	}
@@ -68,7 +68,7 @@ class DirConfig extends LiteObject
 	 */
 	public function truncateResourcesToPublicDir(Package $p)
 	{
-		$p->Scripts->truncatePath($this->PublicDir);
-		$p->Styles->truncatePath($this->PublicDir);
+		$p->Scripts->truncatePath($this->RootWWWDirectory);
+		$p->Styles->truncatePath($this->RootWWWDirectory);
 	}
 }

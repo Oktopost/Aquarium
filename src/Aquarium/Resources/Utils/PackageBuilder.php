@@ -42,7 +42,7 @@ class PackageBuilder implements IPackageBuilder
 		$dir = $splitted[0];
 		$prefix = $this->setPrefix($dir);
 		$suffix = $this->setSuffix($splitted[1]);
-		$path = Config::instance()->Directories->getPathToSource($dir);
+		$path = Config::instance()->directories()->getPathToSource($dir);
 		$scan = scandir($path);
 		
 		foreach ($scan as $item)
@@ -81,7 +81,7 @@ class PackageBuilder implements IPackageBuilder
 		else
 		{
 			$this->loadDirectory = false;
-			$fullPath = Config::instance()->Directories->getPathToSource($resource);
+			$fullPath = Config::instance()->directories()->getPathToSource($resource);
 		}
 		
 		if (!$fullPath)

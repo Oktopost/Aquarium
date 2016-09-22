@@ -30,7 +30,7 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	private function execute(Package $p, array $commands)
 	{
-		$targetDir = Config::instance()->Directories->ResourcesTargetDir . DIRECTORY_SEPARATOR . $p->getName('_');
+		$targetDir = Config::instance()->directories()->CompiledResourcesDir . DIRECTORY_SEPARATOR . $p->getName('_');
 		
 		/** @var IGulpCommand $command */
 		$command = Config::skeleton(IGulpCommand::class);
