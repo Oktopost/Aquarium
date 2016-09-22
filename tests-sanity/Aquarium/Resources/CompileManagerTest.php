@@ -33,7 +33,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	private function setupScriptTest(GulpPackageManager $gulp)
 	{
-		Config::instance()->Compiler			= $gulp;
+		Config::instance()->GulpCompiler		= $gulp;
 		Config::instance()->DefinitionManager	= new ClassMethods(SanityTestHelper_Script::class);
 		Config::instance()->Provider			= new Manager();
 		Config::instance()->Consumer			= new TestConsumer();
@@ -41,7 +41,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	
 	private function setupStyleTest(GulpPackageManager $gulp)
 	{
-		Config::instance()->Compiler			= $gulp;
+		Config::instance()->GulpCompiler		= $gulp;
 		Config::instance()->DefinitionManager	= new ClassMethods(SanityTestHelper_Style::class);
 		Config::instance()->Provider			= new Manager();
 		Config::instance()->Consumer			= new TestConsumer();
@@ -50,7 +50,7 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	private function setupWithPackageLoader(GulpPackageManager $gulp, $class)
 	{
 		Config::instance()->Provider			= new Manager();
-		Config::instance()->Compiler			= $gulp;
+		Config::instance()->GulpCompiler		= $gulp;
 		
 		Config::instance()->DefinitionManager	= new ClassMethods($class);
 		Config::instance()->Consumer			= new TestConsumer();

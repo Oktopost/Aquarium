@@ -64,16 +64,27 @@ class GulpCommand implements IGulpCommand
 	}
 	
 	/**
+	 * @return string
+	 */
+	private function getHomeDirectory()
+	{
+		$shell_user = posix_getpwuid(posix_getuid());
+		return $shell_user['dir'];
+	}
+	
+	/**
 	 * @param IShell $shell
 	 * @throws GulpException When gulp exit with none zero code.
 	 */
 	public function execute(IShell $shell) 
 	{
 		$commandParts = array_merge(
+			['export HOME="' . $this->getHomeDirectory() . '" && '], 
 			["cd {$this->path} &&"],
 			['gulp'],
 			[$this->action],
-			$this->arguments
+			$this->arguments,
+			['2>&1']
 		);
 		
 		$command = implode(' ', $commandParts);

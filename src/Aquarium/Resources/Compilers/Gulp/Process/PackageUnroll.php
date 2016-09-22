@@ -25,11 +25,12 @@ class PackageUnroll
 	private function getElements($propertyName, Package $package)
 	{
 		/** @var ResourceCollection $styles */
-		$styles = $package->$propertyName;
-		$this->collection->add($styles);
+		$items = $package->$propertyName;
 		
 		$this->getRequiredElements($propertyName, $package);
 		$this->getInscribedElements($propertyName, $package);
+		
+		$this->collection->add($items);
 	}
 	
 	/**

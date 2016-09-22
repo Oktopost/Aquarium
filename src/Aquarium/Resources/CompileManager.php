@@ -27,7 +27,7 @@ class CompileManager
 			self::prepare();
 			
 			Config::instance()->Log->info('Compiling...');
-			Config::instance()->Compiler->compile();
+			Config::instance()->GulpCompiler->compile();
 			Config::instance()->Log->info('Complete!');
 		}
 		catch (\Exception $e)

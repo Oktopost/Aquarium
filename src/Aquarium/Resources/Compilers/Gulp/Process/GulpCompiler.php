@@ -36,7 +36,7 @@ class GulpCompiler implements IGulpCompiler
 		$command = Config::skeleton(IGulpCommand::class);
 		
 		$command->setAction('build');
-		$command->setGulpPath(__DIR__ . '/../GulpScript/');
+		$command->setGulpPath(__DIR__ . '/../../../../../../js/GulpCompiler/');
 			
 		if (!file_exists($targetDir)) {
 			mkdir($targetDir, 0777, true);

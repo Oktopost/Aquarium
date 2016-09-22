@@ -53,9 +53,9 @@ class Manager implements IProvider
 		
 		$package = Config::instance()->DefinitionManager->get($name);
 		
-		if (Config::instance()->Compiler)
+		if (Config::instance()->GulpCompiler)
 		{
-			$package = Config::instance()->Compiler->compilePackage($package);
+			$package = Config::instance()->GulpCompiler->compilePackage($package);
 		}
 		
 		$this->appendPackage($package);
