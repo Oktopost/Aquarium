@@ -87,7 +87,7 @@ class Config
 	public function provider()
 	{
 		if (!$this->provider)
-			throw new \Exception('Provider was not defined');
+			$this->provider = new Manager();
 		
 		return $this->provider;
 	}
@@ -109,7 +109,9 @@ class Config
 	public function compiler()
 	{
 		if (!$this->compiler)
+		{
 			$this->compiler = new GulpPackageCompiler();
+		}
 		
 		return $this->compiler;
 	}
