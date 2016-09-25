@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\Compilers\Gulp\Process;
 
 
+use Aquarium\Resources\Compilers\Gulp\Actions\HandleBarAction;
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\Compilers\Gulp\IShell;
@@ -138,8 +139,17 @@ class GulpCompiler implements IGulpCompiler
 	 * @param CompilerSetup $setup
 	 * @return ResourceCollection
 	 */
-	public function compileScript(CompilerSetup $setup) 
+	public function compileScript(CompilerSetup $setup)
 	{
 		return $this->compile($this->config->ScriptActions, $setup);
+	}
+	
+	/**
+	 * @param CompilerSetup $setup
+	 * @return ResourceCollection
+	 */
+	public function compileView(CompilerSetup $setup)
+	{
+		return $this->compile([new HandleBarAction()], $setup);
 	}
 }

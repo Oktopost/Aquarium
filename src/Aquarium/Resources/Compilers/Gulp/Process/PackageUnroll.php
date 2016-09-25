@@ -97,4 +97,15 @@ class PackageUnroll
 		$this->collection->add($this->package->Scripts);
 		return $this->collection;
 	}
+	
+	/**
+	 * @return ResourceCollection
+	 */
+	public function getViews()
+	{
+		$this->collection = new ResourceCollection();
+		$this->getInscribedElements('Views', $this->package);
+		$this->collection->add($this->package->Views);
+		return $this->collection;
+	}
 }

@@ -24,4 +24,9 @@ interface IGulpActionFactory
 	 * @return IGulpAction
 	 */
 	public function cssmin();
+	
+	/**
+	 * @return IGulpAction
+	 */
+	public function handleBar();
 }

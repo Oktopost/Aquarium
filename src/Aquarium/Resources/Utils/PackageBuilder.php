@@ -32,16 +32,16 @@ class PackageBuilder implements IPackageBuilder
 	{
 		$result = [];
 		
-		$splitted = explode('*', $resource);
+		$split = explode('*', $resource);
 		
-		if (isset($splitted[2]))
+		if (isset($split[2]))
 		{
 			throw new \Exception('Can not use more than one asterisk in path');
 		}
 		
-		$dir = $splitted[0];
+		$dir = $split[0];
 		$prefix = $this->setPrefix($dir);
-		$suffix = $this->setSuffix($splitted[1]);
+		$suffix = $this->setSuffix($split[1]);
 		$path = Config::instance()->directories()->getPathToSource($dir);
 		$scan = scandir($path);
 		
@@ -151,6 +151,16 @@ class PackageBuilder implements IPackageBuilder
 	public function script($script)
 	{
 		$this->package->Scripts->add($this->getFullPath($script), $this->loadDirectory);
+		return $this;
+	}
+	
+	/**
+	 * @param string $view
+	 * @return static
+	 */
+	public function view($view)
+	{
+		$this->package->Views->add($this->getFullPath($view), $this->loadDirectory);
 		return $this;
 	}
 	

@@ -52,6 +52,14 @@ abstract class AbstractGulpAction implements IGulpAction
 	
 	
 	/**
+	 * @return string $filter
+	 */
+	protected function getFilter()
+	{
+		return $this->filter;
+	}
+	
+	/**
 	 * @return string Type of the file generated (should be css or js)
 	 */
 	protected abstract function getFileType();

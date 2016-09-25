@@ -17,6 +17,12 @@ interface IPackageBuilder
 	public function script($script);
 	
 	/**
+	 * @param string $view
+	 * @return static
+	 */
+	public function view($view);
+	
+	/**
 	 * @param string $name
 	 * @return static
 	 */

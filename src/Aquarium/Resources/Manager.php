@@ -38,6 +38,11 @@ class Manager implements IProvider
 		{
 			$consumer->addScript($script);
 		}
+		
+		foreach ($package->Views as $script)
+		{
+			$consumer->addScript($script);
+		}
 	}
 	
 	
@@ -82,6 +87,16 @@ class Manager implements IProvider
 	public function style($path)
 	{
 		Config::instance()->consumer()->addStyle($path);
+		return $this;
+	}
+	
+	/**
+	 * @param string $path
+	 * @return static
+	 */
+	public function view($path)
+	{
+		Config::instance()->consumer()->addView($path);
 		return $this;
 	}
 }

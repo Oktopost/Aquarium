@@ -18,7 +18,7 @@ class CompileHelper implements ICompileHelper
 		$targetDir = Config::instance()->directories()->CompiledResourcesDir;
 		$packageDir = $targetDir . DIRECTORY_SEPARATOR . $p->getName('_');
 		
-		$allFiles = array_merge($p->Scripts->get(), $p->Styles->get());
+		$allFiles = array_merge($p->Scripts->get(), $p->Styles->get(), $p->Views->get());
 		
 		foreach (glob($packageDir . '/*') as $path)
 		{

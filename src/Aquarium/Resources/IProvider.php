@@ -21,4 +21,10 @@ interface IProvider
 	 * @return static
 	 */
 	public function style($path);
+	
+	/**
+	 * @param string $path
+	 * @return static
+	 */
+	public function view($path);
 }

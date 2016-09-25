@@ -77,6 +77,11 @@ TAG
 		{
 			fprintf($resource, "\t\t\$b->script('%s');%s", $script, PHP_EOL);
 		}
+		
+		foreach ($package->Views as $script)
+		{
+			fprintf($resource, "\t\t\$b->script('%s');%s", $script, PHP_EOL);
+		}
 	}
 	
 	/**

@@ -57,12 +57,13 @@ class GulpPackageCompiler implements ICompiler
 		$preCompiler = new PreCompiler();
 		
 		$preCompiler->setConfig($this->compileConfig);
+		$viewSettings = $preCompiler->preCompileView($package);
 		$styleSettings = $preCompiler->preCompileStyle($package);
 		$scriptSettings = $preCompiler->preCompileScript($package);
-		
 		$compiler = new GulpCompiler();
 		
 		$compiler->setCompilerConfig($this->compileConfig);
+		$compiled->Views->add($compiler->compileView($viewSettings));
 		$compiled->Styles->add($compiler->compileStyle($styleSettings));
 		$compiled->Scripts->add($compiler->compileScript($scriptSettings));
 		

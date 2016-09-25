@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bb38c0df4fb89c7306f480da1e33d295",
+    "hash": "5ddd0bca9e863bbb6a6d01b6ef27d1fe",
     "content-hash": "2247c6d51328e1de0005a14a8ba93254",
     "packages": [
         {
             "name": "oktopost/objection",
-            "version": "1.0.4",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/Objection.git",
-                "reference": "238ba1b3236d7612b56f6514ead8c723076ec877"
+                "reference": "262e36acf44c48192dfcd2a88ef3143d87618a1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/238ba1b3236d7612b56f6514ead8c723076ec877",
-                "reference": "238ba1b3236d7612b56f6514ead8c723076ec877",
+                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/262e36acf44c48192dfcd2a88ef3143d87618a1c",
+                "reference": "262e36acf44c48192dfcd2a88ef3143d87618a1c",
                 "shasum": ""
             },
             "require": {
@@ -44,11 +44,16 @@
                     "name": "Marina Sherstuk",
                     "email": "marinashers@gmail.com",
                     "role": "Developer"
+                },
+                {
+                    "name": "Daniel Podrabinek",
+                    "email": "dpodrabinek@oktopost.com",
+                    "role": "Developer"
                 }
             ],
             "description": "Objects in PHP",
             "homepage": "https://github.com/Oktopost/Objection",
-            "time": "2016-07-20 07:10:42"
+            "time": "2016-09-01 14:20:15"
         },
         {
             "name": "oktopost/skeleton",

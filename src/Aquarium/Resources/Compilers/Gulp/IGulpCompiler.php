@@ -24,4 +24,10 @@ interface IGulpCompiler
 	 * @return ResourceCollection
 	 */
 	public function compileScript(CompilerSetup $setup);
+	
+	/**
+	 * @param CompilerSetup $setup
+	 * @return ResourceCollection
+	 */
+	public function compileView(CompilerSetup $setup);
 }

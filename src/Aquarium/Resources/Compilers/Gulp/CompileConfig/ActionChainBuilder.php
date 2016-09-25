@@ -59,6 +59,15 @@ class ActionChainBuilder
 		return $this;
 	}
 	
+	/**
+	 * @return static
+	 */
+	public function handleBar()
+	{
+		$this->collection[] = $this->factory->handleBar();
+		return $this;
+	}
+	
 	
 	/**
 	 * @return IGulpAction[]

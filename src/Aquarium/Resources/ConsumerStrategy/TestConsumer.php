@@ -9,6 +9,7 @@ class TestConsumer implements IConsumer
 {
 	public $scripts = [];
 	public $styles = [];
+	public $views = [];
 	
 	
 	/**
@@ -27,5 +28,14 @@ class TestConsumer implements IConsumer
 	public function addStyle($path)
 	{
 		$this->styles[] = $path;
+	}
+	
+	/**
+	 * @param string $path
+	 * @return static
+	 */
+	public function addView($path)
+	{
+		$this->views[] = $path;
 	}
 }

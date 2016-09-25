@@ -44,4 +44,12 @@ class ActionFactory implements IGulpActionFactory
 	{
 		return new CssMinifyAction();
 	}
+	
+	/**
+	 * @return IGulpAction
+	 */
+	public function handleBar()
+	{
+		return new HandleBarAction();
+	}
 }

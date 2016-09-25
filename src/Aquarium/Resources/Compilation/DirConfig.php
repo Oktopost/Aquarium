@@ -70,5 +70,6 @@ class DirConfig extends LiteObject
 	{
 		$p->Scripts->truncatePath($this->RootWWWDirectory);
 		$p->Styles->truncatePath($this->RootWWWDirectory);
+		$p->Views->truncatePath($this->RootWWWDirectory);
 	}
 }

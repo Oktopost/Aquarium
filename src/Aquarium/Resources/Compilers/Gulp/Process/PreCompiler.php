@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\Compilers\Gulp\Process;
 
 
+use Aquarium\Resources\Compilers\Gulp\Actions\HandleBarAction;
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 
@@ -171,5 +172,18 @@ class PreCompiler implements IPreCompiler
 		$scripts = $unroll->getScripts();
 		
 		return $this->preCompileActions($p, $this->config->ScriptActions, $scripts);
+	}
+	
+	/**
+	 * @param Package $p
+	 * @return CompilerSetup
+	 */
+	public function preCompileView(Package $p)
+	{
+		$unroll = new PackageUnroll(Config::instance()->packageDefinitionManager());
+		$unroll->setOriginPackage($p);
+		$views = $unroll->getViews();
+		
+		return $this->preCompileActions($p, [new HandleBarAction()], $views);
 	}
 }

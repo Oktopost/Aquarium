@@ -16,6 +16,7 @@ use Objection\Enum\AccessRestriction;
  * @property ResourceCollection	$Inscribed
  * @property ResourceCollection	$Styles
  * @property ResourceCollection	$Scripts
+ * @property ResourceCollection	$Views
  */
 class Package extends LiteObject
 {
@@ -33,7 +34,8 @@ class Package extends LiteObject
 			'Requires'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
 			'Inscribed'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
 			'Styles'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
-			'Scripts'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET)
+			'Scripts'	=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET),
+			'Views'		=> LiteSetup::createInstanceOf(ResourceCollection::class, AccessRestriction::NO_SET)
 		];
 	}
 	
@@ -51,6 +53,7 @@ class Package extends LiteObject
 		$this->_p->Inscribed	= new ResourceCollection();
 		$this->_p->Styles		= new ResourceCollection();
 		$this->_p->Scripts		= new ResourceCollection();
+		$this->_p->Views		= new ResourceCollection();
 	}
 	
 	
