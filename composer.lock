@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "oktopost/objection",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Oktopost/Objection.git",
-                "reference": "262e36acf44c48192dfcd2a88ef3143d87618a1c"
+                "reference": "1a12ffb725e283b81b39a7b3ddbbf7bb55035088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/262e36acf44c48192dfcd2a88ef3143d87618a1c",
-                "reference": "262e36acf44c48192dfcd2a88ef3143d87618a1c",
+                "url": "https://api.github.com/repos/Oktopost/Objection/zipball/1a12ffb725e283b81b39a7b3ddbbf7bb55035088",
+                "reference": "1a12ffb725e283b81b39a7b3ddbbf7bb55035088",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
             ],
             "description": "Objects in PHP",
             "homepage": "https://github.com/Oktopost/Objection",
-            "time": "2016-09-01 14:20:15"
+            "time": "2016-09-26 07:47:16"
         },
         {
             "name": "oktopost/skeleton",
