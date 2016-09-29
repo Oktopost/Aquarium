@@ -2,7 +2,6 @@
 namespace Aquarium\Resources;
 
 
-use Aquarium\Resources\Log\LogStream\ConsoleLogStream;
 use Aquarium\Resources\Log\LogStream\VoidStream;
 use Aquarium\Resources\Utils\PackageBuilder;
 use Aquarium\Resources\Package\IPackageBuilder;
