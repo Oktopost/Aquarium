@@ -14,7 +14,6 @@ class CompilerSetupTest extends \PHPUnit_Framework_TestCase
 		$c = new CompilerSetup($p);
 		
 		$this->assertSame($p, $c->Package);
-		$this->assertInstanceOf(ResourceCollection::class, $c->Unchanged);
 		$this->assertInstanceOf(ResourceCollection::class, $c->CompileTarget);
 	}
 	

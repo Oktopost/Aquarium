@@ -37,12 +37,12 @@ class StateValidator implements IStateValidator
 		
 		foreach ($all as $item)
 		{
-			$item = substr($item, 0, $length + 1);
+			$item = substr($item, $length + 1);
 			
 			$file = new ResourceFile();
 			$file->Path = $item;
 			
-			$set->Files[$item] = $item; 
+			$set->Files[$item] = $file; 
 		}
 		
 		return $set;

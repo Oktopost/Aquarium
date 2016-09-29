@@ -42,7 +42,7 @@ class ResourceFile extends LiteObject
 	 */
 	public function populateSizeIfEmpty()
 	{
-		if (!$this->FileSize)
+		if (!$this->FileSize || $this->FileSize <= 0)
 		{
 			$this->FileSize = filesize($this->getFullPath());
 		}

@@ -18,8 +18,7 @@ interface IPreCompileHelper
 	/**
 	 * @param Package $p
 	 * @param ResourceMap $compilationMap Aggregated compilation map.
-	 * @param array $modified Array of final Resource files that must be recompiled.
 	 * @return CompilerSetup
 	 */
-	public function getRecompileTargets(Package $p, ResourceMap $compilationMap, array $modified);
+	public function getRecompileTargets(Package $p, ResourceMap $compilationMap);
 }

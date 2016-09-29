@@ -14,6 +14,11 @@ interface IPreCompiler
 	public function setConfig(GulpCompileConfig $config);
 	
 	/**
+	 * @return Package
+	 */
+	public function getTargetPackage();
+	
+	/**
 	 * @param Package $p
 	 * @return CompilerSetup
 	 */
@@ -24,4 +29,10 @@ interface IPreCompiler
 	 * @return CompilerSetup
 	 */
 	public function preCompileScript(Package $p);
+	
+	/**
+	 * @param Package $p
+	 * @return CompilerSetup
+	 */
+	public function preCompileView(Package $p);
 }

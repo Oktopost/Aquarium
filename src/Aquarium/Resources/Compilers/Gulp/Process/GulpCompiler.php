@@ -57,11 +57,8 @@ class GulpCompiler implements IGulpCompiler
 	 */
 	private function compile(array $actions, CompilerSetup $setup)
 	{
-		if (!$setup->CompileTarget->hasAny())
-			return clone $setup->Unchanged;
-		
-		if (!$actions)
-			return clone ($setup->Unchanged->add($setup->CompileTarget));
+		if (!$setup->hasToCompile() || !$actions)
+			return clone $setup->CompileTarget;
 		
 		$commands = [];
 		$compiledCollection = clone $setup->CompileTarget;
@@ -103,8 +100,6 @@ class GulpCompiler implements IGulpCompiler
 				rename($compiledFile, $timestampName);
 			}
 		}
-		
-		$compiledCollection->add($setup->Unchanged);
 		
 		return $compiledCollection;
 	}

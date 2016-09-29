@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\Compilers;
 
 
+use Aquarium\Resources\Base\State\IStateValidator;
 use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\ICompiler;
@@ -13,6 +14,7 @@ use Aquarium\Resources\Compilers\Gulp\Process\GulpCompiler;
 use Aquarium\Resources\Compilers\Gulp\Process\ICompileHelper;
 use Aquarium\Resources\Compilers\Gulp\Process\PreCompiler;
 use Aquarium\Resources\Compilers\Gulp\CompileConfig\ConfigBuilder;
+use Objection\Mapper\Utils\ValuesProcessorCreator;
 
 
 class GulpPackageCompiler implements ICompiler
@@ -23,10 +25,14 @@ class GulpPackageCompiler implements ICompiler
 	/** @var GulpCompileConfig */
 	private $compileConfig = null;
 	
+	/** @var IStateValidator */
+	private $validator;
+	
 	
 	public function __construct()
 	{
 		$this->configBuilder = new ConfigBuilder();
+		$this->validator = Config::skeleton(IStateValidator::class);
 	}
 	
 	
@@ -62,7 +68,13 @@ class GulpPackageCompiler implements ICompiler
 		$scriptSettings = $preCompiler->preCompileScript($package);
 		$compiler = new GulpCompiler();
 		
+		if (!$this->validator->isModified($package, $preCompiler->getTargetPackage()))
+		{
+			return $preCompiler->getTargetPackage(); 
+		}
+		
 		$compiler->setCompilerConfig($this->compileConfig);
+		
 		$compiled->Views->add($compiler->compileView($viewSettings));
 		$compiled->Styles->add($compiler->compileStyle($styleSettings));
 		$compiled->Scripts->add($compiler->compileScript($scriptSettings));
@@ -70,6 +82,8 @@ class GulpPackageCompiler implements ICompiler
 		/** @var ICompileHelper $compilerHelper */
 		$compilerHelper = Config::skeleton(ICompileHelper::class);
 		$compilerHelper->cleanDirectory($compiled);
+		
+		$this->validator->saveNewState($package, $compiled);
 		
 		return $compiled;
 	}

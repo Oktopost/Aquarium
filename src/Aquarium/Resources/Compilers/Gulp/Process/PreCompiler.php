@@ -26,6 +26,17 @@ class PreCompiler implements IPreCompiler
 	/** @var ITimestampHelper */
 	private $timestampHelper;
 	
+	/** @var Package */
+	private $targetPackage = null;
+	
+	
+	private function createTargetPackage(Package $source)
+	{
+		if ($this->targetPackage) return;
+		
+		$this->targetPackage = new Package($source->Name);
+	}
+	
 	
 	public function __construct()
 	{
@@ -35,48 +46,21 @@ class PreCompiler implements IPreCompiler
 	
 	
 	/**
-	 * @param ResourceMap $map
-	 * @return array
+	 * @return Package
 	 */
-	private function getModified(ResourceMap $map)
+	public function getTargetPackage()
 	{
-		$modified = [];
-		
-		foreach ($map->getMap() as $compiledResource => $sourceFiles)
-		{
-			$maxTimestamp = max(array_values($this->preCompileHelper->getTimestamps($sourceFiles)));
-			$compiledTimestamp = 0;
-			
-			if ($this->config->IsAddTimestamp)
-			{
-				$compiledWithTimestamp = $this->timestampHelper->findFileWithTimestamp($compiledResource);
-				
-				if ($compiledWithTimestamp) 
-				{
-					$data = $this->preCompileHelper->getTimestamps([$compiledWithTimestamp]);
-					$compiledTimestamp = end($data);
-				}
-			}
-			else
-			{
-				$data = $this->preCompileHelper->getTimestamps([$compiledResource]);
-				$compiledTimestamp = end($data);
-			}
-			
-			if ($maxTimestamp > $compiledTimestamp)
-				$modified[] = $compiledResource;
-		}
-		
-		return $modified;
+		return $this->targetPackage;
 	}
 	
 	/**
 	 * @param Package $p
 	 * @param IGulpAction[] $actions
 	 * @param ResourceCollection $collection
+	 * @param ResourceCollection $target
 	 * @return CompilerSetup
 	 */
-	private function preCompileActions(Package $p, array $actions, ResourceCollection $collection)
+	private function preCompileActions(Package $p, array $actions, ResourceCollection $collection, ResourceCollection $target)
 	{
 		$modifiedCollection = clone $collection;
 		
@@ -91,48 +75,30 @@ class PreCompiler implements IPreCompiler
 			
 			$map->apply($modifiedCollection);
 			
-			$modifiedMap->modify($map); 
+			$modifiedMap->modify($map);
 		}
 		
-		$modified = $this->getModified($modifiedMap);
-		$setup = $this->preCompileHelper->getRecompileTargets($p, $modifiedMap, $modified);
+		$target->add($modifiedCollection);
 		
-		
-		// All resource files that have an unmodified target resource.
-		$unmodifiedSourceFiles = [];
-		
-		foreach ($setup->Unchanged as $unmodifiedTarget)
-		{
-			$data = $modifiedMap->getMapFor($unmodifiedTarget);
-			$unmodifiedSourceFiles = array_merge($unmodifiedSourceFiles, (is_array($data) ? $data : [$data]));
-		}
-		
-		
-		// Upend source resource files that were not used to create any package.
-		foreach ($collection as $resource)
-		{
-			// File will be used to recompile.
-			if ($setup->CompileTarget->hasResource($resource))
-				continue;
-			
-			// File used for a library that was not modified.
-			if (in_array($resource, $unmodifiedSourceFiles))
-				continue;
-			
-			// Else file is not modified at all.
-			$setup->CompileTarget->add($resource);
-		}
-		
-		
-		// Rename target files to target files with timestamp.
 		if ($this->config->IsAddTimestamp)
 		{
-			foreach ($setup->Unchanged->get() as $unchanged)
+			foreach ($target->get() as $file)
 			{
-				$setup->Unchanged->replace($unchanged, $this->timestampHelper->findFileWithTimestamp($unchanged));
+				$timestampFile = $this->timestampHelper->findFileWithTimestamp($file);
+				
+				if (!$timestampFile)
+				{
+					$target->remove($file);
+				}
+				else
+				{
+					$target->replace($file, $timestampFile);
+				}
 			}
 		}
 		
+		$setup = new CompilerSetup($p);
+		$setup->CompileTarget->add($collection);
 		
 		return $setup;
 	}
@@ -154,11 +120,13 @@ class PreCompiler implements IPreCompiler
 	 */
 	public function preCompileStyle(Package $p)
 	{
+		$this->createTargetPackage($p);
+		
 		$unroll = new PackageUnroll(Config::instance()->packageDefinitionManager());
 		$unroll->setOriginPackage($p);
 		$styles = $unroll->getStyles();
 			
-		return $this->preCompileActions($p, $this->config->StyleActions, $styles);
+		return $this->preCompileActions($p, $this->config->StyleActions, $styles, $this->targetPackage->Styles);
 	}
 	
 	/**
@@ -167,11 +135,13 @@ class PreCompiler implements IPreCompiler
 	 */
 	public function preCompileScript(Package $p)
 	{
+		$this->createTargetPackage($p);
+		
 		$unroll = new PackageUnroll(Config::instance()->packageDefinitionManager());
 		$unroll->setOriginPackage($p);
 		$scripts = $unroll->getScripts();
 		
-		return $this->preCompileActions($p, $this->config->ScriptActions, $scripts);
+		return $this->preCompileActions($p, $this->config->ScriptActions, $scripts, $this->targetPackage->Scripts);
 	}
 	
 	/**
@@ -180,10 +150,12 @@ class PreCompiler implements IPreCompiler
 	 */
 	public function preCompileView(Package $p)
 	{
+		$this->createTargetPackage($p);
+		
 		$unroll = new PackageUnroll(Config::instance()->packageDefinitionManager());
 		$unroll->setOriginPackage($p);
 		$views = $unroll->getViews();
 		
-		return $this->preCompileActions($p, [new HandleBarAction()], $views);
+		return $this->preCompileActions($p, [new HandleBarAction()], $views, $this->targetPackage->Views);
 	}
 }

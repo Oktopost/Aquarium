@@ -30,6 +30,9 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 			
 			rmdir($file);
 		}
+		
+		if (file_exists(self::SANITY_DIR . '/state/state.json'))
+			unlink(self::SANITY_DIR . '/state/state.json');
 	}
 	
 	private function basicSetup(GulpPackageCompiler $gulp)
@@ -63,7 +66,8 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 		Config::instance()->directories()->addSourceDir(self::SANITY_DIR . '/source');
 		Config::instance()->directories()->PhpTargetDir			= self::SANITY_DIR . '/php';
 		Config::instance()->directories()->CompiledResourcesDir	= self::SANITY_DIR . '/target';
-		Config::instance()->directories()->RootWWWDirectory			= self::SANITY_DIR;
+		Config::instance()->directories()->RootWWWDirectory		= self::SANITY_DIR;
+		Config::instance()->directories()->StateFile		 	= self::SANITY_DIR . '/state/state.json';
 	}
 	
 	
@@ -77,6 +81,9 @@ class CompilerManagerTest extends \PHPUnit_Framework_TestCase
 	public function tearDown()
 	{
 		$this->clean();
+		
+		if (file_exists(self::SANITY_DIR . '/state/state.json'))
+			unlink(self::SANITY_DIR . '/state/state.json');
 	}
 	
 	

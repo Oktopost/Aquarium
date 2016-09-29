@@ -12,7 +12,7 @@ interface IStateDAO
 {
 	/**
 	 * @param string $name
-	 * @return PackageResourceSet
+	 * @return PackageResourceSet|null
 	 */
 	public function getPackageState($name);
 	

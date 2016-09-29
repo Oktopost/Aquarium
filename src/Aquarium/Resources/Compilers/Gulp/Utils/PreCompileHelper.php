@@ -36,10 +36,9 @@ class PreCompileHelper implements IPreCompileHelper
 	/**
 	 * @param Package $p
 	 * @param ResourceMap $compilationMap Aggregated compilation map.
-	 * @param array $modified Array of final Resource files that must be recompiled.
 	 * @return CompilerSetup
 	 */
-	public function getRecompileTargets(Package $p, ResourceMap $compilationMap, array $modified)
+	public function getRecompileTargets(Package $p, ResourceMap $compilationMap)
 	{
 		$recompileSource = [];
 		$unmodifiedFlipped = array_flip(array_keys($compilationMap->getMap()));
@@ -47,17 +46,6 @@ class PreCompileHelper implements IPreCompileHelper
 		// Key is the original source file
 		$recompileSourceFlipped = [];
 		
-		
-		foreach ($modified as $resource)
-		{
-			unset($unmodifiedFlipped[$resource]);
-			$resourceSources = $compilationMap->getMapFor($resource);
-			
-			// This should not happen. Modified file that didn't have a map should not be present here.
-			if (is_null($resourceSources)) continue;
-			
-			$recompileSourceFlipped = array_merge($recompileSourceFlipped, array_flip($resourceSources));
-		}
 		
 		while (count($recompileSource) < count($recompileSourceFlipped)) 
 		{
@@ -81,8 +69,10 @@ class PreCompileHelper implements IPreCompileHelper
 		
 		$setup = new CompilerSetup($p);
 		
-		if ($unmodifiedFlipped) $setup->Unchanged->add(array_keys($unmodifiedFlipped));
-		if ($recompileSource) $setup->CompileTarget->add($recompileSource);
+		if ($recompileSource) 
+		{
+			$setup->CompileTarget->add($recompileSource);
+		}
 		
 		return $setup;
 	}

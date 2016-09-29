@@ -27,12 +27,18 @@ class StateJsonFileDAO implements IStateDAO
 			$this->filePath = Config::instance()->directories()->StateFile;
 		}
 		
+		if (!file_exists($this->filePath))
+		{
+			$this->data = [];
+			return;
+		}
+		
 		$data = file_get_contents($this->filePath);
 		
 		if (!$data) $data = '[]';
 		
 		/** @var PackageResourceSet[] $objects */
-		$objects = Mappers::simple()->getObjects($data, PackageResourceSet::class);
+		$objects = Mappers::simple()->getObjects(json_decode($data), PackageResourceSet::class);
 		$this->data = [];
 		
 		foreach ($objects as $object)
@@ -45,6 +51,27 @@ class StateJsonFileDAO implements IStateDAO
 	private function save()
 	{
 		if (!$this->isModified) return; 
+		
+		foreach ($this->data as $item)
+		{
+			foreach ($item->Source->Files as $file)
+			{
+				if ($file->isExists())
+				{
+					$file->populateMD5IfEmpty();
+					$file->populateSizeIfEmpty();
+				}
+			}
+			
+			foreach ($item->Target->Files as $file)
+			{
+				if ($file->isExists())
+				{
+					$file->populateMD5IfEmpty();
+					$file->populateSizeIfEmpty();
+				}
+			}
+		}
 		
 		$jsonData = Mappers::simple()->getJson($this->data, JSON_PRETTY_PRINT);
 		
@@ -63,13 +90,13 @@ class StateJsonFileDAO implements IStateDAO
 	
 	/**
 	 * @param string $name
-	 * @return PackageResourceSet
+	 * @return PackageResourceSet|null
 	 */
 	public function getPackageState($name)
 	{
 		$this->preLoad();
 		
-		return (isset($this->data[$name]) ? $this->data[$name] : false); 
+		return (isset($this->data[$name]) ? $this->data[$name] : null); 
 	}
 	
 	/**
