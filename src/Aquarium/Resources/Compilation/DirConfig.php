@@ -14,6 +14,7 @@ use Objection\Enum\AccessRestriction;
  * @property string	$RootWWWDirectory		After compilation all paths to the compiled resources are 
  * 											truncated to be relative to this path.
  * @property array	$ResourcesSourceDirs	Directories that contain the resources to compile.
+ * @property string $StateFile				File used to keep truck of the compiled packages.
  */
 class DirConfig extends LiteObject
 {
@@ -26,7 +27,8 @@ class DirConfig extends LiteObject
 			'PhpTargetDir'			=> LiteSetup::createString(),
 			'CompiledResourcesDir'	=> LiteSetup::createString(),
 			'RootWWWDirectory'		=> LiteSetup::createString(),
-			'ResourcesSourceDirs'	=> LiteSetup::createArray([], AccessRestriction::NO_SET)
+			'ResourcesSourceDirs'	=> LiteSetup::createArray([], AccessRestriction::NO_SET),
+			'StateFile'				=> LiteSetup::createString()
 		];
 	}
 	

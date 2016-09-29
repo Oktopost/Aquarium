@@ -19,7 +19,26 @@ class StateValidator implements IStateValidator
 	 * @var \Aquarium\Resources\Base\State\IStateDAO
 	 */
 	private $dao;
-	
+
+
+	/**
+	 * @param Package $p
+	 */
+	private function createResourceSet(Package $p)
+	{
+		$set = new ResourceSet();
+		
+		$all = array_merge($p->Scripts->get(), $p->Views->get(), $p->Styles->get());
+		sort($all);
+		
+		foreach ($all as $item)
+		{
+			$file = new ResourceFile();
+			$file->FullPath = $item;
+			
+			$set->Files[$item] = $item; 
+		}
+	}
 	
 	/**
 	 * @param Package $source

@@ -2,7 +2,9 @@
 namespace Aquarium\Resources\State;
 
 
+use Aquarium\Resources\Config;
 use Aquarium\Resources\Base\State\IStateDAO;
+
 use Objection\Mapper;
 use Objection\Mappers;
 
@@ -20,7 +22,14 @@ class StateJsonFileDAO implements IStateDAO
 	{
 		if (!is_null($this->data)) return;
 		
-		$data = '';
+		if (!$this->filePath) 
+		{
+			$this->filePath = Config::instance()->directories()->StateFile;
+		}
+		
+		$data = file_get_contents($this->filePath);
+		
+		if (!$data) $data = '[]';
 		
 		/** @var PackageResourceSet[] $objects */
 		$objects = Mappers::simple()->getObjects($data, PackageResourceSet::class);
@@ -36,7 +45,12 @@ class StateJsonFileDAO implements IStateDAO
 	{
 		if (!$this->isModified) return; 
 		
-		$jsonData = Mappers::simple()->getJson($this->data);
+		$jsonData = Mappers::simple()->getJson($this->data, JSON_PRETTY_PRINT);
+		
+		if (file_put_contents($this->filePath, $jsonData, LOCK_EX) === false)
+		{
+			throw new \Exception('Failed to write to the state file: ' . $this->filePath);
+		}
 	}
 	
 	
@@ -52,7 +66,9 @@ class StateJsonFileDAO implements IStateDAO
 	 */
 	public function getPackageState($name)
 	{
+		$this->preLoad();
 		
+		return (isset($this->data[$name]) ? $this->data[$name] : false); 
 	}
 	
 	/**

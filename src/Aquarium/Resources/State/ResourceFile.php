@@ -7,7 +7,6 @@ use Objection\LiteSetup;
 
 
 /**
- * @property string $Name
  * @property string $FullPath
  * @property string $MD5
  * @property int	$FileSize
@@ -20,7 +19,6 @@ class ResourceFile extends LiteObject
 	protected function _setup()
 	{
 		return [
-			'Name'		=> LiteSetup::createString(),
 			'FullPath'	=> LiteSetup::createString(),
 			'MD5'		=> LiteSetup::createString(''),
 			'FileSize'	=> LiteSetup::createInt(-1)
