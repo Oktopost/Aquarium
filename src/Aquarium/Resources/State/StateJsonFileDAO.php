@@ -37,6 +37,7 @@ class StateJsonFileDAO implements IStateDAO
 		
 		foreach ($objects as $object)
 		{
+			$object->setRootPath();
 			$this->data[$object->PackageName] = $object;
 		}
 	}
@@ -78,6 +79,7 @@ class StateJsonFileDAO implements IStateDAO
 	{
 		$this->preLoad();
 		
+		$this->isModified = true;
 		$this->data[$set->PackageName] = $set;
 	}
 	

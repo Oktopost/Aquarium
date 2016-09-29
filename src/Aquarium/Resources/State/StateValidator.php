@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\State;
 
 
+use Aquarium\Resources\Config;
 use Aquarium\Resources\Package;
 use Aquarium\Resources\Base\State\IStateValidator;
 
@@ -19,25 +20,32 @@ class StateValidator implements IStateValidator
 	 * @var \Aquarium\Resources\Base\State\IStateDAO
 	 */
 	private $dao;
-
-
+	
+	
 	/**
 	 * @param Package $p
+	 * @param string $dir
+	 * @return ResourceSet
 	 */
-	private function createResourceSet(Package $p)
+	private function createResourceSet(Package $p, $dir)
 	{
 		$set = new ResourceSet();
 		
+		$length = strlen($dir);
 		$all = array_merge($p->Scripts->get(), $p->Views->get(), $p->Styles->get());
 		sort($all);
 		
 		foreach ($all as $item)
 		{
+			$item = substr($item, 0, $length + 1);
+			
 			$file = new ResourceFile();
-			$file->FullPath = $item;
+			$file->Path = $item;
 			
 			$set->Files[$item] = $item; 
 		}
+		
+		return $set;
 	}
 	
 	/**
@@ -47,7 +55,17 @@ class StateValidator implements IStateValidator
 	 */
 	private function createPackageResourceSet(Package $source, Package $target)
 	{
+		$setSource = $this->createResourceSet($source, Config::instance()->directories()->ResourcesSourceDirs[0]);
+		$setTarget = $this->createResourceSet($target, Config::instance()->directories()->CompiledResourcesDir);
 		
+		$packageSet = new PackageResourceSet();
+		
+		$packageSet->PackageName = $source->Name;
+		$packageSet->Source = $setSource;
+		$packageSet->Target = $setTarget;
+		$packageSet->setRootPath();
+		
+		return $packageSet;
 	}
 	
 	

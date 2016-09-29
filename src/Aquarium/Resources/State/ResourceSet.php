@@ -62,7 +62,7 @@ class ResourceSet extends LiteObject
 			$this->Files,
 			function($carry, ResourceFile $item) 
 			{
-				$carry[] = $item->FullPath;
+				$carry[] = $item->Path;
 				return $carry;
 			},
 			[]
@@ -78,10 +78,21 @@ class ResourceSet extends LiteObject
 			$this->Files,
 			function($carry, ResourceFile $item)
 			{
-				$carry[$item->FullPath] = $item;
+				$carry[$item->Path] = $item;
 				return $carry;
 			},
 			[]
 		);
+	}
+	
+	/**
+	 * @param string $rootPath
+	 */
+	public function setRootPath($rootPath)
+	{
+		foreach ($this->Files as $file)
+		{
+			$file->setRootDir($rootPath);
+		}
 	}
 }

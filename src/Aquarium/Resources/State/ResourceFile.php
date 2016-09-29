@@ -7,19 +7,22 @@ use Objection\LiteSetup;
 
 
 /**
- * @property string $FullPath
+ * @property string $Path
  * @property string $MD5
  * @property int	$FileSize
  */
 class ResourceFile extends LiteObject
 {
+	private $rootDir = '';
+	
+	
 	/**
 	 * @return array
 	 */
 	protected function _setup()
 	{
 		return [
-			'FullPath'	=> LiteSetup::createString(),
+			'Path'		=> LiteSetup::createString(),
 			'MD5'		=> LiteSetup::createString(''),
 			'FileSize'	=> LiteSetup::createInt(-1)
 		];
@@ -41,7 +44,7 @@ class ResourceFile extends LiteObject
 	{
 		if (!$this->FileSize)
 		{
-			$this->FileSize = filesize($this->FullPath);
+			$this->FileSize = filesize($this->getFullPath());
 		}
 		
 		return $this->FileSize;
@@ -54,7 +57,7 @@ class ResourceFile extends LiteObject
 	{
 		if (!$this->MD5)
 		{
-			$this->MD5 = md5_file($this->FullPath);
+			$this->MD5 = md5_file($this->getFullPath());
 		}
 		
 		return $this->MD5;
@@ -83,6 +86,22 @@ class ResourceFile extends LiteObject
 	 */
 	public function isExists()
 	{
-		return file_exists($this->FullPath);
+		return file_exists($this->getFullPath());
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getFullPath()
+	{
+		return $this->rootDir . '/' . $this->Path;
+	}
+	
+	/**
+	 * @param string $rootDir
+	 */
+	public function setRootDir($rootDir)
+	{
+		$this->rootDir = $rootDir;
 	}
 }

@@ -2,6 +2,7 @@
 namespace Aquarium\Resources\State;
 
 
+use Aquarium\Resources\Config;
 use Objection\LiteSetup;
 use Objection\LiteObject;
 
@@ -26,10 +27,20 @@ class PackageResourceSet extends LiteObject
 	}
 	
 	
+	/**
+	 * @param PackageResourceSet $set
+	 * @return bool
+	 */
 	public function isModified(PackageResourceSet $set)
 	{
 		return
 			$this->Source->isModified($set->Source) || 
 			$this->Target->isModified($set->Target);
+	}
+	
+	public function setRootPath()
+	{
+		$this->Source->setRootPath(Config::instance()->directories()->ResourcesSourceDirs[0]);
+		$this->Target->setRootPath(Config::instance()->directories()->CompiledResourcesDir);
 	}
 }

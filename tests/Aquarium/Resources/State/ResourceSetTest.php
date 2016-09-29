@@ -34,9 +34,9 @@ class ResourceSetTest extends \PHPUnit_Framework_TestCase
 		$file2 = new ResourceFile();
 		$file3 = new ResourceFile();
 		
-		$file1->FullPath = 'file/1';
-		$file2->FullPath = 'file/2';
-		$file3->FullPath = 'file/3';
+		$file1->Path = 'file/1';
+		$file2->Path = 'file/2';
+		$file3->Path = 'file/3';
 		
 		$set->Files = [$file1, $file2, $file3];
 		
@@ -57,9 +57,9 @@ class ResourceSetTest extends \PHPUnit_Framework_TestCase
 		$file2 = new ResourceFile();
 		$file3 = new ResourceFile();
 		
-		$file1->FullPath = 'file/1';
-		$file2->FullPath = 'file/2';
-		$file3->FullPath = 'file/3';
+		$file1->Path = 'file/1';
+		$file2->Path = 'file/2';
+		$file3->Path = 'file/3';
 		
 		$set->Files = [$file1, $file2, $file3];
 		
